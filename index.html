@@ -1,15 +1,55 @@
-<!DOCTYPE html>
+<html>
 <html lang="en">
 <head>
     <script src='https://d3js.org/d3.v7.min.js'></script>
-    </head> 
-    <p>First paragraph</p>
-    <p>Second paragraph</p>
-    <script>
-     d3.select("p").style("color", "red");
-     let newspan = d3.select("body").append('span');
-    newspan.text('Shrek');
+</head> 
 
-    </script>
+<body>
+
+    
+    <p class='main' id="para1">First paragraph</p>
+    <p class='body' id="para2">Second paragraphSecond paragraph Second paragraph Second paragraph Second paragraph Second paragraph 
+        Second paragraph Second paragraph
+    </p>
+    <p class='body' id="para3"> Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph</p>
+
+    <span>
+        Shrek
+    </span>
+
+</body>
+
+
+<script>
+    console.log('d3.version:', d3.version);
+
+     d3.select("#para1").style("color", "red")
+     .style('text-align','center')
+     .style("font-size","50px")
+     .style("line-height","100px") 
+     .style("font-family", function(d,i) {return i<5 ? "ariel" : "ariel"; });
+
+     //add tranform and font family 
+    //  .style('transform',"rotate(-180deg) scale(0.001,0.001)" )
+    // .transition()
+    // .;
+     d3.selectAll(".body")
+     .style("color", "blue")
+     .style('text-align','center')
+     .style("font-size","15px");
+
+    
+
+     for (let i = 1; i < 11; i++) {
+        let temp = i
+        d3.select("body").append('div').text(i)
+        .style('text-align','center')
+        .style("font-size","15px")
+        .style("color", function(temp){ return (i<6?"red":"green"); }); 
+         
+     }
+ 
+</script>
+
 </body>
 </html>
