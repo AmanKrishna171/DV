@@ -2,52 +2,49 @@
 <html lang="en">
 <head>
     <script src='https://d3js.org/d3.v7.min.js'></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head> 
 
 <body>
 
+   
     
-    <p class='main' id="para1">First paragraph</p>
-    <p class='body' id="para2">Second paragraphSecond paragraph Second paragraph Second paragraph Second paragraph Second paragraph 
-        Second paragraph Second paragraph
-    </p>
-    <p class='body' id="para3"> Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph</p>
 
-    <span>
-        Shrek
-    </span>
+    
+      </nav>
 
 </body>
+<div class="list-group">
+  <a href="Lab/Lab1_part1.html" class="list-group-item list-group-item-success">Part 1</a>
+  <a href="Lab/Lab1_part1.html" class="list-group-item list-group-item-success">Part 2</a>
+  <a href="Lab/Lab1_part1.html" class="list-group-item list-group-item-success">Part 3</a>
+  <a href="Lab/Lab1_part1.html" class="list-group-item list-group-item-success">Part 4</a>
+
+  <a href="Lab/Lab1_part2.html" class="list-group-item list-group-item-info">Part 5</a>
+  <a href="Lab/Lab1_part2.html" class="list-group-item list-group-item-info">Part 6</a>
+  <a href="Lab/Lab1_part2.html" class="list-group-item list-group-item-info">Part 7</a>
+  <a href="Lab/Lab1_part2.html" class="list-group-item list-group-item-info">Part 8</a>
+
+  <a href="#" class="list-group-item list-group-item-warning">Part 9</a>
+  <a href="#" class="list-group-item list-group-item-warning">Part 10</a>
+  <a href="#" class="list-group-item list-group-item-warning">Part 11</a>
+  <a href="#" class="list-group-item list-group-item-warning">Part 12</a>
+
+  <a href="#" class="list-group-item list-group-item-danger">Part 13</a>
+  <a href="#" class="list-group-item list-group-item-danger">Part 14</a>
+  <a href="#" class="list-group-item list-group-item-danger">Part 15</a>
+  <a href="#" class="list-group-item list-group-item-danger">Part 16</a>
+</div>
+
+
 
 
 <script>
     console.log('d3.version:', d3.version);
-
-     d3.select("#para1").style("color", "red")
-     .style('text-align','center')
-     .style("font-size","50px")
-     .style("line-height","100px") 
-     .style("font-family", function(d,i) {return i<5 ? "ariel" : "ariel"; });
-
-     //add tranform and font family 
-    //  .style('transform',"rotate(-180deg) scale(0.001,0.001)" )
-    // .transition()
-    // .;
-     d3.selectAll(".body")
-     .style("color", "blue")
-     .style('text-align','center')
-     .style("font-size","15px");
-
-    
-
-     for (let i = 1; i < 11; i++) {
-        let temp = i
-        d3.select("body").append('div').text(i)
-        .style('text-align','center')
-        .style("font-size","15px")
-        .style("color", function(temp){ return (i<6?"red":"green"); }); 
-         
-     }
  
 </script>
 
