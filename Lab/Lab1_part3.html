@@ -1,0 +1,97 @@
+<html>
+<html lang="en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head> 
+
+<nav class="navbar navbar-light" style="background-color: #44a0ec8e;">
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1</a>
+    
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+  </nav>
+
+
+
+
+<body>
+    
+    <div class = 'example'>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <div class = 'exercise6'>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <div class = 'exercise7'>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    
+    <script>
+    let nums = [10, 50, 200];
+    let paragraph = d3.select('.example')
+     .selectAll("div")
+     .data(nums)
+     .text(function (d, i) {
+     console.log("d: " + d);
+     console.log("i: " + i);
+     console.log("this: " + this);
+     return 'cont:' + d; // return value is used to set the 'text'
+     })
+     .style("color", function(d){ return (d>=100? "red": ""); }); // greater or equal to 100 use red
+   
+     let otherdata = [ {name:'test', val:1, colour:"red"}, 
+        {name:'other', val:2 , colour:"blue"},
+        {name:'b', val:3 , colour:"green"} ];
+        let paragraph2 = d3
+        .select(".exercise6")
+        .selectAll("div")
+        .data(otherdata)
+        .text(function (d, i) {
+        console.log("d.name: " + d.name);
+        console.log("d.val: " + d.val);
+        console.log("i: " + i);
+        console.log("this: " + this);
+        return 'cont name:' + d.name + "   cont colour :"+ d.colour; // return value is used to set the 'text'
+        })
+        // .style("color", function(d){ return d.colour}) ;
+
+
+        let num = [10, 50, 100, 200];
+        let paragraph3 = d3.select("body")
+        .select(".exercise7")
+        .selectAll("div")
+        .data(num)
+        .text(function (d, i) {
+        return 'cont:' + d; // return value is used to set the 'text'
+        })
+        .style("color", function(d, i) {
+        if ( d >= 50 && d <= 100 ) {
+        return "red";
+        } else {
+        return "yellow";
+        }
+        return 'blue';
+        });
+   
+   
+   
+   
+   </script>
+
+</body>
+</html>

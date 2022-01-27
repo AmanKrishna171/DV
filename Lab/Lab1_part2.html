@@ -1,15 +1,90 @@
-<!DOCTYPE html>
+<html>
 <html lang="en">
-<head>
-    <script src='https://d3js.org/d3.v7.min.js'></script>
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head> 
-    <p>First paragraph</p>
-    <p>Second paragraph</p>
-    <script>
-     d3.select("p").style("color", "red");
-     let newspan = d3.select("body").append('span');
-    newspan.text('Shrek');
 
-    </script>
+<nav class="navbar navbar-light" style="background-color: #44a0ec8e;">
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1</a>
+    
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+  </nav>
+
+  
+
+<body>
+    <span>D3 version (from console output): </span> <p  id="test"></p>
+
+    <p class='main' id="para1">First paragraph</p>
+    <p class='body' id="para2">Second paragraphSecond paragraph Second paragraph Second paragraph Second paragraph Second paragraph 
+        Second paragraph Second paragraph
+    </p>
+    <p class='body' id="para3"> Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph</p>
+
+
+
+
+
+<script>
+    console.log('d3.version:', d3.version);
+    
+
+     d3.select("#para1").style("color", "red") //changes the first paragraph to red
+     .style('text-align','center')
+     .style("font-size","50px")
+     .style("line-height","100px") 
+     .style("font-family", function(d,i) {return i<5 ? "ariel" : "ariel"; });
+
+     //add tranform and font family 
+    //  .style('transform',"rotate(-180deg) scale(0.001,0.001)" )
+    // .transition()
+    // .;
+     d3.selectAll(".body")  //selects all elements class body and then applies the attributes 
+     .style("color", "blue")
+     .style('text-align','center')
+     .style("font-size","15px");
+
+
+
+    let flag = false;
+
+     for (let i = 1; i < 11; i++) {
+        let temp = i
+        d3.select("body").append('div').text(i) // addds text to body tag generated from the script 
+        .style('text-align','center')
+        .style("font-size","15px")
+        .style("color", function(temp){ return (i<6? "red":"green"); }); 
+         
+        if(i>9){flag = true}
+     }
+
+     
+
+     if(flag){
+        d3.select("div").transition()
+     .delay(2000)
+    .text("Start")
+    .transition()
+    .duration(2000)
+    .style("color", "purple");
+
+     }
+
+     d3.select("body").append("div").text("Hello World!").style("color", "green");
+
+
+
+
+     document.getElementById("test").innerHTML = d3.version;
+ 
+</script>
+
 </body>
 </html>
