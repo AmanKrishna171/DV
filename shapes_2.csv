@@ -1,0 +1,8 @@
+shape,x1,x2,y1,y2,color
+rect,100,200,200,200,#AF9BFA
+rect,180,220,40,100,#5A3BD7
+circle,100,200,50,0,black
+circle,100,200,25,0,grey
+circle,300,200,50,0,black
+circle,300,200,25,0,grey
+ellipse,200,370,100,30,#ff0000

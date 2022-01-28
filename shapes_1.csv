@@ -1,0 +1,14 @@
+shape,x1,x2,y1,y2,color
+line,100,150,50,100,red
+line,100,100,50,150,red
+line,200,100,150,150,blue
+line,200,200,150,50,green
+line,150,200,100,50,green
+rect,10,320,400,70,#5A3BD7
+rect,30,230,200,100,#AF9BFA
+circle,100,400,50,0,black
+circle,100,400,25,0,grey
+circle,300,400,50,0,black
+circle,300,400,25,0,grey
+ellipse,400,330,15,20,#F9DC4A
+ellipse,10,330,15,30,#ff0000
