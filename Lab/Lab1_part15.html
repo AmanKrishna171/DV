@@ -1,0 +1,66 @@
+<html>
+<html lang="en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head> 
+
+    <nav class="navbar navbar-light" style="background-color: #44a0ec8e;">
+        <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1 Home</a>
+        
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+      </nav>
+<body>
+
+</body>
+
+
+<script>
+    var data = [, 12,15,20,11,17,33,45,55,64,22,75,67,78,62];
+const xSize = 400; const ySize = 400;
+const margin = 40;
+const xMax = xSize - margin*2;
+const yMax = ySize - margin*2;
+// Append SVG Object to the Page
+const svg = d3.select("body")
+ .append("svg")
+ .attr('width', xSize )
+ .attr('height', ySize )
+ .append("g")
+ .attr("transform","translate(" + xSize/2 + "," + ySize/2 + ")");
+const radius = Math.min(xSize, ySize) / 2;
+var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c']);
+// Generate the pie
+var pie = d3.pie();
+// Generate the arcs
+var arc = d3.arc()
+ .innerRadius(0)
+ .outerRadius(radius);
+//Generate groups
+var arcs = svg.selectAll("arc")
+ .data(pie(data))
+ .enter()
+ .append("g")
+ .attr("class", "arc")
+//Draw arc paths
+arcs.append("path")
+ .attr("fill", function(d, i) {
+ return color(i);
+ })
+ .attr("d", arc);
+ arcs.append("text")
+        .attr("transform", null)
+        .attr("text-anchor", "middle")
+        .text(function (d, i) {return data[i];})
+        .attr("transform", function (d) {return "translate(" + arc.centroid(d) + ")";}) // from http://bl.ocks.org/MohamedAlaa/246b7d45e20be8680394
+ 
+</script>
+
+</body>
+</html>
