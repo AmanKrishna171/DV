@@ -81,12 +81,12 @@ const data1= [50, 400, 300, 900, 250, 1000]
  .range([0, 400]);
  
  var xscale_2 = d3.scaleLinear()
- .domain([0, d3.max(data1)])
+ .domain([0, d3.max(data1)])data
  .range([0, 400 ]);
 
  var yscale_2 = d3.scaleBand()
  .domain(d3.range(data1.length)) 
- .range([ 1,barHeight * data.length +120 ]);
+ .range([ 1,barHeight * .length +120 ]);
 
  var yscale_3 = d3.scaleBand()
  .domain(d3.range(data1.length)) 
@@ -251,7 +251,7 @@ for (let i = 0; i < 100; i++) { data_sine.push( {x: i/100, y: Math.sin( 6.2 * i/
 for (let i = 0; i < 100; i++) { data_cos.push( {x: i/100, y: Math.cos( 6.2 * i/100 ) } ); }
 
 Generate_graph(data_sine,pickRandomColour(myColor4),'Sine Wave')
-Generate_graph(data_cos,pickRandomColour(myColor4),'Cosine Wave')
+Generate_graph(data_cos,'red','Cosine Wave')
 
 function Generate_graph(data,colour,name){
     const xExtent = d3.extent( data, d=>{ return d.x } );

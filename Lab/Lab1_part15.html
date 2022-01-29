@@ -22,7 +22,15 @@
 
 
 <script>
-    var data = [, 12,15,20,11,17,33,45,55,64,22,75,67,78,62];
+var temp = d3.range(10);
+var myColor4 = d3.scaleOrdinal().domain(temp).range(d3.schemeSet1);
+
+  function pickRandomColour (arr,number){
+    return arr  (Math.floor(Math.random() * 20))
+  }
+ 
+
+    var data = [12,15,20,11,17,33,45,55,64,22,75,67,78,62];
 const xSize = 400; const ySize = 400;
 const margin = 40;
 const xMax = xSize - margin*2;
@@ -51,7 +59,7 @@ var arcs = svg.selectAll("arc")
 //Draw arc paths
 arcs.append("path")
  .attr("fill", function(d, i) {
- return color(i);
+ return myColor4(d);
  })
  .attr("d", arc);
  arcs.append("text")
