@@ -81,12 +81,12 @@ const data1= [50, 400, 300, 900, 250, 1000]
  .range([0, 400]);
  
  var xscale_2 = d3.scaleLinear()
- .domain([0, d3.max(data1)])data
+ .domain([0, d3.max(data1)])
  .range([0, 400 ]);
 
  var yscale_2 = d3.scaleBand()
  .domain(d3.range(data1.length)) 
- .range([ 1,barHeight * .length +120 ]);
+ .range([ 1,barHeight * data.length +120 ]);
 
  var yscale_3 = d3.scaleBand()
  .domain(d3.range(data1.length)) 

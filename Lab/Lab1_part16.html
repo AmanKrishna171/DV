@@ -123,10 +123,86 @@ svg_2.append("g")
  svg_2.style("background","url('../image.gif') no-repeat")
  .attr("width", width-40)
  .attr("height", 280)
- .attr("x",)
+ .attr("x",10)
  .attr("y",53);;
 }
  
+
+const data_sine = [];
+const data_cos = [];
+const data_random = [];
+const xSize = 600; const ySize = 600;
+const margin = 40;
+const xMax = xSize - margin*2;
+const yMax = ySize - margin*2;
+for (let i = 0; i < 100; i++) { data_sine.push( {x: i/100, y: Math.sin( 6.2 * i/100 ) } ); }
+for (let i = 0; i < 100; i++) { data_cos.push( {x: i/100, y: Math.cos( 6.2 * i/100 ) } ); }
+
+Generate_graph(data_sine,pickRandomColour(myColor4),'Sine Wave')
+
+
+function Generate_graph(data,colour,name){
+    const xExtent = d3.extent( data, d=>{ return d.x } );
+    const yExtent = d3.extent( data, d=>{ return d.y } );
+    // Append SVG Object to the Page
+    const svg = d3.select("body")
+    .append("svg")
+    .attr('width', '100vw' )
+    .attr('height', ySize +60 )
+    .attr("style", "outline: thin solid Grey;") 
+    .append("g")
+    .attr("transform","translate(" + margin + "," + margin + ")")
+    ;
+
+    svg.append("svg:image")
+ .attr("xlink:href", "../image2.gif")
+ .attr("width", 520)
+ .attr("height",520)
+ .attr("x",1)
+ .attr("y",);
+    // X Axis
+    const x = d3.scaleLinear()
+    .domain([ xExtent[0], xExtent[1] ])
+    .range([0, xMax]);
+    // bottom
+    svg.append("g")
+    .attr("transform", "translate(0," + yMax + ")")
+    .call(d3.axisBottom(x))
+    .attr('color', 'green'); // make bottom axis green
+    // top
+    svg.append("g")
+    .call(d3.axisTop(x));
+    // Y Axis
+    const y = d3.scaleLinear()
+    .domain([ yExtent[0], yExtent[1] ])
+    .range([ yMax, 0]);
+    // left y axis
+    svg.append("g")
+    .call(d3.axisLeft(y));
+    // right y axis
+    svg.append("g")
+    .attr("transform", `translate(${yMax},0)`)
+    .call(d3.axisRight(y));
+    // Add the line
+    svg.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", colour)
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+    .x(function(d) { return x(d.x) })
+    .y(function(d) { return y(d.y) })
+    );
+
+    svg.append('text').text(name)
+    .attr('x',180)
+    .attr('y',580)
+    .style('font-size', '2em')
+
+
+ 
+
+}    
 </script>
 
 </body>
