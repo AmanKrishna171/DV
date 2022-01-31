@@ -20,69 +20,89 @@
   
 
 <body>
-    <span>D3 version (from console output): </span> <p  id="test"></p>
+    <p style="text-align:center;" > 
+        <span  >D3 version (from console output): </span> <p style="text-align:center;" id="test"></p>
+    </p>
+  
 
     <p class='main' id="para1">First paragraph</p>
-    <p class='body' id="para2">Second paragraphSecond paragraph Second paragraph Second paragraph Second paragraph Second paragraph 
-        Second paragraph Second paragraph
+
+    <p class='body' id="para2">
+         Second paragraphSecond paragraph
+         Second paragraph Second paragraph 
+         Second paragraph Second paragraph 
+         Second paragraph Second paragraph
     </p>
-    <p class='body' id="para3"> Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph Third paragraph</p>
+
+    <p class='body' id="para3">
+        Third paragraph Third paragraph 
+        Third paragraph Third paragraph
+        Third paragraph Third paragraph
+    </p>
 
 
 
 
 
 <script>
+   
+   // Exercise 1 
     console.log('d3.version:', d3.version);
+    document.getElementById("test").innerHTML = d3.version; // writes the console log output to display on html page 
     
 
-     d3.select("#para1").style("color", "red") //changes the first paragraph to red
-     .style('text-align','center')
-     .style("font-size","50px")
-     .style("line-height","100px") 
-     .style("font-family", function(d,i) {return i<5 ? "ariel" : "ariel"; });
-
-     //add tranform and font family 
-    //  .style('transform',"rotate(-180deg) scale(0.001,0.001)" )
-    // .transition()
-    // .;
-     d3.selectAll(".body")  //selects all elements class body and then applies the attributes 
-     .style("color", "blue")
-     .style('text-align','center')
-     .style("font-size","15px");
-
-
-
-    let flag = false;
-
-     for (let i = 1; i < 11; i++) {
-        let temp = i
-        d3.select("body").append('div').text(i) // addds text to body tag generated from the script 
+     d3.selectAll("#para1") //selects all elements with id para1 and then applies the style attributes
+        .style("color", "red") //changes the first paragraph to red
         .style('text-align','center')
-        .style("font-size","15px")
-        .style("color", function(temp){ return (i<6? "red":"green"); }); 
+        .style("font-size","50px")
+        .style("line-height","100px") 
+        .style("font-family",  "sans-serif");
+
+
+     d3.selectAll(".body")  //selects all elements with class 'body' and then applies the attributes 
+        .style("color", "blue")
+        .style('text-align','center')
+        .style("font-size","15px");
+
+
+
+    let flag = false; // flag is set so that the changing the 1 to start and then turning it
+                      // green is executed only after loop is finished  
+
+     for (let i = 1; i < 11; i++) 
+     {
+        let temp = i
+        d3.select("body")
+            .append('div')
+            .text(i) // adds text to body tag generated from the script 
+                .style('text-align','center')
+                .style("font-size","15px")
+                .style("color", function(temp){ return (i<6? "red":"green"); }); 
          
         if(i>9){flag = true}
      }
 
      
 
-     if(flag){
-        d3.select("div").transition()
-     .delay(2000)
-    .text("Start")
-    .transition()
-    .duration(2000)
-    .style("color", "purple");
-
-     }
-
-     d3.select("body").append("div").text("Hello World!").style("color", "green");
+     if(flag){ // when the loop is in the final iteration, this if statement is executed 
+        d3.select("div") //since paragraphs are in <p> and <span>, only the numbers appended in the loop will be selected
+          .transition()  //and since only select is used, it will select the first div element 
+          .delay(2000)
+          .text("Start")
+          .transition()
+          .duration(2000)
+          .style("color", "purple");}
 
 
+     d3.select("body")
+       .append("div")
+       .text("Hello World!")
+       .style("color", "green"); //chaining Exercise 5
+  
 
 
-     document.getElementById("test").innerHTML = d3.version;
+
+     
  
 </script>
 

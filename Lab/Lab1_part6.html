@@ -1,264 +1,196 @@
-<html>
 <html lang="en">
-    <head>
-        <script src='https://d3js.org/d3.v7.min.js'></script>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-      </head> 
 
-<nav class="navbar navbar-light" style="background-color: #44a0ec8e;">
-    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1</a>
-    
-      <span class="navbar-toggler-icon"></span>
-   
-
-  </nav>
-
-
-
+<head>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 
 <body>
-    
-  <button type="button" class="btn btn-outline-secondary" id='button'>destroy</button>
-    
-    <script>
-//Create SVG element
-var svg = d3.select("body")
- .append("svg")
- .attr("width", 400)
- .attr("height", 400)
- .style("border", '1px solid green');
- //Create line element inside SVG
- svg.append("line")
- .attr("x1", 100)
- .attr("x2", 200)
- .attr("y1", 50)
- .attr("y2", 50)
- .attr("stroke", "blue")
+  <nav class="navbar navbar-light" style="background-color: #44a0ec8e">
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1</a>
 
- svg.append("line")
- .attr("x1", 100)
- .attr("x2", 100)
- .attr("y1", 50)
- .attr("y2", 150)
- .attr("stroke", "red")
-   
- svg.append("line")
- .attr("x1", 200)
- .attr("x2", 100)
- .attr("y1", 150)
- .attr("y2", 150)
- .attr("stroke", "green")
+    <span class="navbar-toggler-icon"></span>
+  </nav>
 
- svg.append("line")
- .attr("x1", 200)
- .attr("x2", 200)
- .attr("y1", 150)
- .attr("y2", 50)
- .attr("stroke", "purple")
+  <button type="button" class="btn btn-outline-secondary" id="button">
+    Change CSV
+  </button>
 
+  <script>
+    //Create SVG element
+    var svg = d3
+      .select("body")
+      .append("svg")
+      .attr("width", 400)
+      .attr("height", 400)
+      .style("border", "1px solid green");
+    //Create line element inside SVG
+    svg
+      .append("line")
+      .attr("x1", 100)
+      .attr("x2", 200)
+      .attr("y1", 50)
+      .attr("y2", 50)
+      .attr("stroke", "blue");
 
+    svg
+      .append("line")
+      .attr("x1", 100)
+      .attr("x2", 100)
+      .attr("y1", 50)
+      .attr("y2", 150)
+      .attr("stroke", "red");
 
+    svg
+      .append("line")
+      .attr("x1", 200)
+      .attr("x2", 100)
+      .attr("y1", 150)
+      .attr("y2", 150)
+      .attr("stroke", "green");
 
- var svg2 = d3.select("body")
- .append("svg")
- .attr("width", 500)
- .attr("height", 500)
- .style("border", '10px solid blue');
+    svg
+      .append("line")
+      .attr("x1", 200)
+      .attr("x2", 200)
+      .attr("y1", 150)
+      .attr("y2", 50)
+      .attr("stroke", "purple");
 
- let shapeCsv_1 = '../shapes_1.csv'
- let shapeCsv_2 = '../shapes_2.csv'
- arr_shapeData = [shapeCsv_1,shapeCsv_2] //array to switch between two csv files
- dataIndex=0
-line_data = []
-circle_data = []
-rectangle_data = []
-ellipse_data = []
+    var svg2 = d3
+      .select("body")
+      .append("svg")
+      .attr("width", 500)
+      .attr("height", 500)
+      .style("border", "10px solid blue");
 
-line_data1 = []
-circle_data1 = []
-rectangle_data1 = []
-ellipse_data1 = []
+    let shapeCsv_1 = "https://amankrishna171.github.io/DV/shapes_1.csv";
+    let shapeCsv_2 = "https://amankrishna171.github.io/DV/shapes_2.csv";
+    arr_shapeData = [shapeCsv_1, shapeCsv_2]; //array to switch between two csv files
+    dataIndex = 0;
+    line_data = [];
+    circle_data = [];
+    rectangle_data = [];
+    ellipse_data = [];
 
-d3.csv(arr_shapeData[1], function(data) {
- if(data.shape==='line'){line_data1.push(data)}
- else if(data.shape==='circle'){circle_data1.push(data)}
- else if(data.shape==='rect'){rectangle_data1.push(data)}
- else if (data.shape==='ellipse'){ellipse_data1.push(data)}
- // save
-})
+    document
+      .getElementById("button")
+      .addEventListener("click", button_switch); 
 
+    function button_switch() {
+      if (dataIndex == 0) {
+        dataIndex = 1;
+      } else {
+        dataIndex = 0;
+      }
+      changeCsv(dataIndex); 
+    }
 
-d3.csv(arr_shapeData[0], function(data) {
- if(data.shape==='line'){line_data.push(data)}
- else if(data.shape==='circle'){circle_data.push(data)}
- else if(data.shape==='rect'){rectangle_data.push(data)}
- else if (data.shape==='ellipse'){ellipse_data.push(data)}
- // save
-}).then(()=>{ 
+    function changeCsv(index) {  // function to change the csv currently being read
+      line_data = [];
+      circle_data = [];
+      rectangle_data = [];
+      ellipse_data = [];
 
-  svg2.selectAll("line")
-  .data(line_data)
-  .enter()
-  .append("line")
-  .attr("x1", function (d) { return d.x1; })
-  .attr("x2", function (d) { return d.x2; })
-  .attr("y1", function (d) { return d.y1; })
-  .attr("y2", function (d) { return d.y2; })
-  .attr("stroke", function (d) { return d.color; })
+      d3.csv(arr_shapeData[index], function (data) 
+      {
+        if (data.shape === "line") {line_data.push(data);}
+        else if (data.shape === "circle") { circle_data.push(data); } 
+        else if (data.shape === "rect") { rectangle_data.push(data); } 
+        else if (data.shape === "ellipse") { ellipse_data.push(data);}
+        // save the csv data into local data
+      })
+      .then(() => { updateSvg();}); // after data is collected, update function is triggered
+    }
 
-  svg2.selectAll("line")
-  .data(line_data1)
-  .attr("x1", function (d) { return d.x1; })
-  .attr("x2", function (d) { return d.x2; })
-  .attr("y1", function (d) { return d.y1; })
-  .attr("y2", function (d) { return d.y2; })
-  .attr("stroke", function (d) { return d.color; })
+    changeCsv(0); // this is the default function call, to show svh before button is pressed
 
-  
-
-  svg2.selectAll("rect")
-  .data(rectangle_data)
-  .enter()
-  .append("rect")
-  .attr("x", function (d) { return d.x1; })
-  .attr("y", function (d) { return d.x2; })
-  .attr("width", function (d) { return d.y1; })
-  .attr("height", function (d) { return d.y2; })
-  .attr("fill", function (d) { return d.color; })
-
-  svg2.selectAll("circle")
-  .data(circle_data)
-  .enter()
-  .append("circle")
-  .attr("cx", function (d) { return d.x1; })
-  .attr("cy", function (d) { return d.x2; })
-  .attr("r", function (d) { return d.y1; })
-  .attr("fill", function (d) { return d.color; })
-
-  svg2.selectAll("ellipse")
-  .data(ellipse_data)
-  .enter()
-  .append("ellipse")
-  .attr("id",'lights')
-  .attr("cx", function (d) { return d.x1; })
-  .attr("cy", function (d) { return d.x2; })
-  .attr("rx", function (d) { return d.y1; })
-  .attr("ry", function (d) { return d.y2; })
-  .attr("fill", function (d) { return d.color; })
+    function updateSvg() { // this function uses .join source : https://observablehq.com/@d3/selection-join
+      svg2
+        .selectAll("line")
+        .data(line_data)
+        .join(
+          enter => enter.append("line") //here enter is used if there are less DOM elements than required
+            .attr("x1", function (d) { return d.x1;})
+            .attr("x2", function (d) {return d.x2; })
+            .attr("y1", function (d) { return d.y1;})
+            .attr("y2", function (d) {return d.y2;})
+            .attr("stroke", function (d) { return d.color; }),
+          update => update              //Update is run to update the already existing elements with new data
+          .attr("x1", function (d) { return d.x1;})
+            .attr("x2", function (d) {return d.x2; })
+            .attr("y1", function (d) { return d.y1;})
+            .attr("y2", function (d) {return d.y2;})
+            .attr("stroke", function (d) { return d.color; }),
+          exit => exit.remove()         //Exit is run when there are more DOM elements than data that needs to be displayed 
+        )
 
 
-})
+      svg2
+        .selectAll("rect")
+        .data(rectangle_data)
+        .join(
+          enter => enter.append("rect")
+          .attr("x", function (d) { return d.x1; })
+          .attr("y", function (d) { return d.x2; })
+          .attr("width", function (d) { return d.y1; })
+          .attr("height", function (d) { return d.y2; })
+          .attr("fill", function (d) { return d.color; }),
+          update => update          
+          .attr("x", function (d) { return d.x1; })
+          .attr("y", function (d) { return d.x2; })
+          .attr("width", function (d) { return d.y1; })
+          .attr("height", function (d) { return d.y2; })
+          .attr("fill", function (d) { return d.color; }),
+          exit => exit.remove()
+        )
 
-document.getElementById("button").addEventListener("click", updateSvg);
-
-function button_switch(){
-
-  if(dataIndex == 0 ){dataIndex=1}
- else { dataIndex = 0}
- changeCsv(dataIndex);
-
-}
-
-function changeCsv(index) {
-
-  line_data = []
-  circle_data = []
-  rectangle_data = []
-  ellipse_data = []
-
-  d3.csv(arr_shapeData[index], function(data) {
- if(data.shape==='line'){line_data.push(data)}
- else if(data.shape==='circle'){circle_data.push(data)}
- else if(data.shape==='rect'){rectangle_data.push(data)}
- else if (data.shape==='ellipse'){ellipse_data.push(data)}
- // save
-});
-
-updateSvg();
-}
-
-
-function updateSvg(){
-  svg2.selectAll("line")
-  .data(line_data1)
-  .enter()
-  .append("line")
-  .attr("x1", function (d) { return d.x1; })
-  .attr("x2", function (d) { return d.x2; })
-  .attr("y1", function (d) { return d.y1; })
-  .attr("y2", function (d) { return d.y2; })
-  .attr("stroke", function (d) { return d.color; })
-  .exit()
- 
-
-  svg2.selectAll("rect")
-  .data(rectangle_data1)
-  .enter()
-  .append("rect")
-  .attr("x", function (d) { return d.x1; })
-  .attr("y", function (d) { return d.x2; })
-  .attr("width", function (d) { return d.y1; })
-  .attr("height", function (d) { return d.y2; })
-  .attr("fill", function (d) { return d.color; })
-  .exit()
-
-  svg2.selectAll("circle")
-  .data(circle_data1)
-  .enter()
-  .append("circle")
-  .attr("cx", function (d) { return d.x1; })
-  .attr("cy", function (d) { return d.x2; })
-  .attr("r", function (d) { return d.y1; })
-  .attr("fill", function (d) { return d.color; })
-  .exit()
-
-  svg2.selectAll("ellipse")
-  .data(ellipse_data1)
-  .enter()
-  .append("ellipse")
-  .attr("id",'lights')
-  .attr("cx", function (d) { return d.x1; })
-  .attr("cy", function (d) { return d.x2; })
-  .attr("rx", function (d) { return d.y1; })
-  .attr("ry", function (d) { return d.y2; })
-  .attr("fill", function (d) { return d.color; })
-  .exit()
-
-}
+      svg2
+        .selectAll("circle")
+        .data(circle_data)
+        .join(
+          enter => enter.append("circle")
+          .attr("cx", function (d) { return d.x1; })
+          .attr("cy", function (d) { return d.x2; })
+          .attr("r", function (d) { return d.y1; })
+          .attr("fill", function (d) { return d.color; }),
+          update => update
+          .attr("cx", function (d) { return d.x1; })
+          .attr("cy", function (d) { return d.x2; })
+          .attr("r", function (d) { return d.y1; })
+          .attr("fill", function (d) { return d.color; }),
+          exit => exit.remove()
+        )
 
 
-// document.getElementById("button").addEventListener("click", myFunction);
-// tire_flag = true
-// function myFunction() {
-//   if(tire_flag){d3.selectAll("#lights")
-//  .remove()
+      svg2
+        .selectAll("ellipse")
+        .data(ellipse_data)
+        .join(
+          enter => enter.append("ellipse")
+          .attr("id",'lights')
+          .attr("cx", function (d) { return d.x1; })
+          .attr("cy", function (d) { return d.x2; })
+          .attr("rx", function (d) { return d.y1; })
+          .attr("ry", function (d) { return d.y2; })
+          .attr("fill", function (d) { return d.color; }),
+          update => update
+          .attr("id",'lights')
+          .attr("cx", function (d) { return d.x1; })
+          .attr("cy", function (d) { return d.x2; })
+          .attr("rx", function (d) { return d.y1; })
+          .attr("ry", function (d) { return d.y2; })
+          .attr("fill", function (d) { return d.color; }),
+          exit => exit.remove()
+        )
 
-//  tire_flag = false}
-//  else {
-//   tire_flag = true
-  
-//   svg2.selectAll("ellipse")
-//   .data(ellipse_data)
-//   .enter()
-//   .append("ellipse")
-//   .attr("id",'lights')
-//   .attr("cx", function (d) { return d.x1; })
-//   .attr("cy", function (d) { return d.x2; })
-//   .attr("rx", function (d) { return d.y1; })
-//   .attr("ry", function (d) { return d.y2; })
-//   .attr("fill", function (d) { return d.color; })}
-  
-// }
+    }
 
-
-
-
-   
-   </script>
-
+  </script>
 </body>
+
 </html>

@@ -28,11 +28,15 @@
         <div></div>
     </div>
 
+    <br><br>
+
     <div class = 'exercise6'>
         <div></div>
         <div></div>
         <div></div>
     </div>
+
+    <br><br>
 
     <div class = 'exercise7'>
         <div></div>
@@ -42,54 +46,59 @@
     </div>
     
     <script>
-    let nums = [10, 50, 200];
-    let paragraph = d3.select('.example')
-     .selectAll("div")
-     .data(nums)
-     .text(function (d, i) {
-     console.log("d: " + d);
-     console.log("i: " + i);
-     console.log("this: " + this);
-     return 'cont:' + d; // return value is used to set the 'text'
-     })
-     .style("color", function(d){ return (d>=100? "red": ""); }); // greater or equal to 100 use red
-   
-     let otherdata = [ {name:'test', val:1, colour:"red"}, 
-        {name:'other', val:2 , colour:"blue"},
-        {name:'b', val:3 , colour:"green"} ];
-        let paragraph2 = d3
-        .select(".exercise6")
-        .selectAll("div")
-        .data(otherdata)
-        .text(function (d, i) {
-        console.log("d.name: " + d.name);
-        console.log("d.val: " + d.val);
-        console.log("i: " + i);
-        console.log("this: " + this);
-        return 'cont name:' + d.name + "   cont colour :"+ d.colour; // return value is used to set the 'text'
-        })
-        // .style("color", function(d){ return d.colour}) ;
+            let nums = [10, 50, 200];
+            let paragraph = d3.select('.example')
+                                .selectAll("div")
+                                .data(nums)
+                                .text(function (d, i) 
+                                {
+                                    console.log("d: " + d);
+                                    console.log("i: " + i);
+                                    console.log("this: " + this);
+                                    return 'cont:' + d; // return value is used to set the 'text'
+                                })
+                                    .style("color", function(d){ return (d>=100? "red": ""); }) // greater or equal to 100 use red
+                                    .style('text-align','center')
+                                    .style("font-size","15px"); 
+        
+            let otherdata = [ // new data wit colour attribute
+                {name:'test', val:1, colour:"red"}, 
+                {name:'other', val:2 , colour:"blue"},
+                {name:'b', val:3 , colour:"green"} ];
+                
+            let paragraph2 = d3.select(".exercise6")  //selects elements with class exercise6 
+                                .selectAll("div")
+                                .data(otherdata)   //uses the new array told to be made
+                                .text(function (d, i) 
+                                {
+                                    console.log("d.name: " + d.name);
+                                    console.log("d.val: " + d.val);
+                                    console.log("i: " + i);
+                                    console.log("this: " + this);
+                                    return 'cont name:' + d.name + "  | cont colour :"+ d.colour; // return value is used to set the 'text'
+                                })
+                                .style('text-align','center')
+                                .style("font-size","15px")
 
 
-        let num = [10, 50, 100, 200];
-        let paragraph3 = d3.select("body")
-        .select(".exercise7")
-        .selectAll("div")
-        .data(num)
-        .text(function (d, i) {
-        return 'cont:' + d; // return value is used to set the 'text'
-        })
-        .style("color", function(d, i) {
-        if ( d >= 50 && d <= 100 ) {
-        return "red";
-        } else {
-        return "yellow";
-        }
-        return 'blue';
-        });
-   
-   
-   
+
+            let num = [10, 50, 100, 200];
+            let paragraph3 = d3.select("body")
+                                .select(".exercise7")
+                                .selectAll("div")
+                                .data(num)
+                                .text(function (d, i) {return 'cont:' + d;})// return value is used to set the 'text'
+                                .style("color", function(d, i)
+                                {
+                                    if ( d >= 50 && d <= 100 ) {return "red";} 
+                                    else {return "yellow";}
+                                    return 'blue'; 
+                                })
+                                .style('text-align','center')
+                                .style("font-size","15px");
+        
+        
+        
    
    </script>
 

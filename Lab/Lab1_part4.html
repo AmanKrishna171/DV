@@ -26,16 +26,17 @@
     
     <script>
 
-        var  myData = ['a', 'a', 4, 1, 'b', 6, 2, 8, 9, 'z']; //fix this
+        var  myData = [,'a', 4, 1, 'b', 6, 2, 8, 9, 'z'];
         
-        var p = d3.select("body")
+        var p = d3.selectAll("body")
         .selectAll("span")
         .data(myData)
         .enter()
         .append('span')
-        .text(function (d, i) {return d;})
-        .style('font-size', '5em')
-        .style("color", function(d){ return (typeof d === 'number' ? 'green' : 'blue')}) ;
+        .text(function (d) {return d}) // here it uses the element from data as text input
+        .style('font-size', '5em')     // make it readable wiht bigger font
+        .style("color", function(d){ return (typeof d === 'number' ? 'green' : 'blue')}) ; // if the element is of type number then green or else blue
+        
    </script>
 
 
@@ -43,17 +44,16 @@
 <p>1</p>
 <p>2</p>
 <p>3</p>
-<script>
- var myData = [3, 4];
- var p = d3.select("body")
- .selectAll("p")
- .data(myData)
- .text(function (d, i) {
- return d;
- })
- .exit()
- .remove();
-</script>
+
+    <script>
+        var myData = [3, 4];
+        var p = d3.select("body")
+                  .selectAll("p")
+                  .data(myData)
+                  .text(function (d, i) {return d;})
+                    .style('font-size', '5em')  
+                  .exit().remove(); // this will remove the div tags that dont have any data to show, so the third div tag does not display
+    </script>
 
 
 </body>

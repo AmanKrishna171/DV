@@ -22,75 +22,73 @@
 
 <body>
     
-  <div class = 'exercise9'>
-
-  </div>
+  <div class = 'exercise9'></div>
 
     
     <script>
-    num_arr1= [{name : 'Mrs count: ', count: 0},{name : 'Mr count: ', count: 0},{name : 'Others count: ', count: 0},
-    {name : 'Male count: ', count: 0}, {name : 'Female count: ', count: 0},]
+        num_arr1= [{name : 'Mrs count: ', count: 0},{name : 'Mr count: ', count: 0},{name : 'Others count: ', count: 0},
+                   {name : 'Male count: ', count: 0}, {name : 'Female count: ', count: 0},] // array to keep track of name (to be displayed) and its count
 
-    let titaniccsv = 'https://raw.githubusercontent.com/dsindy/kaggle-titanic/master/data/test.csv';
-    d3.csv(titaniccsv, function(data) {
+        let titaniccsv = 'https://raw.githubusercontent.com/dsindy/kaggle-titanic/master/data/test.csv';
 
-    if (data.Name.includes('Mrs')){num_arr1[0].count=num_arr1[0].count+1;}
-    else if (data.Name.includes('Mr')){num_arr1[1].count=num_arr1[1].count+1;}
-    else {num_arr1[2].count=1+num_arr1[2].count ;} 
+        d3.csv(titaniccsv, function(data) 
+        {
+  
+          if (data.Name.includes('Mrs')){num_arr1[0].count=num_arr1[0].count+1;} // first Mrs is counted as Mrs also includes Mr in it , so Mrs is counted first 
+          else if (data.Name.includes('Mr')){num_arr1[1].count=num_arr1[1].count+1;} //then Mr is counted
+          else {num_arr1[2].count=1+num_arr1[2].count ;}     // after Others are counted
 
 
-    if(data.Sex.includes('female')){num_arr1[4].count=1+num_arr1[4].count;}
-    else{num_arr1[3].count=1+num_arr1[3].count;}
-    
-    
-    }).then(()=>{  d3.select("body")
-                      .selectAll('.exercise9')
-                      .selectAll("p")
-                      .data(num_arr1)
-                      .enter()
-                      .append('p')
-                      .text(function (d, i) {return (d.name + d.count );})
-                      .style('font-size', '5em')
-                    
-                    
-                    
+          if(data.Sex.includes('female')){num_arr1[4].count=1+num_arr1[4].count;} // similarly female is counted before male as if male is counted first
+          else{num_arr1[3].count=1+num_arr1[3].count;}                            // it will include female as both have 'male' in them
+        
+        
+        }).then(()=>{ 
+                        d3.select("body")
+                          .selectAll('.exercise9')  // then p elements with id 'exercise9' is selected 
+                          .selectAll("p")
+                          .data(num_arr1)
+                          .enter()
+                          .append('p')
+                          .text(function (d, i) {return (d.name + d.count );})  // the name (title) with count is displayed
+                          .style('font-size', '5em')
                     });
-// excercise 9
+    // excercise 9
 
 
-let heartfailurecsv = 'https://raw.githubusercontent.com/akmand/datasets/master/heart_failure.csv';
+    let heartfailurecsv = 'https://raw.githubusercontent.com/akmand/datasets/master/heart_failure.csv';
 
-count_overFifty =0        
-count_arr2 = [{name : 'Total patients between age of 1-30: ', count: 0},
-              {name : 'Total patients between age of 31-40: ', count: 0},
-              {name : 'Total patients between age of 41-60: ', count: 0},
-              {name : 'Total patients between age of 61-100: ', count: 0}]
+    count_overFifty =0        
+    count_arr2 = [,{name : 'Total patients between age of 1-30: ', count: 0},
+                  {name : 'Total patients between age of 31-40: ', count: 0},
+                  {name : 'Total patients between age of 41-60: ', count: 0},
+                  {name : 'Total patients between age of 61-100: ', count: 0}]
 
-d3.csv(heartfailurecsv, function(data) {
+    d3.csv(heartfailurecsv, function(data) {
 
-patient_age = data.age
+    patient_age = data.age
 
-if (patient_age>50){count_overFifty=count_overFifty+1}
+    if (patient_age>50){count_overFifty=count_overFifty+1}
 
-if(patient_age > 0 && patient_age <=30){ count_arr2[0].count= count_arr2[0].count+=1}
-else if(patient_age > 30 && patient_age <=40){count_arr2[1].count+=1}
-else if(patient_age > 40 && patient_age <=60){count_arr2[2].count+=1}
-else if(patient_age > 60 && patient_age <=100){count_arr2[3].count+=1}
+    if(patient_age > 0 && patient_age <=30){ count_arr2[0].count= count_arr2[0].count+=1}
+    else if(patient_age > 30 && patient_age <=40){count_arr2[1].count+=1}
+    else if(patient_age > 40 && patient_age <=60){count_arr2[2].count+=1}
+    else if(patient_age > 60 && patient_age <=100){count_arr2[3].count+=1}
 
-}).then(()=>{  d3.select("body")
-                  .append('div')
-                  .text("Heart failure over the age of 50:  "+ count_overFifty)
-                  .style('font-size', '5em')
-                
-                  d3.select("body")
-                      .selectAll("p")
-                      .data(count_arr2)
-                      .enter()
-                      .append('p')
-                      .text(function (d, i) {return (d.name + d.count);})
+    }).then(()=>{  d3.select("body")
+                      .append('div')
+                      .text("Heart failure over the age of 50:  "+ count_overFifty)
                       .style('font-size', '5em')
+                    
+                      d3.select("body")
+                          .data(count_arr2)
+                          .enter()
+                          .append('p')
+                          .text(function (d, i) {return (d.name + d.count);})
+                          .style('font-size', '5em')
+                         
 
-                });
+                    });
 
 
           
