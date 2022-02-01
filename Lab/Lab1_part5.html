@@ -23,6 +23,7 @@
 <body>
     
   <div class = 'exercise9'></div>
+  <div class = 'exercise10'></div>
 
     
     <script>
@@ -58,36 +59,37 @@
 
     let heartfailurecsv = 'https://raw.githubusercontent.com/akmand/datasets/master/heart_failure.csv';
 
-    count_overFifty =0        
-    count_arr2 = [,{name : 'Total patients between age of 1-30: ', count: 0},
-                  {name : 'Total patients between age of 31-40: ', count: 0},
+    count_overFifty =0        // counter to keep track of people over 50
+
+    count_arr2 = [,{name : 'Total patients between age of 31-40: ', count: 0},//array to keep track of name (to be displayed) and its count
                   {name : 'Total patients between age of 41-60: ', count: 0},
-                  {name : 'Total patients between age of 61-100: ', count: 0}]
+                  {name : 'Total patients between age of 61-100: ', count: 0},
+                  {name : 'Total patients between age of 1-30: ', count: 0}, ]
 
     d3.csv(heartfailurecsv, function(data) {
 
     patient_age = data.age
 
-    if (patient_age>50){count_overFifty=count_overFifty+1}
+    if (patient_age>50){count_overFifty=count_overFifty+1}  // counts the number of patients over 50
 
-    if(patient_age > 0 && patient_age <=30){ count_arr2[0].count= count_arr2[0].count+=1}
-    else if(patient_age > 30 && patient_age <=40){count_arr2[1].count+=1}
-    else if(patient_age > 40 && patient_age <=60){count_arr2[2].count+=1}
-    else if(patient_age > 60 && patient_age <=100){count_arr2[3].count+=1}
+    if(patient_age > 0 && patient_age <=30){ count_arr2[0].count+=1} //logic to count the patients based on age bounds
+    if(patient_age > 30 && patient_age <=40){count_arr2[1].count+=1}
+    if(patient_age > 40 && patient_age <=60){count_arr2[2].count+=1}
+    if(patient_age > 60 && patient_age <=100){count_arr2[3].count+=1}
 
     }).then(()=>{  d3.select("body")
+                      .selectAll('.exercise10')  //
                       .append('div')
                       .text("Heart failure over the age of 50:  "+ count_overFifty)
-                      .style('font-size', '5em')
+                      .style('font-size', '5em');
                     
-                      d3.select("body")
+                    d3.select("body")
+                          .selectAll('.exercise10')  //here all the elements with id 'exercise10' is selected 
                           .data(count_arr2)
                           .enter()
-                          .append('p')
+                          .append('p')  //appends <p> for the required number of data
                           .text(function (d, i) {return (d.name + d.count);})
-                          .style('font-size', '5em')
-                         
-
+                          .style('font-size', '5em');
                     });
 
 

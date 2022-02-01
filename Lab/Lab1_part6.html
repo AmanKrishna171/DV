@@ -11,86 +11,89 @@
 
 <body>
   <nav class="navbar navbar-light" style="background-color: #44a0ec8e">
-    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1</a>
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1 Home</a>
 
     <span class="navbar-toggler-icon"></span>
   </nav>
 
+<div id='exercise11'>
   <button type="button" class="btn btn-outline-secondary" id="button">
     Change CSV
   </button>
 
+</div>
+
   <script>
-    //Create SVG element
-    var svg = d3
-      .select("body")
-      .append("svg")
-      .attr("width", 400)
-      .attr("height", 400)
-      .style("border", "1px solid green");
-    //Create line element inside SVG
-    svg
-      .append("line")
+    //Exercise 11
+
+              // the code below are hardcoded values to make square for Excercise 11
+    var svg = d3.select("body")
+                .append("svg")
+                .attr("width", 400)
+                .attr("height", 400)
+                .style("border", "1px solid green");
+    
+    svg.append("line")
       .attr("x1", 100)
       .attr("x2", 200)
       .attr("y1", 50)
       .attr("y2", 50)
       .attr("stroke", "blue");
 
-    svg
-      .append("line")
+    svg.append("line")
       .attr("x1", 100)
       .attr("x2", 100)
       .attr("y1", 50)
       .attr("y2", 150)
       .attr("stroke", "red");
 
-    svg
-      .append("line")
+    svg.append("line")
       .attr("x1", 200)
       .attr("x2", 100)
       .attr("y1", 150)
       .attr("y2", 150)
       .attr("stroke", "green");
 
-    svg
-      .append("line")
+    svg.append("line")
       .attr("x1", 200)
       .attr("x2", 200)
       .attr("y1", 150)
       .attr("y2", 50)
       .attr("stroke", "purple");
 
-    var svg2 = d3
-      .select("body")
-      .append("svg")
-      .attr("width", 500)
-      .attr("height", 500)
-      .style("border", "10px solid blue");
 
-    let shapeCsv_1 = "https://amankrishna171.github.io/DV/shapes_1.csv";
-    let shapeCsv_2 = "https://amankrishna171.github.io/DV/shapes_2.csv";
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+
+//Exercise 12 & 13
+
+    let shapeCsv_1 ='../csvFiles/shapes_1.csv'; // Two csv files with information on svg shapes
+    let shapeCsv_2 ='../csvFiles/shapes_2.csv';
+
     arr_shapeData = [shapeCsv_1, shapeCsv_2]; //array to switch between two csv files
+
     dataIndex = 0;
-    line_data = [];
+
+    line_data = []; // arrays to store the csv file information locally
     circle_data = [];
     rectangle_data = [];
     ellipse_data = [];
 
     document
       .getElementById("button")
-      .addEventListener("click", button_switch); 
+      .addEventListener("click", button_switch);  // trigger button to change between the files
 
-    function button_switch() {
-      if (dataIndex == 0) {
-        dataIndex = 1;
-      } else {
-        dataIndex = 0;
-      }
+    function button_switch() // function to switch between the files
+    {
+      if (dataIndex == 0) {dataIndex = 1; } 
+      else {dataIndex = 0;}
+
       changeCsv(dataIndex); 
     }
 
-    function changeCsv(index) {  // function to change the csv currently being read
+    function changeCsv(index) // function to change the csv currently being read
+    {  
+
+      // all the local data is reset first 
       line_data = [];
       circle_data = [];
       rectangle_data = [];
@@ -98,16 +101,25 @@
 
       d3.csv(arr_shapeData[index], function (data) 
       {
+        // save the csv data into local array
         if (data.shape === "line") {line_data.push(data);}
         else if (data.shape === "circle") { circle_data.push(data); } 
         else if (data.shape === "rect") { rectangle_data.push(data); } 
         else if (data.shape === "ellipse") { ellipse_data.push(data);}
-        // save the csv data into local data
       })
       .then(() => { updateSvg();}); // after data is collected, update function is triggered
     }
 
-    changeCsv(0); // this is the default function call, to show svh before button is pressed
+
+    var svg2 = d3  // svg for the exercise 12 and 13
+      .select("body")
+      .append("svg")
+      .attr("width", 500)
+      .attr("height", 500)
+      .style("border", "10px solid blue");
+
+
+    changeCsv(0); // this is the default function call, to show svg before button is pressed
 
     function updateSvg() { // this function uses .join source : https://observablehq.com/@d3/selection-join
       svg2
@@ -120,7 +132,7 @@
             .attr("y1", function (d) { return d.y1;})
             .attr("y2", function (d) {return d.y2;})
             .attr("stroke", function (d) { return d.color; }),
-          update => update              //Update is run to update the already existing elements with new data
+          update => update              //Update is run to update the elements with new data
           .attr("x1", function (d) { return d.x1;})
             .attr("x2", function (d) {return d.x2; })
             .attr("y1", function (d) { return d.y1;})
@@ -129,7 +141,7 @@
           exit => exit.remove()         //Exit is run when there are more DOM elements than data that needs to be displayed 
         )
 
-
+              // the code below follows the same logic as above but for different svg shapes
       svg2
         .selectAll("rect")
         .data(rectangle_data)
