@@ -59,7 +59,7 @@
         .attr("font-family", "sans-serif")
         .text(function(d) {return d; });
 
-
+// Code for Rectangles with size dependent on the data values
     
         const svg_2 = d3.select("body")
                         .append("svg")
@@ -73,87 +73,60 @@
                         .attr("transform", function(d, i) {return "translate(0,0)"; })
 
         g1.append("rect")
-        .attr("x", function(d, i) {
-        return i*100 +30 ;
-        })
-        .attr("y", function(d, i) {
-        return 100-20*i*0.2;
-        })
-        .attr("width", function(d) {
-        return d +30;
-        })
-        .attr("height", function(d) {
-        return d +30;
-        })
-        .attr("fill", function(d, i){
-        return colors[i];
-        })
+          .attr("x", function(d, i) {return i*100 +30 ;})
+          .attr("y", function(d, i) {return 100-20*i*0.2;})
+          .attr("width", function(d) { return d +30;})
+          .attr("height", function(d) { return d +30;})
+          .attr("fill", function(d, i){ return colors[i];})
+          
         g1.append("text")
-        .attr("x", function(d, i) {
-        return i * 100 +50;
-        })
-        .attr("y", 125)
-        .attr("stroke", "black")
-        .style('fill','black')
-        .attr("font-size", "20px")
-        .attr("font-family", "sans-serif")
-        .text(function(d) {
-        return d;
-        });
+          .attr("x", function(d, i) { return i * 100 +45;})
+          .attr("y", 125)
+          .attr("stroke", "black")
+          .style('fill','black')
+          .attr("font-size", "20px")
+          .attr("font-family", "sans-serif")
+          .text(function(d) {return d;});
 
+
+ // Code for alternating Squares and Circles with size dependent on the data values
 
         const data2 = [15, 20, 25, 30,40,45];
         const colors_2 = ['#d4e6b5','#dc493a','#f58a07','#012622','#f9ab55','#f58a07']
         const colors_3=['#afc97e','#4392f1','#f7f5fb','#83b5d1','#cad178','#00a8e8']
+
         const svg_3 = d3.select("body")
                         .append("svg")
                         .attr("width", '100vw')
                         .attr("height", height);
 
         const G = svg_3.selectAll("g")
-        .data(data2)
-        .enter()
-        .append("g")
-        .attr("transform", function(d, i) {
-        return "translate(0,0)";
-        })
+                      .data(data2)
+                      .enter()
+                      .append("g")
+                      .attr("transform", function(d, i) {return "translate(0,0)";})
+
         G.append("rect")
-        .attr("x", function(d, i) {
-        return i*100 +30 ;
-        })
-        .attr("y", function(d, i) {
-        return 100-20 *i*0.2;
-        })
-        .attr("width", function(d,i) {
-        return (i%2===0 ? d +30:0);
-        })
-        .attr("height", function(d,i) {
-          return (i%2===0 ? d +30:0);
-        })
-        .attr("fill", function(d, i){
-        return colors_2[i];
-        })
+          .attr("x", function(d, i) {return i*100 +30 ;}) // Here i have added a factor that multipies with x and y coordinates so 
+          .attr("y", function(d, i) {return 100-20 *i*0.2; }) // each shape starts from the center
+          .attr("width", function(d,i) { return (i%2===0 ? d +30 : 0);}) // Here this ternary function will show sqaures  in even indexes
+          .attr("height", function(d,i) {return (i%2===0 ? d +30 : 0);})
+          .attr("fill", function(d, i){ return colors_2[i];})
+
         G.append("circle")
-        .attr("cx", function(d, i) {
-        return i*100 + 60;
-        })
-        .attr("cy", function(d, i) {
-        return 119;
-        })
-        .attr("r", function(d,i) {
-          return (i%2===0 ? 0 : d );
-        })
-        .attr("fill", function(d, i){
-        return colors_3[i];
-        })
+          .attr("cx", function(d, i) {return i*100 + 55; })// Here i have added a factor that multipies with x and y coordinates so each shape starts from the center
+          .attr("cy", function(d, i) {return 119;})
+          .attr("r", function(d,i) { return (i%2===0 ? 0 : d ); })// here this ternary function will show circles  in odd indexes
+          .attr("fill", function(d, i){return colors_3[i];})
+
         G.append("text")
-        .attr("x", function(d, i) { return i * 100 +50; })
-        .attr("y", 125)
-        .attr("stroke", "black")
-        .style('fill','black')
-        .attr("font-size", "20px")
-        .attr("font-family", "sans-serif")
-        .text(function(d) {return d;});
+          .attr("x", function(d, i) { return i * 100 +45; })
+          .attr("y", 125)
+          .attr("stroke", "black")
+          .style('fill','black')
+          .attr("font-size", "20px")
+          .attr("font-family", "sans-serif")
+          .text(function(d) {return d;});
         
 
         

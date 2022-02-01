@@ -41,260 +41,201 @@
 
     <script>
 
-// Set Dimensions
-const xSize = 600; const ySize = 600;
-const margin = 40;
-const xMax = xSize - margin*2;
-const yMax = ySize - margin*2;
-// Create Random Points
-const numPoints = 200;
-const data = [];
-const data_sine = [];
-const data_cos = [];
-const data_random = [];
-for (let i = 0; i < numPoints; i++) { data_sine.push( {x: i/100, y: Math.sin( 6.2 * i/100 ) } ); }
-for (let i = 0; i < numPoints; i++) { data_cos.push( {x: i/100, y: Math.cos( 6.2 * i/100 ) } ); }
-function randomPlot(x){
-    var a = 0.05;
-var b = 10; //play with these values to your liking
-var y;
+            // Set Dimensions
+            const xSize = 600; const ySize = 600;
+            const margin = 40;
+            const xMax = xSize - margin*2;
+            const yMax = ySize - margin*2;
 
-//loop here from 0 to whatever
-return  a * x^2 + b * x * Math.random();
-//or using your randomMumber function:
+            const numPoints = 200;
+            const data = [];
+            const data_sine = [];
+            const data_cos = [];
+            const data_random = [];
+            for (let i = 0; i < numPoints; i++) { data_sine.push( {x: i/100, y: Math.sin( 6.2 * i/100 ) } ); } // function to make sine values
+            for (let i = 0; i < numPoints; i++) { data_cos.push( {x: i/100, y: Math.cos( 6.2 * i/100 ) } ); }  // function to make cosine values
+            
+            function randomPlot(x) // function to create random values (source: https://stackoverflow.com/questions/26656589/how-can-i-generate-random-numbers-for-demo-charts-that-roughly-trend-up-and-to-t)
+            {
+                var a = 0.05;
+                var b = 10; 
+                var y;
+            return  a * x^2 + b * x * Math.random();
+            }
 
-}
-for (let i = 0; i < numPoints; i++) { data_random.push( {x: i/100, y: randomPlot(i/100) } ); }
-
-
-
-//Excersie 22
-
-function Generate_graph(data,colour,name){
-    const xExtent = d3.extent( data, d=>{ return d.x } );
-    const yExtent = d3.extent( data, d=>{ return d.y } );
-    // Append SVG Object to the Page
-    const svg = d3.select("body")
-    .append("svg")
-    .attr('width', '100vw' )
-    .attr('height', ySize +60 )
-    .attr("style", "outline: thin solid Grey;") 
-    .append("g")
-    .attr("transform","translate(" + margin + "," + margin + ")");
-    // X Axis
-    const x = d3.scaleLinear()
-    .domain([ xExtent[0], xExtent[1] ])
-    .range([0, xMax]);
-    // bottom
-    svg.append("g")
-    .attr("transform", "translate(0," + yMax + ")")
-    .call(d3.axisBottom(x))
-    .attr('color', 'green'); // make bottom axis green
-    // top
-    svg.append("g")
-    .call(d3.axisTop(x));
-    // Y Axis
-    const y = d3.scaleLinear()
-    .domain([ yExtent[0], yExtent[1] ])
-    .range([ yMax, 0]);
-    // left y axis
-    svg.append("g")
-    .call(d3.axisLeft(y));
-    // right y axis
-    svg.append("g")
-    .attr("transform", `translate(${yMax},0)`)
-    .call(d3.axisRight(y));
-    // Add the line
-    svg.append("path")
-    .datum(data)
-    .attr("fill", "none")
-    .attr("stroke", colour)
-    .attr("stroke-width", 1.5)
-    .attr("d", d3.line()
-    .x(function(d) { return x(d.x) })
-    .y(function(d) { return y(d.y) })
-    );
-
-    svg.append('text').text(name)
-    .attr('x',180)
-    .attr('y',580)
-    .style('font-size', '2em')
-
-}   
+            for (let i = 0; i < numPoints; i++) { data_random.push( {x: i/100, y: randomPlot(i/100) } ); }  // function to put random values in array
 
 
 
-//Excersie 24
-//  Draw_graph(svg_2,data_sine,'red')
-// Draw_graph(svg_2,data_cos,'blue')
+            //Excersie 22
 
-// Get the 'limits' of the data - the full extent (mins and max)
-// so the plotted data fits perfectly 
-d3.select("body")
- .append("svg")
- .attr('width', '100vw' )
- .attr('height', 100 )
- .append('text').text('Exercise 24 (press the buttons to generate graphs): ')
-    .attr('x',30)
-    .attr('y',80)
-    .style('font-size', '2em')
+            function Generate_graph(data,colour,name){
+                const xExtent = d3.extent( data, d=>{ return d.x } );
+                const yExtent = d3.extent( data, d=>{ return d.y } );
+                // Append SVG Object to the Page
+                const svg = d3.select("body")
+                .append("svg")
+                .attr('width', '100vw' )
+                .attr('height', ySize +60 )
+                .attr("style", "outline: thin solid Grey;") 
+                .append("g")
+                .attr("transform","translate(" + margin + "," + margin + ")");
+                // X Axis
+                const x = d3.scaleLinear()
+                .domain([ xExtent[0], xExtent[1] ])
+                .range([0, xMax]);
+                // bottom
+                svg.append("g")
+                .attr("transform", "translate(0," + yMax + ")")
+                .call(d3.axisBottom(x))
+                .attr('color', 'green'); // make bottom axis green
+                // top
+                svg.append("g")
+                .call(d3.axisTop(x));
+                // Y Axis
+                const y = d3.scaleLinear()
+                .domain([ yExtent[0], yExtent[1] ])
+                .range([ yMax, 0]);
+                // left y axis
+                svg.append("g")
+                .call(d3.axisLeft(y));
+                // right y axis
+                svg.append("g")
+                .attr("transform", `translate(${yMax},0)`)
+                .call(d3.axisRight(y));
+                // Add the line
+                svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", colour)
+                .attr("stroke-width", 1.5)
+                .attr("d", d3.line()
+                .x(function(d) { return x(d.x) })
+                .y(function(d) { return y(d.y) })
+                );
 
-const svg_1 = d3.select("body")
- .append("svg")
- .attr('width', xSize )
- .attr('height', ySize )
- .append("g")
- .attr("class","svg1")
- .attr("transform","translate(" + margin + "," + margin + ")")
- ;
+                svg.append('text').text(name)
+                .attr('x',180)
+                .attr('y',580)
+                .style('font-size', '2em')
 
- d3.select("body")
- .append("svg")
- .attr('width', '100vw' )
- .attr('height', 100 )
- .append('text').text('Exercise 22: ')
-    .attr('x',30)
-    .attr('y',80)
-    .style('font-size', '2em')
+            }   
 
 
 
- /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Excersie 23
+            //Excersie 24
 
-function Generate_graph_csv(path,colour,name){
+            d3.select("body")
+            .append("svg")
+            .attr('width', '100vw' )
+            .attr('height', 100 )
+            .append('text').text('Exercise 24 (press the buttons to generate graphs): ')
+                .attr('x',30)
+                .attr('y',80)
+                .style('font-size', '2em')
 
-csv_data=[]
-d3.csv(path, function(data) {csv_data.push(data)})
-  .then(()=>{Generate_graph(csv_data,colour,name)});
-}   
+            const svg_1 = d3.select("body")
+            .append("svg")
+            .attr('width', xSize )
+            .attr('height', ySize )
+            .append("g")
+            .attr("class","svg1")
+            .attr("transform","translate(" + margin + "," + margin + ")")
+            ;
+
+            d3.select("body")
+            .append("svg")
+            .attr('width', '100vw' )
+            .attr('height', 100 )
+            .append('text').text('Exercise 22: ')
+                .attr('x',30)
+                .attr('y',80)
+                .style('font-size', '2em')
+
+
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Excersie 23
+
+            function Generate_graph_csv(path,colour,name)
+            {  // gets data from csv files
+                csv_data=[]
+                d3.csv(path, function(data) {csv_data.push(data)})
+                    .then(()=>{Generate_graph(csv_data,colour,name)}); // calls the generate graph function
+            }   
 
 
 
 
 
-                
+                            
+          // Exercise 22 :
+            Generate_graph(data_sine,'blue','Sine Wave')
+            Generate_graph(data_cos,'red','Cosine Wave')
+            Generate_graph(data_random,'red','Random Graph')
 
-Generate_graph(data_sine,'blue','Sine Wave')
-Generate_graph(data_cos,'red','Cosine Wave')
-Generate_graph(data_random,'red','Random Graph')
-
-Generate_graph_csv('../csvFiles/ex3.csv','blue','Plot from ex3.csv')
-
-Generate_graph_csv('../csvFiles/ex4.csv','red','Plot from ex4.csv')
-
-
-const svg_yes1= d3.select("body")
-                    .selectAll("#svg1")
-
- const svg_2 = d3.select("body")
- .append("svg")
- .attr('width', xSize )
- .attr('height', ySize )
- .append("g")
- .attr("transform","translate(" + margin + "," + margin + ")");
+          // Exercise 23  
+            Generate_graph_csv('../csvFiles/ex3.csv','blue','Plot from ex3.csv')
+            Generate_graph_csv('../csvFiles/ex4.csv','red','Plot from ex4.csv')
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
- function Draw_graph(svg_name,data,colour){
-const xExtent = d3.extent( data, d=>{ return d.x } );
-const yExtent = d3.extent( data, d=>{ return d.y } );
-// X Axis
-const x = d3.scaleLinear()
- .domain([ xExtent[0], xExtent[1] ])
- .range([0, xMax]);
-// bottom
+            const svg_yes1= d3.select("body")
+                                .selectAll("#svg1")
 
-svg_name.append("g")
- .attr("transform", "translate(0," + yMax + ")")
- .call(d3.axisBottom(x))
- .attr('color', 'green'); // make bottom axis green
-// top
-svg_name.append("g")
- .call(d3.axisTop(x));
-// Y Axis
-const y = d3.scaleLinear()
- .domain([ yExtent[0], yExtent[1] ])
- .range([ yMax, 0]);
-// left y axis
-svg_name.append("g")
-
- .call(d3.axisLeft(y));
-// right y axis
-svg_name.append("g")
- .attr("transform", `translate(${yMax},0)`)
-  .attr("class","myXaxis")
- .call(d3.axisRight(y));
-// Add the line
-svg_name.append("path")
- .datum(data)
- .attr("fill", "none")
- .attr("stroke", colour)
- .attr("stroke-width", 1.5)
- .attr("d", d3.line()
- .x(function(d) { return x(d.x) })
- .y(function(d) { return y(d.y) })
- );
- }               
+            const svg_2 = d3.select("body")
+            .append("svg")
+            .attr('width', xSize )
+            .attr('height', ySize )
+            .append("g")
+            .attr("transform","translate(" + margin + "," + margin + ")");
 
 
+            //////////////////////////////////////////////////////////////////////////////////////////
+
+            // Excerise 24: 
+
+            function Draw_graph(svg_name,data,colour){ // this function takes an svg as input and appends a graph with the data it is provided with 
+            const xExtent = d3.extent( data, d=>{ return d.x } );
+            const yExtent = d3.extent( data, d=>{ return d.y } );
+            // X Axis
+            const x = d3.scaleLinear()
+            .domain([ xExtent[0], xExtent[1] ])
+            .range([0, xMax]);
+            // bottom
+
+            svg_name.append("g")
+            .attr("transform", "translate(0," + yMax + ")")
+            .call(d3.axisBottom(x))
+            .attr('color', 'green'); // make bottom axis green
+            // top
+            svg_name.append("g")
+            .call(d3.axisTop(x));
+            // Y Axis
+            const y = d3.scaleLinear()
+            .domain([ yExtent[0], yExtent[1] ])
+            .range([ yMax, 0]);
+            // left y axis
+            svg_name.append("g")
+
+            .call(d3.axisLeft(y));
+            // right y axis
+            svg_name.append("g")
+            .attr("transform", `translate(${yMax},0)`)
+              .attr("class","myXaxis")
+            .call(d3.axisRight(y));
+            // Add the line
+            svg_name.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", colour)
+            .attr("stroke-width", 1.5)
+            .attr("d", d3.line()
+            .x(function(d) { return x(d.x) })
+            .y(function(d) { return y(d.y) })
+            );
+            }               
 
 
-
-
-
-
-
-
- /////////////////////////////////////////////////////////////////////////////////////////////////////
-//  function Update_graph(svg_name,data,colour){
-//     const xExtent = d3.extent( data, d=>{ return d.x } );
-// const yExtent = d3.extent( data, d=>{ return d.y } );
-// // X Axis
-// const x = d3.scaleLinear()
-//  .domain([ xExtent[0], xExtent[1] ])
-//  .range([0, xMax]);
-// // bottom
-// svg_name.append("g")
-//  .attr("transform", "translate(0," + yMax + ")")
-//  .call(d3.axisBottom(x))
-//  .attr('color', 'green'); // make bottom axis green
-// // top
-// svg_name.append("g")
-//  .call(d3.axisTop(x));
-// // Y Axis
-// const y = d3.scaleLinear()
-//  .domain([ yExtent[0], yExtent[1] ])
-//  .range([ yMax, 0]);
-// // left y axis
-// svg_name.append("g")
-
-//  .call(d3.axisLeft(y));
-// // right y axis
-// svg_name.append("g")
-//  .attr("transform", `translate(${yMax},0)`)
-//   .attr("class","myXaxis")
-//  .call(d3.axisRight(y));
-// // Add the line
-// var line = svg_name.selectAll('.lines')
-//                    .data(data)
-// line.exit()
-//     .attr("d", d3.line()
-//     .x(function(d) { return 0 })
-//     .y(function(d) { return 0 })  )
-//     .remove()              
-
-//     line.enter()
-// //  .attr("fill", "none")
-// //  .attr("stroke", colour)
-//  .attr("stroke-width", 1.5)
-//  .attr("d", d3.line()
-//  .x(function(d) { return x(d.x) })
-//  .y(function(d) { return y(d.y) })
-//  );
-
-//  }  
- 
     </script>
 
 </body>

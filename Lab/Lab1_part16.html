@@ -120,7 +120,7 @@ svg_2.append("g")
 .style('color','white')
  .call(y_axis_2); 
 
- svg_2.style("background","url('../image.gif') no-repeat")
+ svg_2.style("background","url('../image.gif') no-repeat")  // background image for bar chart
  .attr("width", width-40)
  .attr("height", 280)
  .attr("x",10)
@@ -138,7 +138,7 @@ const yMax = ySize - margin*2;
 for (let i = 0; i < 100; i++) { data_sine.push( {x: i/100, y: Math.sin( 6.2 * i/100 ) } ); }
 for (let i = 0; i < 100; i++) { data_cos.push( {x: i/100, y: Math.cos( 6.2 * i/100 ) } ); }
 
-Generate_graph(data_sine,pickRandomColour(myColor4),'Sine Wave')
+Generate_graph(data_sine,pickRandomColour(myColor4),'Sine Wave with scaled image')
 
 
 function Generate_graph(data,colour,name){
@@ -154,12 +154,12 @@ function Generate_graph(data,colour,name){
     .attr("transform","translate(" + margin + "," + margin + ")")
     ;
 
-    svg.append("svg:image")
- .attr("xlink:href", "../image2.gif")
- .attr("width", 520)
- .attr("height",520)
- .attr("x",1)
- .attr("y",);
+    svg.append("svg:image")  // scaled image for the line chart
+      .attr("xlink:href", "../image2.gif")
+      .attr("width", 520)
+      .attr("height",520)
+      .attr("x",1)
+      .attr("y",);
     // X Axis
     const x = d3.scaleLinear()
     .domain([ xExtent[0], xExtent[1] ])

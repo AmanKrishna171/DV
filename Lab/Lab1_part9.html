@@ -30,152 +30,151 @@
 
 
 
-const data = [50, 400, 300, 900, 250, 1000]
-const width = '100vw';
-const barHeight = 20;
-const margin = 1;
-var scale = d3.scaleLinear()
- .domain([d3.min(data), d3.max(data)])
- .range([50, 500]);
-var svg = d3.select("body")
- .append("svg")
- .attr("width", width)
- .attr("height", barHeight * data.length);
-var g = svg.selectAll("g")
- .data(data)
- .enter()
- .append("g")
- .attr("transform", function (d, i) {
- return "translate(0," + i * barHeight + ")";
- });
-g.append("rect")
- .attr("width", function (d) {
- return scale(d);
- })
- .attr('fill',function (d) { return (d <100?'green':d>500?'red' :'blue'); })
- .attr("height", barHeight - margin)
-g.append("text")
- .attr("x", function (d) { return (scale(d)); })
- .attr("y", barHeight / 2)
- .attr("dy", ".35em")
- .style('text-anchor', 'end')
- .text(function (d) { return d; });
- 
+        const data = [50, 400, 300, 900, 250, 1000]
+        const width = '100vw';
+        const barHeight = 20;
+        const margin = 1;
 
+        // exercise 17:
+        var scale = d3.scaleLinear()
+                        .domain([d3.min(data), d3.max(data)])
+                        .range([50, 500]);
 
-//file path
- const csv_arr = ['../csvFiles/ex1.csv','../csvFiles/ex2.csv'];
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", barHeight * data.length);
 
+        var g = svg.selectAll("g")
+                    .data(data)
+                    .enter()
+                    .append("g")
+                    .attr("transform", function (d, i) {return "translate(0," + i * barHeight + ")";});
 
-var menuDiv = d3.select("body").append("button")
-    .text("Next Bar Chart")
-    .attr("id", "buttonCentre")
-    .classed("button", true)
-    .on('click', function(){
-        //here this is the button
-        next_barChart();
-    });
+        g.append("rect")
+        .attr("width", function (d) {return scale(d);})
+        .attr('fill',function (d) { return (d <100?'green':d>500?'red' :'blue'); })
+        .attr("height", barHeight - margin)
 
-
-global_csv_flag = 1;
-function next_barChart (){
-    if(global_csv_flag === 0){global_csv_flag=1}
-    else{global_csv_flag=0}
-    csv_data=[]
-
-    d3.csv(csv_arr[global_csv_flag], function(data) {
-    csv_data.push(data)
-
-}).then(()=>{  
-
-    var info = d3.select("body")
-     .append("svg")
-     .attr("width", '100vw' )
-     .attr("height", 150 )
-     info.append("rect")
-        .attr("x", 45 )
-        .attr("y", 50)
-        .attr("width",30)
-        .attr("height", 20)
-        .style("fill", 'red')
-        .append('text')    
-
-        info.append("rect")
-        .attr("x", 435 )
-        .attr("y", 50)
-        .attr("width",30)
-        .attr("height", 20)
-        .style("fill", 'green')
-        .append('text')  
-  
-
-        info.append("rect")
-        .attr("x", 235 )
-        .attr("y", 50)
-        .attr("width",30)
-        .attr("height", 20)
-        .attr("fill", 'blue') 
-
-        info.append('text').text('Below the age of 30')
-                .attr('x', 10)
-                .attr('y', 85)
-                .style('fill', 'black')
-
-        info.append('text').text('Between the age of 30 and 60')
-                .attr('x', 190)
-                .attr('y', 85)
-                .style('fill', 'black')    
-
-        info.append('text').text('Over the age of 60')
-                .attr('x', 390)
-                .attr('y', 85)
-                .style('fill', 'black')         
+        g.append("text")
+        .attr("x", function (d) { return (scale(d)); })
+        .attr("y", barHeight / 2)
+        .attr("dy", ".35em")
+        .style('text-anchor', 'end')
+        .text(function (d) { return d; });
         
-        info.append('text').text(function(d, i) {
-     return (global_csv_flag===0?"Chart 1":"Chart 2");
-     })
-                .attr('x', 270)
-                .attr('y', 30)
-                .style('fill', 'black')
-                .style("font", "40px times")            
-    
-    var width = 200;
-    var scaleFactor = 10;
-    var barHeight = 20;
-    var  margin = { top: 10, right: 30, bottom: 50, left: 20 };
-    
-     var graph1 = d3.select("body")
-     .append("svg")
-     .attr("width", '100vw')
-     .attr("height", barHeight * csv_data.length +20)
-     .style("border", '5px solid grey');;
-    var bar = graph1.selectAll("g")
-     .data(csv_data)
-     .enter()
-     .append("g")
-     .attr("transform", function(d, i) {
-     return "translate(0," + i * barHeight + ")";
-     });
-     
-    bar.append("rect")
-     .attr("width", function(d) {
-     return d.age * scaleFactor;
-     })
-     .attr("height", barHeight - 1)
-     .style('fill',function (d) { return (d.age <30?'green':d.age>60?'red' :'blue'); })
-    bar.append("text")
-     .attr("x", function(d) { return (d.age*scaleFactor); })
-     .attr("y", barHeight / 2)
-     .attr("dy", ".35em")
-     .text(function(d) { return d.age; });
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                });
+// Exercise 18 and 19
+
+        //file path
+        const csv_arr = ['../csvFiles/ex1.csv','../csvFiles/ex2.csv']; // csv files with data
 
 
+        var menuDiv = d3.select("body")
+                        .append("button")
+                        .text("Next Bar Chart")
+                        .attr("id", "buttonCentre")
+                        .classed("button", true)
+                        .on('click', function(){ next_barChart();});// this is the button
 
-}
 
+        global_csv_flag = 1;
+
+        function next_barChart (){ // this function geneartes a new bar chart, and every time it is triggered
+            if(global_csv_flag === 0){global_csv_flag=1} // It alternates between two csv files
+            else{global_csv_flag=0}
+
+            csv_data=[] // local copy of data
+
+            d3.csv(csv_arr[global_csv_flag], function(data) {csv_data.push(data)})
+              .then(()=>
+              {  
+
+                    var info = d3.select("body")  // appends a new svg to page
+                                .append("svg")
+                                .attr("width", '100vw' )
+                                .attr("height", 150 )
+
+                    info.append("rect")
+                        .attr("x", 45 )
+                        .attr("y", 50)
+                        .attr("width",30)
+                        .attr("height", 20)
+                        .style("fill", 'red')
+                        .append('text')    
+
+                        info.append("rect")
+                        .attr("x", 435 )
+                        .attr("y", 50)
+                        .attr("width",30)
+                        .attr("height", 20)
+                        .style("fill", 'green')
+                        .append('text')  
+                
  
+                        info.append("rect")  // legend for the bar chart
+                        .attr("x", 235 )
+                        .attr("y", 50)
+                        .attr("width",30)
+                        .attr("height", 20)
+                        .attr("fill", 'blue') 
+
+                        info.append('text').text('Below the age of 30')
+                                .attr('x', 10)
+                                .attr('y', 85)
+                                .style('fill', 'black')
+
+                        info.append('text').text('Between the age of 30 and 60')
+                                .attr('x', 190)
+                                .attr('y', 85)
+                                .style('fill', 'black')    
+
+                        info.append('text').text('Over the age of 60')
+                                .attr('x', 390)
+                                .attr('y', 85)
+                                .style('fill', 'black')         
+                        
+                        info.append('text').text(function(d, i) {return (global_csv_flag===0?"Chart 1":"Chart 2");}) // title for each bar chart
+                                .attr('x', 270)
+                                .attr('y', 30)
+                                .style('fill', 'black')
+                                .style("font", "40px times")            
+                    
+                    var width = 200;
+                    var scaleFactor = 10;
+                    var barHeight = 20;
+                    var  margin = { top: 10, right: 30, bottom: 50, left: 20 };
+                    
+                    var graph1 = d3.select("body")
+                                    .append("svg")
+                                    .attr("width", '100vw')
+                                    .attr("height", barHeight * csv_data.length +20)
+                                    .style("border", '5px solid grey');;
+                    var bar = graph1.selectAll("g")
+                                    .data(csv_data)
+                                    .enter()
+                                    .append("g")
+                                    .attr("transform", function(d, i) {return "translate(0," + i * barHeight + ")";  });
+                    
+                    bar.append("rect")
+                        .attr("width", function(d) { return d.age * scaleFactor; })
+                        .attr("height", barHeight - 1)
+                        .style('fill',function (d) { return (d.age <30?'green':d.age>60?'red' :'blue'); }) // colour the bars according to data
+
+                    bar.append("text")
+                        .attr("x", function(d) { return (d.age*scaleFactor); })
+                        .attr("y", barHeight / 2)
+                        .attr("dy", ".35em")
+                        .text(function(d) { return d.age; });
+
+            });
+
+
+
+        }
+
+        
                 
 
     </script>
