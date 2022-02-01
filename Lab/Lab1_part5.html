@@ -12,7 +12,7 @@
 <nav class="navbar navbar-light" style="background-color: #44a0ec8e;">
     <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 1</a>
     
-  
+
     </button>
 
   </nav>
@@ -27,7 +27,7 @@
 
     
     <script>
-        num_arr1= [,{name : 'Mrs count: ', count: 0},{name : 'Mr count: ', count: 0},{name : 'Others count: ', count: 0},
+        num_arr1= [{name : 'Mrs count: ', count: 0},{name : 'Mr count: ', count: 0},{name : 'Others count: ', count: 0},
                    {name : 'Male count: ', count: 0}, {name : 'Female count: ', count: 0},] // array to keep track of name (to be displayed) and its count
 
         let titaniccsv = 'https://raw.githubusercontent.com/dsindy/kaggle-titanic/master/data/test.csv';
@@ -68,7 +68,7 @@
 
     d3.csv(heartfailurecsv, function(data) {
 
-    patient_age = data.age
+    patient_age = parseInt(data.age);
 
     if (patient_age>50){count_overFifty=count_overFifty+1}  // counts the number of patients over 50
 
