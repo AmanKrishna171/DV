@@ -68,7 +68,7 @@
 
     d3.csv(heartfailurecsv, function(data) {
 
-    patient_age = parseInt(data.age);
+    patient_age = parseInt(data.age); // parewed to int cause it is of tyle string
 
     if (patient_age>50){count_overFifty=count_overFifty+1}  // counts the number of patients over 50
 

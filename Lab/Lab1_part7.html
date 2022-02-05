@@ -53,7 +53,7 @@
 
         d3.csv(heartfailurecsv, function(data) {
             csv_data.push(data)
-        patient_age = data.age
+            patient_age = parseInt(data.age);
 
         if (patient_age>50){count_overFifty=count_overFifty+1}
 
