@@ -1,0 +1,46 @@
+<html>
+<html lang="en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head> 
+
+    <nav class="navbar navbar-light" style="background-color: #09c05b8e;">
+        <a class="navbar-brand" href="./index.html" style="color: white">DF Lab 2 Home</a>
+      
+        </button>
+    
+      </nav>
+<body>
+    <span>Exercise 3</span>
+    <div class="Excersie3" >
+
+    </div>
+
+</body>
+
+
+<script>
+    d3.select('body')
+        .selectAll('.Excersie3')
+        .append('div')
+        .style('width', '100px')
+        .style('height', '20px')
+        .style('background-color', 'green');
+    d3.selectAll("div")
+        .on("mouseover", function(event){
+    d3.select(this)
+        .style("background-color", "orange");
+        console.log(d3.pointer(event));})
+        .on("mouseout", function(){
+    d3.select(this)
+    .style("background-color", "steelblue")});
+ 
+</script>
+
+</body>
+</html>
