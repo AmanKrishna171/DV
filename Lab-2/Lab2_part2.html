@@ -17,29 +17,177 @@
       </nav>
 <body>
     <span>Exercise 3</span>
-    <div class="Excersie3" >
+    <div id="Excersie3" >
+    </div>
 
+    <div id = "Excersie4" style="text-align: center">
     </div>
 
 </body>
 
 
 <script>
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Exercsie 3    
     d3.select('body')
-        .selectAll('.Excersie3')
+        .selectAll('#Excersie3')
         .append('div')
         .style('width', '100px')
         .style('height', '20px')
+        .style("outline", "thick solid orange")
         .style('background-color', 'green');
     d3.selectAll("div")
-        .on("mouseover", function(event){
-    d3.select(this)
-        .style("background-color", "orange");
-        console.log(d3.pointer(event));})
-        .on("mouseout", function(){
-    d3.select(this)
-    .style("background-color", "steelblue")});
+        .on("mouseover", function(event)
+        {
+            d3.select(this)
+                .style("background-color", "orange")
+                .style('width', '340px')
+                .style('border','10px')
+                .style("outline", "thin solid red")
+                .style('height', '40px');
+                console.log(d3.pointer(event));
+        })
+
+        .on("mouseout", function()
+        {
+            d3.select(this)
+            .style('width', '100px')
+            .style('height', '70px')
+            .style("background-color", "steelblue")
+            .style("outline", "thick solid yellow")
+         });
  
+
+
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Exercise 4
+
+    d3.select("body")
+        .append("svg")
+        .attr('width', '100vw' )
+        .attr('height', 100 )
+        .append('text').text('Exercise 4  ')
+            .attr('x',30)
+            .attr('y',80)
+            .style('font-size', '2em')
+
+    const svg_1 = d3.select("body")
+                        .append("svg")
+                        .attr('width', '100vw' )
+                        .attr('height', 200 )
+                        .attr("style", "outline: thin solid Grey;") 
+
+   circle =  svg_1.append("circle")
+          .attr("cx",300 )
+          .attr("cy",100 )
+          .attr("r", 50)
+          .attr("fill",'Orange')
+          .style('align','center')
+          .on("mouseover", function(){ updateCircle(2) })
+          .on("mouseout", function(){ updateCircle(0)});
+
+
+
+         svg_1.append('text')
+                .text('Hover here')
+                .attr('x',264)
+                .attr('y',110)
+                .style('font-size', '2 em')
+                .attr('class','text')
+                .on("mouseover", function(){ updateCircle(2) })
+                .on("mouseout", function(){ updateCircle(0)});
+
+        function updateCircle (args){
+
+            if (args>1)
+            {
+            
+                    circle
+                        .transition()
+                        .attr("r", 80)
+                        .attr("fill",'red')
+                        .attr('stroke', 'yellow')
+                        .attr('stroke-width', '20px')
+
+                    d3.select('.text')
+                        .transition()
+                        .style("font", "54px times")
+                        .attr('x',257)
+                        .attr('y',110)
+                        .attr("fill",'white')
+                        .text('Big')
+
+
+            }
+
+            else 
+            {
+
+                circle
+                        .transition()
+                        .attr("r", 30)
+                        .attr("fill",'blue')
+                        .attr('stroke', 'green')
+                        .attr('stroke-width', '10px')
+
+                    d3.select('.text')
+                        .transition()
+                        .style("font", "14px times")
+                        .attr('x',283)
+                        .attr('y',105)
+                        .attr("fill",'white')
+                        .text('Small')
+
+            }
+
+    
+     
+         
+    }
+    
+
+
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Exercise 5
+
+    d3.select("body")
+        .append("svg")
+        .attr('width', '100vw' )
+        .attr('height', 100 )
+        .append('text').text('Exercise 5 (Hover over the grid below)')
+            .attr('x',30)
+            .attr('y',80)
+            .style('font-size', '2em')
+
+    const svg_2 = d3.select("body")
+                        .append("svg")
+                        .attr('width', '100vw' )
+                        .attr('height', 200 )
+                        .attr("style", "outline: thin solid Grey;") 
+                        .on('mousemove', function() {
+                            var coordinates = d3.pointer(event)
+                            updateText(coordinates)
+                        })
+
+
+                        text =   svg_2.append('text')
+                                    .text('Here')
+                                    .attr('x',0)
+                                    .attr('y',0)
+                                    .style('font-size', '2 em')
+                                    .attr('class','text')
+                                    
+      function updateText(coordinates)
+      { 
+                text.attr('x',coordinates[0]+13)
+                    .attr('y',parseInt(coordinates[1]))
+                    .text('Coordinates: (X:'+coordinates[0]+', Y:'+parseInt(coordinates[1])+')')
+                    //.style("color", function(coordinates){ return (coordinates[0]<60? "red":"green"); });            
+      }  
 </script>
 
 </body>
