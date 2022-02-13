@@ -16,10 +16,281 @@
     
       </nav>
 <body>
+<div class = 'exercise6'>
+    <span>Execise 6</span>
 
+</div>
+<br><br>
+<div class = 'exercise7'>
+    <span>Execise 7</span>
+
+</div>
+
+<br><br>
+<div class = 'exercise8'>
+    <span>Execise 8 (Hover mouse over to trigger event)</span>
+</div>
+
+<br><br>
+<div class = 'exercise9'>
+    <span>Execise 9 ease bounce vs ease elastic</span>
+</div>
+
+<br><br>
+<div class = 'exercise10'>
+    <span>Execise 10 and 11 (Hover mouse over to trigger event)</span>
+</div>
 </body>
 
+<script>
+    d3.select('body')
+    .select('.exercise6')
+     .append("div")
+     .style('width', '100px')
+     .style('height', '100px')
+     .style('background-color', 'blue')
+     .transition()
+     .duration(1000)
+     .style("background-color", "red")
+     .transition() 
+     .duration(2000) // Exercise 6
+     .style("background-color", "green")
 
+
+     d3.select('body')
+    .select('.exercise7')
+     .append("div")
+     .style('width', '100px')
+     .style('height', '100px')
+     .style('background-color', 'blue')
+     .transition()
+     .duration(1000)
+     .style("background-color", "red")
+     .transition() 
+     .duration(2000) 
+     .style('width', '40px')
+     .style('height', '40px')
+     .style("background-color", "green")
+     .transition() 
+     .duration(2000) // Exercise 7
+     .style('width', '150px')
+     .style('height', '150px');
+
+     // exercise 8
+     d3.select('body')
+    .select('.exercise8')
+     .append("div")
+     .style('width', '100px')
+     .style('height', '100px')
+     .style('background-color', 'blue')
+     .transition()
+     .duration(1000)
+     .style("background-color", "red")
+
+
+     d3.select('body')
+        .select('.exercise8')
+        .selectAll('div')
+        .on("mouseover", function(event)
+        { 
+            d3.select(this)
+                .transition() 
+                .style('width', '40px')
+                .style('height', '40px')
+                .style("background-color", "green")
+        })
+        .on("mouseout", function(event)
+        { 
+            d3.select(this)
+                .transition() 
+                .style('width', '100px')
+                .style('height', '100px')
+                .style("background-color", "red");
+        })
+
+// Exercise 9
+    d3.select('body')
+    .select('.exercise9')
+    .append("div")
+    .style('width', '100px')
+    .style('height', '100px')
+    .style('background-color', 'blue')
+    .style('transform', 'scale(1.0)')
+    .transition()
+    .ease( d3.easeBounce )
+    .duration(1000)
+    .style("background-color", "red")
+    .style('transform', 'scale(0.5)')
+
+
+    d3.select('body')
+    .select('.exercise9')
+    .append("div")
+    .style('width', '100px')
+    .style('height', '100px')
+    .style('background-color', 'blue')
+    .style('transform', 'scale(1.0)')
+    .transition()
+    .ease( d3.easeElastic )
+    .duration(1000)
+    .style("background-color", "red")
+    .style('transform', 'scale(0.5)')
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Exercise 10 and 11
+
+
+    const svg_1 = d3.select("body")
+                        .select('.exercise10')
+                        .append("svg")
+                        .attr('width', '100vw' )
+                        .attr('height', 200 )
+                        .attr("style", "outline: thin solid Grey;") 
+
+    circle =  svg_1.append("circle")
+            .attr("cx",300 )
+            .attr("cy",100 )
+            .attr("r", 50)
+            .attr("fill",'Orange')
+            .style('align','center')
+            .on("mouseover", function(){ updateCircle(2) })
+            .on("mouseout", function(){ updateCircle(0)});
+
+
+
+            svg_1.append('text')
+                    .text('Hover here')
+                    .attr('x',264)
+                    .attr('y',110)
+                    .style('font-size', '2 em')
+                    .attr('class','text')
+                    .on("mouseover", function(){ updateCircle(2) })
+                    .on("mouseout", function(){ updateCircle(0)});
+
+            function updateCircle (args){
+
+                if (args>1)
+                {
+                
+                        circle
+                            .transition()
+                            .ease( d3.easeBounce )
+                            .attr("r", 80)
+                            .attr("fill",'Red')
+                            .attr('stroke', 'blue')
+                            .attr('stroke-width', '20px')
+
+                        d3.select('.text')
+                            .transition()
+                            .ease( d3.easeBounce )
+                            .style("font", "54px times")
+                            .attr('x',257)
+                            .attr('y',110)
+                            .attr("fill",'white')
+                            .text('Big')
+
+
+                }
+
+                else 
+                {
+
+                    circle
+                            .transition()
+                            .ease( d3.easeBounce )
+                            .attr("r", 30)
+                            .attr("fill",'black')
+                            .attr('stroke', 'yellow')
+                            .attr('stroke-width', '10px')
+
+                        d3.select('.text')
+                            .transition()
+                            .ease( d3.easeBounce )
+                            .style("font", "14px times")
+                            .attr('x',283)
+                            .attr('y',105)
+                            .attr("fill",'red')
+                            .text('Small')
+
+                }
+
+        
+        
+            
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Exercise 12 adn 13        
+          var svg = d3.select("body")
+            .append("svg")
+            .attr("width", 500)
+            .attr("height", 500);
+
+            var bar1 = svg.append("rect")
+            .attr("fill", "blue")
+            .attr("x", 100)
+            .attr("y", 20)
+            .attr("height", 20)
+            .attr("width", 10)
+
+            var bar2 = svg.append("rect")
+            .attr("fill", "blue")
+            .attr("x", 120)
+            .attr("y", 20)
+            .attr("height", 20)
+            .attr("width", 10)
+
+            var bar3 = svg.append("rect")
+            .attr("fill", "blue")
+            .attr("x", 140)
+            .attr("y", 20)
+            .attr("height", 20)
+            .attr("width", 10)
+
+            update();
+            function update() {
+
+            bar1.transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .attr("height",100)
+            .attr("fill", "green") // exericse 14
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .delay(6000)
+            .attr("height",20) // exericse 13
+            .attr("fill", "blue") // exericse 14
+
+            bar2.transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .delay(2000)
+            .attr("height",100)
+            .attr("fill", "green") // exericse 14
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .delay(4000)
+            .attr("height",20) // exericse 13
+            .attr("fill", "blue") // exericse 14
+
+            bar3.transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .delay(4000)
+            .attr("height",100)
+            .attr("fill", "green") // exericse 14
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .delay(2000)
+            .attr("height",20) // exericse 13
+            .attr("fill", "blue") // exericse 14
+
+            }
 
  
 </script>
