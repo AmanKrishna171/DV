@@ -18,8 +18,132 @@
 <body>
 
 </body>
+<script >
+
+  var myColor2 = d3.scaleSequential().domain([1,100]).interpolator(d3.interpolateRainbow);
+
+ 
+var width = 700, height = 700;
+// setup svg
+svg = d3.select('body').append('svg').attr('width',width).attr('height',height);
+// generate some random data
+var numNodes = 100;
+var nodes = d3.range(numNodes).map(function(d) {
+ return {radius: Math.random() * 25}
+})
 
 
+csv_data=[]
+                d3.csv('../csvFiles/Lab2_part7.csv', function(data) {csv_data.push(data)})
+                .then(()=>{var simulation = d3.forceSimulation(csv_data)
+ .force('charge', d3.forceManyBody().strength(5))
+ .force('center', d3.forceCenter(width / 2, height / 2))
+ .force('collision', d3.forceCollide().radius(function(d) {
+ return d.r
+ }))
+ .on('tick', ticked);
+function ticked() {
+ var u = d3.select('svg')
+ .selectAll('circle')
+ .data(csv_data)
+ .join('circle')
+ .attr('r', function(d) {
+ return d.r
+ })
+ .attr('cx', function(d) {
+ return d.x
+ })
+ .attr('cy', function(d) {
+ return d.y
+ })
+ .attr('fill',function(d,i) {
+  return myColor2(i)       
+          })
+          .on("mouseover", function(d,i){ 
+              
+            tx = 0
+            ty = 0  
+            d3.select(this)
+            .transition()
+            .attr('r', function(d) {tx = d.x,ty=d.y; return d.r})
+            .attr("fill",'red')
+
+            svg.append('text')
+            .attr('class','text1')
+            .transition()
+            .style("font", "54px times")
+            .attr('x',tx -60)
+            .attr('y',ty)
+            .attr("fill",'black')
+            .text('Big')
+
+            })
+                .on("mouseout", function(){   d3.select(this)
+            .transition()
+            .attr('r', function(d) {
+ return d.r 
+ })
+ .attr('fill',function(d,i) {
+  return myColor2(i)       
+          })
+
+
+          d3.selectAll('.text1').remove();
+             });
+        
+
+ 
+}}); // calls the generate graph function
+function updateCircle (args){
+
+if (args>1)
+{
+
+    d3.select(this)
+            .transition()
+            .attr("r", 80)
+            .attr("fill",'red')
+            .attr('stroke', 'yellow')
+            .attr('stroke-width', '20px')
+
+        d3.select('.text')
+            .transition()
+            .style("font", "54px times")
+            .attr('x',257)
+            .attr('y',110)
+            .attr("fill",'white')
+            .text('Big')
+
+
+}
+
+else 
+{
+  d3.select(this).select("circle")
+            .transition()
+            .attr("r", 30)
+            .attr("fill",'blue')
+            .attr('stroke', 'green')
+            .attr('stroke-width', '10px')
+
+        d3.select('.text')
+            .transition()
+            .style("font", "14px times")
+            .attr('x',283)
+            .attr('y',105)
+            .attr("fill",'white')
+            .text('Small')
+
+}
+
+
+
+
+}
+
+
+
+console.log('ready..');
 
  
 </script>

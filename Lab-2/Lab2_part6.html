@@ -18,11 +18,125 @@
 <body>
 
 </body>
+<script>
+csv_index = 1
+let intr = d3.interpolate( [20, 40, 4], [1, 12, 10])
+console.log("Type of returned function is: ", typeof (intr) );
+console.log( intr(0.2) )
+
+let cc = d3.interpolate('red', 'green')
+console.log( cc(0.5) );
+console.log( cc(0.9 ));
+console.log( cc(1 ));
+
+// 0.5 returns a vlaue bewteen red and green
+// when i increase the number, it goe stowards green and when its 1, it is fully green
 
 
+// execersei 26 source :https://observablehq.com/@d3/d3-interpolatedate
 
+date = d3.interpolateDate(new Date("1999-01-01"), new Date("2021-01-01"))
+
+console.log( date(0.95));
+
+
+var dataset = {
+ apples: [5345, 2879, 1997, 2437, 4045],
+ bananas: [45, 29, 78, 65],
+    cherries: [5634, 2847, 2923,  4876],
+    oranges: [1256, 1678],
+    pears: [937, 1093, 984, 847, 846, 446]
  
-</script>
+};
+var width = 460,
+ height = 300,
+ radius = Math.min(width, height) / 2;
+var color = d3.scaleOrdinal().range(d3.schemeSet3);
+var pie = d3.pie()
+ .sort(null);
+var arc = d3.arc()
+ .innerRadius(radius - 100)
+ .outerRadius(radius - 50);
+var svg = d3.select("body").append("svg")
+ .attr("width", width)
 
+ .attr("height", height)
+ .append("g")
+ .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+
+
+
+// set the dimensions and margins of the graph
+
+
+// Create a function that takes a dataset as input and update the plot:
+function update(data) {
+    console.log(data)
+    var path = svg.selectAll(".arc")
+     .data(pie(data))
+
+  path.transition()
+               .attrTween("d", function (d) 
+        {
+            var i = d3.interpolate(d.endAngle, d.startAngle);
+            return function (t) {
+            d.startAngle = i(t);
+            return arc(d);
+            }
+        })
+
+    path.enter()
+        .append("path")
+        .attr("fill", function(d, i) { return color(i); })
+        .transition().delay(function(d, i) { return i * 50; })
+        .attr("class", "arc")
+        .attr("d", arc)
+ 
+;
+
+ path.exit()
+    .transition()
+    .duration(1000)
+    .remove()
+
+}
+
+update(dataset.apples)
+function change_csv ()
+                {
+                    switch (csv_index)
+                    {
+                        case 0:
+                            update(dataset.apples)
+                            csv_index = 1
+                            break;
+                        case 1:
+                            update(dataset.bananas)
+                            csv_index = 2
+                            break;
+                        case 2:
+                            update(dataset.cherries)
+                            csv_index = 3
+                            break;
+                        case 3:
+                            update(dataset.oranges)
+                            csv_index = 4
+                            break;
+                        case 4:
+                            update(dataset.pears)
+                            csv_index = 0
+                            break;
+                    }
+
+                   
+                    
+                }
+
+
+ </script>
+   <button onclick="change_csv()">Cycle through data for pie chart</button>
+ 
 </body>
 </html>
