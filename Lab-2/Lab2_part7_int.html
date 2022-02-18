@@ -1,0 +1,239 @@
+<html>
+<html lang="en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head> 
+
+    <nav class="navbar navbar-light" style="background-color: #09c05b8e;">
+        <a class="navbar-brand" href="./index.html" style="color: white">DF Lab 2 Home</a>
+      
+        </button>
+    
+      </nav>
+<body>
+<div class="Display1"></div>
+<div class="Display2"></div>
+
+<script >
+  test()
+  test3();
+var test_flag=0
+function switch_test(){
+    switch(test_flag){
+        case 0:
+            test3();
+            test_flag=1
+            break;
+        case 1:
+            test2();
+            test_flag=2
+            break;
+        case 2:
+            test3();
+            test_flag=0
+            break;
+        case 3:
+            test_flag=2
+            break;  
+
+    
+    }
+ 
+}
+
+
+function test() {
+  var data1 ={ 
+    "nodes":  [
+      {"id": "A"},
+      {"id": "B"},
+      {"id": "C"},
+      {"id":"D"},
+      {"id":"E"},
+      {"id":"F"},
+      {"id":"G"},
+      {"id":"H"},
+
+      {"id": "1"},
+      {"id": "2"},
+      {"id": "3"},
+      {"id":"4"},
+      {"id":"5"},
+      {"id":"6"},
+      {"id":"7"},
+      {"id":"8"},
+
+    ],  
+
+    "links":  [
+      {"source": "A", "target": "B"},      
+      {"source": "C", "target": "A"},   
+      {"source": "D", "target": "A"},
+      {"source": "E", "target": "A"},
+      {"source": "F", "target": "A"},
+      {"source": "G", "target": "A"},
+      {"source": "H", "target": "A"},
+
+          
+      {"source": "2", "target": "1"},   
+      {"source": "3", "target": "1"},
+      {"source": "4", "target": "1"},
+      {"source": "5", "target": "1"},
+      {"source": "6", "target": "1"},
+      {"source": "7", "target": "1"}]}
+
+      var width = window.innerWidth , height = window.innerHeight-30
+
+  var svg = d3.select("body").select(".Display1").append("svg")   
+  .attr("width",width)
+  .attr("height",height)
+  .style('border','1px solid red')
+
+  var simulation1 = d3.forceSimulation()
+  .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(100))
+  .force("charge", d3.forceManyBody())
+  .force("center", d3.forceCenter(width / 3, height / 2).strength(0.5))
+  .force("collide", d3.forceCollide().strength(.1).radius(function(d){return 50}).iterations(30)) // Force that avoids circle overlapping
+;
+
+  var link1 = svg.append("g")
+  .selectAll("line")
+  .data(data1.links)
+  .enter().append("line")
+  .attr("stroke","black");
+
+  var node1 = svg.append("g")
+  .selectAll("circle")
+  .data(data1.nodes)
+  .enter().append("circle")
+  .attr("r", function(d){
+    if(d.id=="A"|| d.id=="1"){
+      return 50
+    }
+    else{
+      return 25
+    }
+  })
+  .call(d3.drag()
+        .on("drag", dragged1)
+        .on("end", dragended1))
+  .attr("fill",function(d){
+    if(d.id=="A" || d.id=="1"){
+      return "red"
+    }
+    else{
+      return "blue"
+    }
+  });
+
+  simulation1.nodes(data1.nodes)
+    .on("tick", ticked1)
+    .alphaDecay(0)
+    .force("link")
+    .links(data1.links);
+
+  function ticked1() {
+    link1
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+    node1
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+  }    
+
+  function dragged1(event,d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended1(event, d) {
+    d.fx = null;
+    d.fy = null;
+  }
+
+}
+
+
+ 
+
+
+ function test3()
+ {
+    var myColor2 = d3.scaleSequential().domain([1,100]).interpolator(d3.interpolateRainbow);
+    var width = window.innerWidth , height = window.innerHeight-30
+
+// append the svg object to the body of the page
+const svg = d3.select("body").select(".Display2")
+  .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+
+// create dummy data -> just one element per circle
+const data = [{ "name": "A" }, { "name": "B" }, { "name": "C" }, { "name": "D" }, { "name": "E" }, { "name": "F" }, { "name": "G" }, { "name": "H" }]
+csv_data=[]
+                d3.csv('../csvFiles/Lab2_part7.csv', function(data) {csv_data.push(data)}).then(()=>
+                {
+                    const node = svg.append("g")
+  .selectAll("circle")
+  .data(csv_data)
+  .join("circle")
+    .attr("r", function(d){ return d.r})
+    .attr("cx", width / 2)
+    .attr("cy", height / 2)
+    .attr('fill',function(d,i) {
+  return myColor2(i)  })
+    .style("fill-opacity", 0.3)
+    .attr("stroke", "#b3a2c8")
+    .style("stroke-width", 4)
+    .call(d3.drag() // call specific function when circle is dragged
+         .on("start", dragstarted)
+         .on("drag", dragged)
+         .on("end", dragended));
+
+// Features of the forces applied to the nodes:
+const simulation = d3.forceSimulation()
+    .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
+    .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
+    .force("collide", d3.forceCollide().strength(.1).radius(function(d){return d.r}).iterations(3)) // Force that avoids circle overlapping
+
+// Apply these forces to the nodes and update their positions.
+// Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
+simulation
+    .nodes(csv_data)
+    .on("tick", function(d){
+      node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y)
+    });
+
+// What happens when a circle is dragged?
+function dragstarted(event, d) {
+ if (!event.active) simulation.alphaTarget(.03).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+function dragged(event, d) {
+  d.fx = event.x;
+  d.fy = event.y;
+}
+function dragended(event, d) {
+ if (!event.active) simulation.alphaTarget(.03);
+  d.fx = null;
+  d.fy = null;
+}
+                })
+               
+// Initialize the circle: all located at the center of the svg area
+
+ }
+</script>
+<button onclick="switch_test()">Cycle through data for pie chart</button>
+</body>
+</html>
