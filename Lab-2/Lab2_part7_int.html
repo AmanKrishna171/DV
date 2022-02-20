@@ -16,38 +16,49 @@
     
       </nav>
 <body>
-<div class="Display1"></div>
-<div class="Display2"></div>
+  <h1 class="display-4">Force Simulation with linkss</h1>
+<div class="Display1" ></div>
 
-<script >
-  test()
-  test3();
-var test_flag=0
-function switch_test(){
-    switch(test_flag){
-        case 0:
-            test3();
-            test_flag=1
-            break;
-        case 1:
-            test2();
-            test_flag=2
-            break;
-        case 2:
-            test3();
-            test_flag=0
-            break;
-        case 3:
-            test_flag=2
-            break;  
 
-    
-    }
+<h1 class="display-4">Different Force simulations</h1>
+<div class="center-screen">
+  
+<form id="form" class="btn-group btn-group-toggle" data-toggle="buttons">
+
+
+    <button onclick="change_sim(2)" type="button" class="btn btn-success">Black Hole (Attraction)</button>
+
+
+    <button onclick="change_sim(3)" type="button" class="btn btn-danger">SuperNova (Repulsion)</button>
+
+    <button onclick="change_sim(1)" type="button" class="btn btn-primary">Radial (Small Outside)</button>
+
+    <button onclick="change_sim(4)" type="button" class="btn btn-warning">Radial (Big Outside)</button>
+
+    <button onclick="change_sim(5)" type="button" class="btn btn-info">Force Along X</button>
+    <button onclick="change_sim(6)" type="button" class="btn btn-info">Force Along Y</button>
+ 
+</form>
+</div>
+<div  class="Display2"></div>
+
+
+
+<style>
+
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
  
 }
+</style>
+
+<script >
 
 
-function test() {
+
   var data1 ={ 
     "nodes":  [
       {"id": "A"},
@@ -87,9 +98,10 @@ function test() {
       {"source": "6", "target": "1"},
       {"source": "7", "target": "1"}]}
 
-      var width = window.innerWidth , height = window.innerHeight-30
+      var width = window.innerWidth
+       , height = window.innerHeight
 
-  var svg = d3.select("body").select(".Display1").append("svg")   
+  var svg_2 = d3.select("body").select(".Display1").append("svg")   
   .attr("width",width)
   .attr("height",height)
   .style('border','1px solid red')
@@ -97,17 +109,17 @@ function test() {
   var simulation1 = d3.forceSimulation()
   .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(100))
   .force("charge", d3.forceManyBody())
-  .force("center", d3.forceCenter(width / 3, height / 2).strength(0.5))
-  .force("collide", d3.forceCollide().strength(.1).radius(function(d){return 50}).iterations(30)) // Force that avoids circle overlapping
+  .force("center", d3.forceCenter(width / 2, height / 2).strength(1))
+  .force("collide", d3.forceCollide().strength(1).radius(function(d){return 50}).iterations(30)) // Force that avoids circle overlapping
 ;
 
-  var link1 = svg.append("g")
+  var link1 = svg_2.append("g")
   .selectAll("line")
   .data(data1.links)
   .enter().append("line")
   .attr("stroke","black");
 
-  var node1 = svg.append("g")
+  var node1 = svg_2.append("g")
   .selectAll("circle")
   .data(data1.nodes)
   .enter().append("circle")
@@ -158,17 +170,14 @@ function test() {
     d.fy = null;
   }
 
-}
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
+// simulation code inspired from https://observablehq.com/@ben-tanen/a-tutorial-to-using-d3-force-from-someone-who-just-learned-ho
 
-
- function test3()
- {
     var myColor2 = d3.scaleSequential().domain([1,100]).interpolator(d3.interpolateRainbow);
-    var width = window.innerWidth , height = window.innerHeight-30
-
+    var width = window.innerWidth , height = window.innerHeight
 // append the svg object to the body of the page
 const svg = d3.select("body").select(".Display2")
   .append("svg")
@@ -177,12 +186,14 @@ const svg = d3.select("body").select(".Display2")
 
 // create dummy data -> just one element per circle
 const data = [{ "name": "A" }, { "name": "B" }, { "name": "C" }, { "name": "D" }, { "name": "E" }, { "name": "F" }, { "name": "G" }, { "name": "H" }]
-csv_data=[]
-                d3.csv('../csvFiles/Lab2_part7.csv', function(data) {csv_data.push(data)}).then(()=>
-                {
-                    const node = svg.append("g")
+var numNodes = 150;
+var nodes = d3.range(numNodes).map(function(d) {
+ return {r: Math.random() * 50}
+})
+
+const node = svg.append("g")
   .selectAll("circle")
-  .data(csv_data)
+  .data(nodes)
   .join("circle")
     .attr("r", function(d){ return d.r})
     .attr("cx", width / 2)
@@ -198,7 +209,7 @@ csv_data=[]
          .on("end", dragended));
 
 // Features of the forces applied to the nodes:
-const simulation = d3.forceSimulation()
+var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
     .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
     .force("collide", d3.forceCollide().strength(.1).radius(function(d){return d.r}).iterations(3)) // Force that avoids circle overlapping
@@ -206,12 +217,15 @@ const simulation = d3.forceSimulation()
 // Apply these forces to the nodes and update their positions.
 // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
 simulation
-    .nodes(csv_data)
+    .nodes(nodes)
     .on("tick", function(d){
       node
           .attr("cx", d => d.x)
           .attr("cy", d => d.y)
     });
+
+
+
 
 // What happens when a circle is dragged?
 function dragstarted(event, d) {
@@ -228,12 +242,105 @@ function dragended(event, d) {
   d.fx = null;
   d.fy = null;
 }
-                })
-               
+              
+          
+
+
+function change_sim(number,flag = false)
+{
+
+   if(number===1)
+  {
+    simulation.stop();
+
+    simulation = d3.forceSimulation()
+    .force("charge", d3.forceCollide().radius(5)) // Nodes are attracted one each other of value is > 0
+.force("collide",  d3.forceCollide().radius(function (d) {return d.r + 2 }))
+.force("r", d3.forceRadial(function(d) { return d.r <25 ? 500 : 20; }).strength(0.3).x(width/2).y(height/2)) 
+
+  }
+
+ else if(number == 2 )
+ {
+  simulation.stop();
+
+simulation = d3.forceSimulation()
+.force("center", d3.forceCenter(width/2, height/2).strength(0.8))
+.force("collide",  d3.forceCollide().radius(function (d) {return d.r + 5 }))
+.force("charge", d3.forceManyBody().strength(100))
+ }
+
+ else if(number == 3 )
+ {
+  simulation.stop();
+
+simulation = d3.forceSimulation()
+.force("x", d3.forceX(width / 2)) 
+  .force("y", d3.forceY(height / 2))
+.force("collide",  d3.forceCollide().radius(function (d) {return d.r + 5 }))
+.force("charge", d3.forceManyBody().strength(-450))
+ }
+
+
+
+
+
+
+
+  else if(number==4)
+  {
+    simulation.stop();
+
+simulation = d3.forceSimulation()
+.force("charge", d3.forceCollide().radius(5)) // Nodes are attracted one each other of value is > 0
+.force("collide",  d3.forceCollide().radius(function (d) {return d.r + 2 }))
+.force("r", d3.forceRadial(function(d) { return d.r <25 ? 100 : 400; }).strength(0.8).x(width/2).y(height/2)) }
+
+
+  else if(number==5)
+  {
+    simulation.stop();
+
+simulation = d3.forceSimulation()
+.force("y", d3.forceY(height / 2)) 
+.force("charge", d3.forceManyBody().strength(-1))
+.force("collide",  d3.forceCollide().radius(function (d) {return d.r + 5 }))
+.force("center", d3.forceCenter(width/2, height/2))
+
+  }
+
+  else if(number==6)
+  {
+    simulation.stop();
+
+simulation = d3.forceSimulation()
+.force("x", d3.forceX(width / 2)) 
+.force("charge", d3.forceManyBody().strength(-2))
+.force("collide",  d3.forceCollide().radius(function (d) {return d.r + 5 }))
+.force("center", d3.forceCenter(width/2, height/2))
+
+
+
+;
+  }
+  simulation
+    .nodes(nodes)
+    .on("tick", function(d){
+      node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y)
+    });
+
+
+
+}
+
+
+
+
 // Initialize the circle: all located at the center of the svg area
 
- }
+
 </script>
-<button onclick="switch_test()">Cycle through data for pie chart</button>
 </body>
 </html>

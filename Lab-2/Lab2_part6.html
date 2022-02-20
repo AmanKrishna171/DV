@@ -16,9 +16,45 @@
     
       </nav>
 <body>
+   
+    
+    <h1 class="display-4">Exercise 27</h1>
+    
+   
+      
+    
+    <div class="center-screen">
 
-</body>
+    <div>
+        <button onclick="change_csv(1)" type="button" class="btn btn-success">Apples</button>
+    
+        <button onclick="change_csv(2)" type="button" class="btn btn-danger">Bananas</button>
+    
+        <button onclick=" change_csv(3)" type="button" class="btn btn-primary">Cherries</button>
+    
+        <button onclick="  change_csv(4)" type="button" class="btn btn-warning">Oranges</button>
+    
+        <button onclick=" change_csv(0)" type="button" class="btn btn-info">Pears</button>
+     
+    </div>
+
+    <div id="display1"></div>
+    </div>
+
+    <style>
+
+        .center-screen {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+         
+        }
+        </style>
 <script>
+
+
+    
 csv_index = 1
 let intr = d3.interpolate( [20, 40, 4], [1, 12, 10])
 console.log("Type of returned function is: ", typeof (intr) );
@@ -33,11 +69,7 @@ console.log( cc(1 ));
 // when i increase the number, it goe stowards green and when its 1, it is fully green
 
 
-// execersei 26 source :https://observablehq.com/@d3/d3-interpolatedate
 
-date = d3.interpolateDate(new Date("1999-01-01"), new Date("2021-01-01"))
-
-console.log( date(0.95));
 
 
 var dataset = {
@@ -57,7 +89,7 @@ var pie = d3.pie()
 var arc = d3.arc()
  .innerRadius(radius - 100)
  .outerRadius(radius - 50);
-var svg = d3.select("body").append("svg")
+var svg = d3.select("body").select('#display1').append("svg")
  .attr("width", width)
 
  .attr("height", height)
@@ -104,7 +136,7 @@ function update(data) {
 }
 
 update(dataset.apples)
-function change_csv ()
+function change_csv (csv_index)
                 {
                     switch (csv_index)
                     {
@@ -136,7 +168,7 @@ function change_csv ()
 
 
  </script>
-   <button onclick="change_csv()">Cycle through data for pie chart</button>
+
  
 </body>
 </html>

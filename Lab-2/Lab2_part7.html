@@ -11,13 +11,35 @@
 
     <nav class="navbar navbar-light" style="background-color: #09c05b8e;">
         <a class="navbar-brand" href="./index.html" style="color: white">DF Lab 2 Home</a>
-      
-        </button>
+
+     
     
       </nav>
 <body>
+  <div class="center-screen">
+    <a href="./Lab2_part7_int.html" >
 
-</body>
+      <button type="button" class="btn btn-danger">More Simulations</button>
+
+    </a>
+
+  </div>
+<br>
+<div class="display1">
+
+</div>
+
+<style>
+
+  .center-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+   
+  }
+  </style>
+
 <script >
 
   var myColor2 = d3.scaleSequential().domain([1,100]).interpolator(d3.interpolateRainbow);
@@ -25,7 +47,7 @@
  
 var width = 700, height = 700;
 // setup svg
-svg = d3.select('body').append('svg').attr('width',width).attr('height',height);
+svg = d3.select('body').select('.display1').append('svg').attr('width',width).attr('height',height);
 // generate some random data
 var numNodes = 100;
 var nodes = d3.range(numNodes).map(function(d) {
@@ -57,25 +79,37 @@ function ticked() {
  return d.y
  })
  .attr('fill',function(d,i) {
-  return myColor2(i)       
+  return myColor2(d.r)       
           })
-          .on("mouseover", function(d,i){ 
+          .on("mousemove", function(event,d){ 
+ 
               
             tx = 0
             ty = 0  
+
             d3.select(this)
             .transition()
-            .attr('r', function(d) {tx = d.x,ty=d.y; return d.r})
+            .attr('r', function(d) {tx = d.x,ty=d.y; return d.r })
             .attr("fill",'red')
+            .attr('stroke','black')
+            .attr('stroke-width',7)
 
+            d3.selectAll('.text1').remove();
             svg.append('text')
             .attr('class','text1')
-            .transition()
-            .style("font", "54px times")
-            .attr('x',tx -60)
+            .attr('text-anchor', 'middle')
+            .attr('alignment-baseline', 'middle')
+            .style("font-size", function(d) {
+   
+      var size = event.target.attributes[0].value/3;
+     
+     
+      return Math.round(size)+'px';
+  })
+            .attr('x', tx )
             .attr('y',ty)
             .attr("fill",'black')
-            .text('Big')
+            .text("Radius: "+event.target.attributes[0].value + 0)
 
             })
             .on("mouseout", function(){   d3.select(this)
@@ -84,11 +118,12 @@ function ticked() {
  return d.r 
  })
  .attr('fill',function(d,i) {
-  return myColor2(i)       
+  return myColor2(d.r)       
           })
+          .attr('stroke-width',0)
 
 
-          d3.selectAll('.text1').remove();
+        
              });
         
 
