@@ -1,0 +1,144 @@
+<html>
+<html lang="en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head> 
+
+    <nav class="navbar navbar-light" style="background-color: #09c05b8e;">
+        <a class="navbar-brand" href="./index.html" style="color: white">DF Lab 2 Home</a>
+      
+        </button>
+    
+      </nav>
+<body>
+   
+    <span>Exercise 3</span>
+    <span id="Excersie3" >
+    </span>
+
+   
+<script >
+
+
+data = 
+[
+{title : "Star Wars", value : "Star Wars is an American epic space opera franchise created by George Lucas, which began with the eponymous 1977 film and quickly became a worldwide pop culture phenomenon."},
+{title : "The Matrix", value : "The Matrix is a 1999 science fiction action film written and directed by The Wachowskis, starring Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving, and Joe Pantoliano."},
+{title : "The Lord of the Rings", value : "The Lord of the Rings is a fantasy adventure film series, consisting of five films, all of which are part of the Lord of the Rings film series, and all of which were directed by Peter Jackson."},
+{title : "Inception", value : "Inception is a 2010 science fiction action film written and directed by Christopher Nolan, and starring Christian Bale, Joseph Gordon-Levitt, and Ellen Page."},
+{title : "The Dark Knight", value : "The Dark Knight is a 2008 superhero film directed, produced, and co-written by Christopher Nolan. It is the second installment in the DC Extended Universe (DCEU)."},
+{title : "The Avengers", value : "The Avengers is a 2012 American superhero film based on the Marvel Comics superhero team of the same name, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures."},
+{title : "The Hobbit: An Unexpected Journey", value : "The Hobbit: An Unexpected Journey is a 2012 fantasy adventure film directed by Peter Jackson, and based on the novel The Hobbit by J. R. R. Tolkien."},
+{title : "The Hobbit: The Desolation of Smaug", value : "The Hobbit: The Desolation of Smaug is a 2013 fantasy adventure film directed by Peter Jackson, and based on the novel The Hobbit by J. R. R. Tolkien."}, 
+
+]
+
+ //Exercsie 3    
+ 
+    d3.select('body').selectAll("div")
+    .data(data)
+        .enter()
+        .append('div')
+        .attr('class', 'box')
+        .append('h1')
+        .text(function(d) { return d.title; })
+        .append('div')
+        .attr('class', 'rect__blurb')
+        .text(function(d) { return d.value; })
+     
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+ 
+</script>
+
+<style>
+    /* source : https://css-tricks.com/using-multi-step-animations-transitions/ */
+
+    .box {
+  width: 150px;
+  height: 150px;
+  background-color: red;
+  box-shadow: 5px 5px 25px #000;
+  transition: all 1s;
+}
+
+/* On hover... */
+.box:hover {
+  /* Increase width */
+  width: 300px;
+  /* Change color */
+  background-color: orange;
+  /* Move the shadow */
+  box-shadow: -5px 5px 25px #000;
+}
+
+/* The first line of text */
+.box__blurb {
+  /* Start with full opacity and centered */
+  opacity: 1;
+  transform: translateX(45px);
+  /* Then transition these chained properties */
+  transition:
+    opacity 0.5s 2s,
+    transform 0.5s 0.5s;
+}
+
+/* On .box hover... */
+.box:hover .box__blurb {
+  /* Fade out */
+  opacity: 0;
+  /* Move over to the right */
+  transform: translateX(-500px);
+}
+
+/* The second line of text */
+.rect__blurb {
+  /* Start with no opacity and pushed off the element */
+  opacity: 0;
+  font-size: 0px;
+  transform: translateX(500px);
+  /* Then transition these chained properties */
+  transition: 
+    opacity 0.5s 1s,
+    transform 0.5s 1s;
+}
+
+/* On .box hover... */
+.box:hover .rect__blurb {
+  /* Face in */
+  opacity: 1;
+  /* While entering from the right */
+  font-size: 15px;
+
+  transform: translateX(10px);
+
+
+  
+}
+
+
+    </style>
+
+</body>
+</html>

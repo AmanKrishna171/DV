@@ -16,6 +16,25 @@
     
       </nav>
 <body>
+  <h2 class="display-4">Interpolate explanation:</h1>
+  <blockquote class="blockquote">
+    <p class="mb-0">From my understanding, interpolate will take two values which will form the range. Then a third value t. From the source  <a  href="https://github.com/d3/d3-interpolate" >D3 source code</a>, for two number 'a' and 'b'
+      
+      <p>
+      <code>
+        function interpolator(t) {
+          return a * (1 - t) + b * t;
+        }
+      </code> 
+      </p>
+
+      <p>
+        Here depending on value of t, the interpolator will return a value between a and b.
+        Similarily it can be used to interpolate between two colors, or two points on a curve, or two angles, dates, or any other value mentioned in <a  href="https://github.com/d3/d3-interpolate" >D3 source code</a>.
+      </p>
+   
+    </p>
+  </blockquote>
 
   <h1 class="display-4">Exercise 24</h1>
 
@@ -28,7 +47,7 @@
   <div class="center-screen">
 
 
-    <h1 class="display-4">Exercise 25</h1>
+    <h1 class="display-4">Exercise 25 (please use the slider)</h1>
     <label for="nRadius" 
     style="display: inline-block; width: 240px; text-align: right">
  <span id="nRadius-value">…</span>
@@ -49,7 +68,7 @@
   </div>
 
   <div>
-  <h1 class="display-4">Exercise 26</h1>
+  <h1 class="display-4">Exercise 26 (please use the slider)</h1>
 
 
  
@@ -109,11 +128,11 @@ console.log( cc(1) );
 
     // Create scale
     var scale = d3.scaleLinear()
-                  .domain([0, 255])
+                  .domain([ 255,0])
                   .range([0, width - 100]);
 
     var scale_2 = d3.scaleLinear()
-                  .domain([0, 128])
+                  .domain([0, 255])
                   .range([0, width - 100]);
     // Add scales to axis
     var x_axis = d3.axisBottom()
@@ -129,20 +148,20 @@ console.log( cc(1) );
      return  (d);
      }).ticks(width/25)
 
-     svg.append("rect")
-          .attr("x", scale(128)+30)
-          .attr("y", 0)
-          .attr("width", 3)
-          .attr("height",100)
-          .attr("fill", 'red')
-    //Append group and insert axis
-    svg.append("g")
-    .attr("transform", "translate(" + 30 + "," + 0 + ")")
-       .call(x_axis)
+    //  svg.append("rect")
+    //       .attr("x", scale(128)+30)
+    //       .attr("y", 0)
+    //       .attr("width", 3)
+    //       .attr("height",100)
+    //       .attr("fill", 'red')
+    // //Append group and insert axis
+    // svg.append("g")
+    // .attr("transform", "translate(" + 30 + "," + 0 + ")")
+    //    .call(x_axis)
  
-       svg.append("g")
-    .attr("transform", "translate(" + 30 + "," + 30 + ")")
-       .call(x_axis_2)
+    //    svg.append("g")
+    // .attr("transform", "translate(" + 30 + "," + 30 + ")")
+    //    .call(x_axis_2)
 
 
 
