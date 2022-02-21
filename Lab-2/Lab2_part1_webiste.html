@@ -17,7 +17,7 @@
       </nav>
 <body>
    
-    <span>Exercise 3</span>
+    <h1>Exercise 3 (Hover over titles for more information)</h1>
     <span id="Excersie3" >
     </span>
 
@@ -27,29 +27,44 @@
 
 data = 
 [
-{title : "Star Wars", value : "Star Wars is an American epic space opera franchise created by George Lucas, which began with the eponymous 1977 film and quickly became a worldwide pop culture phenomenon."},
-{title : "The Matrix", value : "The Matrix is a 1999 science fiction action film written and directed by The Wachowskis, starring Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving, and Joe Pantoliano."},
-{title : "The Lord of the Rings", value : "The Lord of the Rings is a fantasy adventure film series, consisting of five films, all of which are part of the Lord of the Rings film series, and all of which were directed by Peter Jackson."},
-{title : "Inception", value : "Inception is a 2010 science fiction action film written and directed by Christopher Nolan, and starring Christian Bale, Joseph Gordon-Levitt, and Ellen Page."},
-{title : "The Dark Knight", value : "The Dark Knight is a 2008 superhero film directed, produced, and co-written by Christopher Nolan. It is the second installment in the DC Extended Universe (DCEU)."},
-{title : "The Avengers", value : "The Avengers is a 2012 American superhero film based on the Marvel Comics superhero team of the same name, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures."},
-{title : "The Hobbit: An Unexpected Journey", value : "The Hobbit: An Unexpected Journey is a 2012 fantasy adventure film directed by Peter Jackson, and based on the novel The Hobbit by J. R. R. Tolkien."},
-{title : "The Hobbit: The Desolation of Smaug", value : "The Hobbit: The Desolation of Smaug is a 2013 fantasy adventure film directed by Peter Jackson, and based on the novel The Hobbit by J. R. R. Tolkien."}, 
-
-]
+{title : "Star Wars", value : "Star Wars is an American epic space opera franchise created by George Lucas, which began with the eponymous 1977 film and quickly became a worldwide pop culture phenomenon.",picture : "https://alfalfastudio.s3.amazonaws.com/wp-content/uploads/2017/04/02235707/Star_Wars_Logo_Suzy_Rice_3-1-1.png",year : 1977},
+{title : "The Matrix", value : "The Matrix is a 1999 science fiction action film written and directed by The Wachowskis, starring Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving, and Joe Pantoliano." ,picture : "https://hyperpix.net/wp-content/uploads/2019/07/the-matrix-logo-font-download.jpg",year : 1999},
+{title : "Inception", value : "Inception is a 2010 science fiction action film written and directed by Christopher Nolan, and starring Christian Bale, Joseph Gordon-Levitt, and Ellen Page.",picture : "https://ih1.redbubble.net/image.25663447.6122/flat,1000x1000,075,f.jpg",year : 2010},
+{title : "The Dark Knight", value : "The Dark Knight is a 2008 superhero film directed, produced, and co-written by Christopher Nolan. It is the second installment in the DC Extended Universe (DCEU)." , picture : "https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/LmEnxtiAuzezXBjYXPuDgfZ4zZQ/AAAABRNVFCSnHSn3QBS0mUp3Ucz5UVVQaMUPvAtltj9KKXP3A4T5bI6X9sjCT6YOYlJ1CJCNtp1wip3OodwH9_MCinmKAlnEV4OLEXJK.png?r=40b",year : 2008},
+{title : "The Avengers", value : "The Avengers is a 2012 American superhero film based on the Marvel Comics superhero team of the same name, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures.",picture:'https://logos-world.net/wp-content/uploads/2020/05/The-Avengers-Logo-2012.jpg',year : 2012},
+{title : "Infinity War", value : "Avengers: Infinity War is a 2018 American superhero film based on the Marvel Comics superhero team of the same name, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures.",picture:'https://logos-world.net/wp-content/uploads/2020/05/Avengers-Infinity-War-Logo-2018.jpg',year : 2018},
+{title : "Endgame", value : "The Avengers: Endgame is a 2019 American superhero film based on the Marvel Comics superhero team of the same name, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures.",picture:'https://cdn.freelogovectors.net/wp-content/uploads/2019/04/avangers-endgame-logo.png',year : 2019}]
 
  //Exercsie 3    
  
-    d3.select('body').selectAll("div")
+  title=  d3.select('body').selectAll("div")
     .data(data)
         .enter()
         .append('div')
         .attr('class', 'box')
         .append('h1')
+        .attr('class', 'title')
         .text(function(d) { return d.title; })
-        .append('div')
+
+        title.append('div')
+        .attr('class', 'year')
+        .text(function(d) { return ("Released on "+d.year); })
+
+        title.append('div')
         .attr('class', 'rect__blurb')
         .text(function(d) { return d.value; })
+
+
+
+
+     d3.selectAll('.box').append('img')
+        .attr('src', function(d) { return d.picture; })
+        .attr('class', 'img')
+        .attr('width', '200px')
+        .attr('height', '100px')
+        .attr('alt', 'image')
+      
+
      
 
 
@@ -76,21 +91,39 @@ data =
     /* source : https://css-tricks.com/using-multi-step-animations-transitions/ */
 
     .box {
-  width: 150px;
-  height: 150px;
-  background-color: red;
+  width: 240px;
+  height: 140px;
+  background-color: rgb(0, 174, 255);
   box-shadow: 5px 5px 25px #000;
   transition: all 1s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 /* On hover... */
 .box:hover {
   /* Increase width */
-  width: 300px;
+  width: 330px;
+  height: 390px;
   /* Change color */
-  background-color: orange;
+  background-color: rgb(174, 62, 226);
   /* Move the shadow */
   box-shadow: -5px 5px 25px #000;
+
+  align-items: center;
+  align-content: center;
 }
 
 /* The first line of text */
@@ -130,14 +163,92 @@ data =
   opacity: 1;
   /* While entering from the right */
   font-size: 15px;
+  font-weight: bold;
+  font-family: sans-serif;
+  
 
-  transform: translateX(10px);
+  transform: translate(5px, 32px);
+
+
+  
+}
+
+.img {
+  /* Start with no opacity and pushed off the element */
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+  transform: translateX(500px);
+  /* Then transition these chained properties */
+  transition: 
+    opacity 0.5s 1s,
+    transform 0.5s 1s;
+}
+
+/* On .box hover... */
+.box:hover .img {
+  /* Face in */
+  opacity: 1;
+  width: 200px;
+  height: 100px;
+  /* While entering from the right */
+  font-size: 15px;
+
+  transform: translate(10px, 30px);
 
 
   
 }
 
 
+.title {
+  /* Start with no opacity and pushed off the element */
+  opacity: 1;
+
+  /* Then transition these chained properties */
+  transition: 
+    opacity 0.5s 1s,
+    transform 0.5s 1s;
+}
+
+/* On .box hover... */
+.box:hover .title {
+  /* Face in */
+  opacity: 1;
+
+  font-weight: bolder;
+  font-family: fantasy;
+
+  /* While entering from the right */
+
+  
+}
+
+
+
+.year {
+  /* Start with no opacity and pushed off the element */
+  opacity: 0;
+  font-size: 0px;
+  /* Then transition these chained properties */
+  transition: 
+    opacity 0.5s 1s,
+    transform 0.5s 1s;
+}
+
+/* On .box hover... */
+.box:hover .year {
+  /* Face in */
+  font-size: 20px;
+  opacity: 1;
+
+  font-weight: 300;
+  font-family: sans-serif;
+
+  /* While entering from the right */
+
+  
+}
     </style>
 
 </body>
