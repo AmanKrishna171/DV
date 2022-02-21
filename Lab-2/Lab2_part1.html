@@ -16,7 +16,20 @@
     
       </nav>
 <body>
-    <div></div>
+
+    <div class="exercise1">
+
+    </div>
+
+    <h1>Exercise 2 (click on the button)</h1>
+    <div class="center-screen">
+        <a href="./Lab2_part1_webiste.html" >
+    
+          <button type="button" class="btn btn-danger">Exercise 2 >>></button>
+    
+        </a>
+    
+      </div>
 </body>
 
     
@@ -37,6 +50,7 @@
 
         
         d3.select("body")
+            .select(".exercise1")
                         .append("svg")
                         .attr('width', '100vw' )
                         .attr('height', 100 )
@@ -46,6 +60,7 @@
                             .style('font-size', '2em')
 
         const svg_3 = d3.select("body")
+        .select(".exercise1")
                         .append("svg")
                         .attr('width', '100vw' )
                         .attr('height', ySize +60 )
@@ -55,14 +70,7 @@
 
         Generate_graph_points(svg_3,data_sine,'blue','circle',true)
                 
-        d3.select("body")
-                        .append("svg")
-                        .attr('width', '100vw' )
-                        .attr('height', 100 )
-                        .append('text').text('Exercise 2')
-                            .attr('x',30)
-                            .attr('y',80)
-                            .style('font-size', '2em')
+     
 
 
 
@@ -146,7 +154,7 @@
         .append("circle")
         .attr("cx", function (d) { return x(d.x) } )
         .attr("cy", function (d) { return y(d.y) } )
-        .attr("r", 4)
+        .attr("r", function (d, i) {return i % 2 === 0 ? 5 : 0; } )
         .style("fill", colour)
         .attr("class", 'pulse')
         .on('mouseover', function (d, i) {
@@ -217,6 +225,8 @@
      to {
      fill: red;
      r:10;
+     stroke-width: 5px;
+     stroke: black;
 
      }
     }
