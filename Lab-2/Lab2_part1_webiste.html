@@ -99,8 +99,8 @@ data =
     /* source : https://css-tricks.com/using-multi-step-animations-transitions/ */
 
     .box {
-  width: 240px;
-  height: 140px;
+  width: 25vw;
+  height: 15vw;
   background-color: rgb(0, 174, 255);
   box-shadow: 5px 5px 25px #000;
   transition: all 1s;
@@ -109,10 +109,9 @@ data =
   display: flex;
   flex-direction: column;
   margin: 10px;
-  padding: 10px;
+  padding: 1px;
   border-radius: 10px;
   color: white;
-  font-size: 20px;
   font-family: sans-serif;
   font-weight: bold;
   text-align: center;
@@ -123,8 +122,8 @@ data =
 /* On hover... */
 .box:hover {
   /* Increase width */
-  width: 330px;
-  height: 390px;
+  width: 33vw;
+  height: 41vw;
   /* Change color */
   background-color: rgb(174, 62, 226);
   /* Move the shadow */
@@ -172,7 +171,7 @@ data =
   /* Face in */
   opacity: 1;
   /* While entering from the right */
-  font-size: 15px;
+  font-size: 1.5vw;
   font-weight: bold;
   font-family: sans-serif;
   
@@ -199,12 +198,13 @@ data =
 .box:hover .img {
   /* Face in */
   opacity: 1;
-  width: 200px;
-  height: 100px;
+  width: 29vw;
+  height: 12vw;
+  align-self: center;
   /* While entering from the right */
   font-size: 15px;
 
-  transform: translate(10px, 30px);
+  transform: translate(4px, 30px);
 
 
   
@@ -214,6 +214,7 @@ data =
 .title {
   /* Start with no opacity and pushed off the element */
   opacity: 1;
+  font-size: 4vw;
 
   /* Then transition these chained properties */
 
@@ -256,7 +257,7 @@ data =
 .box:hover .year {
   /* Face in */
   opacity: 1;
-  font-size: 20px;
+  font-size: 2vw;
 
   font-weight: 300;
   font-family: sans-serif;
@@ -287,12 +288,12 @@ data =
 
 .header {
   margin: auto;
-  width: 50%;
+  width: 90vw;
   border: 3px solid rgb(0, 0, 0);
   padding: 50px;
   border-radius: 10px;
 
-  background-color: rgba(40, 205, 255, 0.726);
+  background-color: rgba(62, 40, 255, 0.726);
   box-shadow: 5px 5px 25px #000;
   transition: all 1s;
   align-items: center;
@@ -303,7 +304,7 @@ data =
   padding: 10px;
   border-radius: 10px;
   color: rgb(255, 255, 255);
-  font-size: 27px;
+  font-size: 2.5vw;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
 
@@ -311,7 +312,7 @@ data =
 
 .heading {
   margin: auto;
-  width: auto;
+  width: 70vw auto;
   border: 3px solid rgb(0, 0, 0);
   padding: 50px;
   border-radius: 10px;
@@ -333,11 +334,11 @@ data =
   font-weight: bolder;
 
   -webkit-animation-name: fade-bg ;
- -webkit-animation-duration: 7s;
+ -webkit-animation-duration: 4s;
  -webkit-animation-iteration-count: infinite;
  -webkit-animation-direction: alternate;
  animation-name: fade-bg ;
- animation-duration: 7s;
+ animation-duration: 4s;
  animation-iteration-count: infinite;
  animation-direction: alternate;
 
@@ -348,7 +349,7 @@ data =
   animation-name: fade-bg;
   animation-delay: 0;
   animation-iteration-count: infinite;
-  animation-direction: forward;
+  animation-direction:alternate;
 }
 
 .heading:hover {
@@ -366,12 +367,12 @@ data =
     25% {
         opacity: 1;
         background-color: rgba(255, 0, 0, 0.767);
-        border-radius: 25x;
+        border-radius: 25px;
     }
 
     50% {
         opacity: 1;
-        background-color: rgba(251, 255, 0, 0.767);
+    
         border-radius: 50px;
     }
 
@@ -389,7 +390,6 @@ data =
 
     100% {
         opacity: 1;
-        background-color: rgba(251, 255, 0, 0.767);
         border-radius: 100px;
     }
 }
