@@ -16,6 +16,7 @@
     
       </nav>
 <body>
+  <div class="exercise">
   <h2 class="display-4">Interpolate explanation:</h1>
   <blockquote class="blockquote">
     <p class="mb-0">From my understanding, interpolate will take two values which will form the range. Then a third value t. From the source  <a  href="https://github.com/d3/d3-interpolate" >D3 source code</a>, for two number 'a' and 'b'
@@ -35,22 +36,23 @@
    
     </p>
   </blockquote>
+</div>
 
   <h1 class="display-4">Exercise 24</h1>
 
 <p style="text-align:center;" > 
-  <span  > The output of the given code is : </span> <p style="text-align:center;" id="test"></p>
+  <span class="display-4"  > The output of the given code is : </span> <p class="display-4" id="test"></p>
 </p>
 
 
 
-  <div class="ex25" >
+  <div class="exercise" id="ex25">
 
 
-    <h1 class="display-4">Exercise 25 (please use the slider)</h1>
+    <h1 class="display-4">Exercise 25</h1>
     <label for="nRadius" 
-    style="display: inline-block; width: 240px; text-align: right">
- <span id="nRadius-value">…</span>
+    style=" width: 80vw; text-align: center">
+ <span class="display-4" id="nRadius-value">(please use the slider)</span>
 </label>
 
 
@@ -66,14 +68,14 @@
 
   </div>
 
-  <div>
-  <h1 class="display-4">Exercise 26 (please use the slider)</h1>
+  <div class = 'exercise'>
+  <h1 class="display-4">Exercise 26 </h1>
 
 
  
   <label for="nRadius2" 
-    style=" width: 550px; text-align: right">
-  <span id="nRadius-value2"></span>
+    style=" width: 80vw; text-align: center">
+  <span class="display-4"  id="nRadius-value2" >(please use the slider)</span>
   </label>
   <input type="range" min="0" max="2" step="0.01" id="nRadius2">
 </div>
@@ -90,6 +92,27 @@
 
 
 <style>
+
+  .center-screen {
+    margin: 0 auto;
+    width: 50%;
+    padding: 10px;
+  }
+  .display-4 {
+    text-align: center;
+    font-size: 4vw;
+    flex: auto;
+  }
+
+  .exercise {
+    margin: auto;
+    width: 80vw;
+    padding: 10px;
+    align-items: center;
+    align-content: center;
+    flex: auto;
+    flex-direction: column;
+  }
 
 
 </style>
@@ -179,18 +202,18 @@ d3.select("#nRadius2").on("input", function() {
 });
 
 d3.select('body')
-.select('.ex25')
+.select('#ex25')
 .append('svg')
-.attr('width', '100vw')
+.attr('width', '80vw')
 .attr('height', 100)
 .append('circle')
 .attr('class', 'dis1')
 .attr('cx', '50vw')
 .attr('cy', height/2)
-.attr('r', scale(128))
+.attr('r', scale(28))
 .attr('fill', 'red')
 .attr('stroke', 'black')
-.attr('stroke-width', '1px')
+.attr('stroke-width', '10px')
 .attr('border-radius', '50%')
 
 
