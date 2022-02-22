@@ -16,7 +16,7 @@
     
       </nav>
 <body>
-    <span>Exercise 3</span>
+    <h1>Exercise 3</h1>
     <div id="Excersie3" >
     </div>
 
@@ -29,6 +29,7 @@
 <script>
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Exercsie 3    
+
     d3.select('body')
         .selectAll('#Excersie3')
         .append('div')
@@ -36,10 +37,12 @@
         .style('height', '20px')
         .style("outline", "thick solid orange")
         .style('background-color', 'green');
+
     d3.selectAll("div")
         .on("mouseover", function(event)
         {
             d3.select(this)
+            .transition()
                 .style("background-color", "orange")
                 .style('width', '340px')
                 .style('border','10px')
@@ -51,6 +54,7 @@
         .on("mouseout", function()
         {
             d3.select(this)
+            .transition()
             .style('width', '100px')
             .style('height', '70px')
             .style("background-color", "steelblue")
@@ -80,13 +84,13 @@
                         .attr("style", "outline: thin solid Grey;") 
 
    circle =  svg_1.append("circle")
-          .attr("cx",300 )
-          .attr("cy",100 )
-          .attr("r", 50)
-          .attr("fill",'Orange')
-          .style('align','center')
-          .on("mouseover", function(){ updateCircle(2) })
-          .on("mouseout", function(){ updateCircle(0)});
+                    .attr("cx",300 )
+                    .attr("cy",100 )
+                    .attr("r", 50)
+                    .attr("fill",'Orange')
+                    .style('align','center')
+                    .on("mouseover", function(){ updateCircle(2) })
+                    .on("mouseout", function(){ updateCircle(0)});
 
 
 

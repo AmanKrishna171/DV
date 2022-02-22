@@ -17,9 +17,9 @@
       </nav>
 <body>
    
-    <h1>Exercise 3 (Hover over titles for more information)</h1>
-    <span id="Excersie3" >
-    </span>
+    <div class = 'header'>Exercise 2 - Interactive Website (Hover over titles for more information)</h1></div>
+    <div class="Excersie2" >
+    </div>
 
    
 <script >
@@ -37,7 +37,15 @@ data =
 
  //Exercsie 3    
  
-  title=  d3.select('body').selectAll("div")
+
+ d3.select('body')
+ .select('.Excersie2')
+        .append('span')
+        .attr('class', 'heading')
+        .text('IMBD')
+
+
+  title=  d3.select('body').select('.Excersie2').selectAll("div")
     .data(data)
         .enter()
         .append('div')
@@ -133,7 +141,7 @@ data =
   transform: translateX(45px);
   /* Then transition these chained properties */
   transition:
-    opacity 0.5s 2s,
+    opacity 0.5s 0.5s,
     transform 0.5s 0.5s;
 }
 
@@ -142,7 +150,7 @@ data =
   /* Fade out */
   opacity: 0;
   /* Move over to the right */
-  transform: translateX(-500px);
+ 
 }
 
 /* The second line of text */
@@ -150,11 +158,13 @@ data =
   /* Start with no opacity and pushed off the element */
   opacity: 0;
   font-size: 0px;
-  transform: translateX(500px);
+  /* transform: translateX(500px); */
   /* Then transition these chained properties */
   transition: 
-    opacity 0.5s 1s,
-    transform 0.5s 1s;
+    opacity 0.5s 0.5s,
+    transform 0.5s 0.5s;
+    
+    
 }
 
 /* On .box hover... */
@@ -206,9 +216,7 @@ data =
   opacity: 1;
 
   /* Then transition these chained properties */
-  transition: 
-    opacity 0.5s 1s,
-    transform 0.5s 1s;
+
 }
 
 /* On .box hover... */
@@ -218,6 +226,13 @@ data =
 
   font-weight: bolder;
   font-family: fantasy;
+
+
+  transition:
+  font-weight 0.1s 3s,
+  
+/* 
+    transform 0.5s 0.5s; */
 
   /* While entering from the right */
 
@@ -233,21 +248,150 @@ data =
   /* Then transition these chained properties */
   transition: 
     opacity 0.5s 1s,
-    transform 0.5s 1s;
+    transform 0.5s 1s,
+    font-size 0.5s 1s;
 }
 
 /* On .box hover... */
 .box:hover .year {
   /* Face in */
-  font-size: 20px;
   opacity: 1;
+  font-size: 20px;
 
   font-weight: 300;
   font-family: sans-serif;
 
   /* While entering from the right */
+}
 
+.Excersie2 {
+  margin: auto;
+  width: 50%;
+  border: 10px solid rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 80px;
+  background-color: rgba(187, 187, 187, 0.486);
+  box-shadow: 5px 5px 25px #000;
+  transition: all 1s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  color: black;
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.header {
+  margin: auto;
+  width: 50%;
+  border: 3px solid rgb(0, 0, 0);
+  padding: 50px;
+  border-radius: 10px;
+
+  background-color: rgba(40, 205, 255, 0.726);
+  box-shadow: 5px 5px 25px #000;
+  transition: all 1s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+
+  padding: 10px;
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+  font-size: 27px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+
+}
+
+.heading {
+  margin: auto;
+  width: auto;
+  border: 3px solid rgb(0, 0, 0);
+  padding: 50px;
+  border-radius: 10px;
   
+
+  background-color: rgba(251, 255, 0, 0.767);
+  box-shadow: 5px 5px 25px #000;
+  transition: all 1s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+
+  padding: 10px;
+  border-radius: 10px;
+  color: rgb(0, 0, 0);
+  font-size: 7vw;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bolder;
+
+  -webkit-animation-name: fade-bg ;
+ -webkit-animation-duration: 7s;
+ -webkit-animation-iteration-count: infinite;
+ -webkit-animation-direction: alternate;
+ animation-name: fade-bg ;
+ animation-duration: 7s;
+ animation-iteration-count: infinite;
+ animation-direction: alternate;
+
+}
+
+
+.fade-bg {
+  animation-name: fade-bg;
+  animation-delay: 0;
+  animation-iteration-count: infinite;
+  animation-direction: forward;
+}
+
+.heading:hover {
+  font-size: 10vw;
+  stroke: crimson;
+}
+
+@keyframes fade-bg {
+    0% {
+        opacity: 1;
+        background-color: rgba(251, 255, 0, 0.767);
+        border-radius: 10px;
+    }
+
+    25% {
+        opacity: 1;
+        background-color: rgba(255, 0, 0, 0.767);
+        border-radius: 25x;
+    }
+
+    50% {
+        opacity: 1;
+        background-color: rgba(251, 255, 0, 0.767);
+        border-radius: 50px;
+    }
+
+    61% {
+        opacity: 1;
+        background-color: rgba(1, 253, 85, 0.767);
+        border-radius: 60px;
+    }
+
+    75% {
+        opacity: 1;
+        background-color: rgba(38, 0, 253, 0.767);
+        border-radius: 70px;
+    }
+
+    100% {
+        opacity: 1;
+        background-color: rgba(251, 255, 0, 0.767);
+        border-radius: 100px;
+    }
 }
     </style>
 
