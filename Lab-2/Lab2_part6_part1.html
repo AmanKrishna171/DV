@@ -33,6 +33,21 @@
         Here depending on value of t, the interpolator will return a value between a and b.
         Similarily it can be used to interpolate between two colors, or two points on a curve, or two angles, dates, or any other value mentioned in <a  href="https://github.com/d3/d3-interpolate" >D3 source code</a>.
       </p>
+
+
+      <p>
+        <span style="font-weight:100 ;">Interpolating RGB Colour:</span> d3.interpolateRgb(a,b) is internally used.  
+        The input argument a and b are converted into rgb using d3.rgb and then retured as a string.
+        
+      <code>return d.setTime(a * (1 - t) + b * t), d;</code>
+       </p>
+
+
+      <p>
+       <span style="font-weight:100 ;">Interpolating Date:</span> d3.interpolateDate is used to interpolate between two dates.
+
+     <code>return d.setTime(a * (1 - t) + b * t), d;</code>
+      </p>
    
     </p>
   </blockquote>

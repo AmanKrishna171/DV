@@ -59,7 +59,7 @@
 
 
 
-  var data1 ={ 
+  var data1 ={  // data for the 'atom' circles
     "nodes":  [
       {"id": "A"},
       {"id": "B"},
@@ -80,6 +80,8 @@
       {"id":"8"},
 
     ],  
+
+    // links between the nodes
 
     "links":  [
       {"source": "A", "target": "B"},      
@@ -108,9 +110,10 @@
 
   var simulation1 = d3.forceSimulation()
   .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(100))
-  .force("charge", d3.forceManyBody())
+  .force("charge", d3.forceManyBody()) // forces bewteen nodes
   .force("center", d3.forceCenter(width / 2, height / 2).strength(1))
-  .force("collide", d3.forceCollide().strength(1).radius(function(d){return 50}).iterations(30)) // Force that avoids circle overlapping
+  .force("collide", d3.forceCollide().strength(1).radius(function(d){return 50}).iterations(30))
+   // Force that avoids circle overlapping
 ;
 
   var link1 = svg_2.append("g")
@@ -131,9 +134,9 @@
       return 25
     }
   })
-  .call(d3.drag()
-        .on("drag", dragged1)
-        .on("end", dragended1))
+  .call(d3.drag()  // using d3.drag so that we can drag the circle
+        .on("drag", dragged1) // call the dragged function
+        .on("end", dragended1)) // called when pointer leaves the circle
   .attr("fill",function(d){
     if(d.id=="A" || d.id=="1"){
       return "red"
@@ -146,7 +149,7 @@
   simulation1.nodes(data1.nodes)
     .on("tick", ticked1)
     .alphaDecay(0)
-    .force("link")
+    .force("link")  // adds links between nodes that act as force
     .links(data1.links);
 
   function ticked1() {
@@ -246,19 +249,22 @@ function dragended(event, d) {
           
 
 
-function change_sim(number,flag = false)
+function change_sim(number,flag = false) // this function switches the simulation configurations
 {
 
    if(number===1)
   {
-    simulation.stop();
+    simulation.stop(); // stops the simulation s
 
+    // then loads the new sim configs
     simulation = d3.forceSimulation()
     .force("charge", d3.forceCollide().radius(5)) // Nodes are attracted one each other of value is > 0
 .force("collide",  d3.forceCollide().radius(function (d) {return d.r + 2 }))
 .force("r", d3.forceRadial(function(d) { return d.r <25 ? 500 : 20; }).strength(0.3).x(width/2).y(height/2)) 
 
   }
+
+  // the same follows for the code below
 
  else if(number == 2 )
  {
@@ -323,6 +329,8 @@ simulation = d3.forceSimulation()
 
 ;
   }
+
+  // the simulation is restarted
   simulation
     .nodes(nodes)
     .on("tick", function(d){
@@ -338,7 +346,7 @@ simulation = d3.forceSimulation()
 
 
 
-// Initialize the circle: all located at the center of the svg area
+
 
 
 </script>

@@ -126,12 +126,12 @@ function update_1(data) {
 
 
 
-svg.selectAll('.myXaxis_bot')
+svg.selectAll('.myXaxis_bot') // bottom axis
     .transition()
     .duration(500)
     .call(d3.axisBottom(x))
 
- svg.selectAll('.myXaxis_top')
+ svg.selectAll('.myXaxis_top') // top axis
     .transition()
     .duration(500)
     .call(d3.axisTop(x))
@@ -140,7 +140,6 @@ svg.selectAll('.myXaxis_bot')
  
 // Add Y axis
  y = d3.scaleLinear()
-
  .domain([0, max])
  .range([ height, 0]);
 
@@ -218,92 +217,92 @@ function onMouseOver(d, i) {
 
 
 
-const csv_arr = ['../csvFiles/ex3.csv','../csvFiles/ex4.csv']
-    csv_index = 0
+    const csv_arr = ['../csvFiles/ex3.csv','../csvFiles/ex4.csv']
+        csv_index = 0
 
-function UpdateLineGraph(path)
-            {  // gets data from csv files
-                csv_data=[]
-                d3.csv(path, function(data) {csv_data.push(data)})
-                    .then(()=>{update_2(csv_data)}); // calls the generate graph function
-            }
-
-// set the dimensions and margins of the graph
-var margin_2 = {top: 10, right: 30, bottom: 30, left: 50},
-    width_2 = 460 - margin_2.left - margin_2.right,
-    height_2 = 400 - margin_2.top - margin_2.bottom;
-
-// append the svg_2 object to the body of the page
-var svg_2 = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width_2 + margin_2.left + margin_2.right)
-    .attr("height", height_2 + margin_2.top + margin_2.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin_2.left + "," + margin_2.top + ")");
-
-// Initialise a X axis:
-var x_2 = d3.scaleLinear().range([0,width_2]);
-var xAxis = d3.axisBottom().scale(x_2);
-svg_2.append("g")
-  .attr("transform", "translate(0," + height_2 + ")")
-  .attr("class","myXaxis")
-
-// Initialize an Y axis
-var y_2 = d3.scaleLinear().range([height_2, 0]);
-var yAxis = d3.axisLeft().scale(y_2);
-svg_2.append("g")
-  .attr("class","myYaxis")
-
-// Create a function that takes a dataset as input and update the plot:
-function update_2(data) {
-
-  // Create the X axis:
-  x_2.domain([0, d3.max(data, function(d) { return d.x }) ]);
-  svg_2.selectAll(".myXaxis").transition()
-    .duration(3000)
-    .call(xAxis);
-
-  // create the Y axis
-  y_2.domain([0, d3.max(data, function(d) { return d.y  }) ]);
-  svg_2.selectAll(".myYaxis")
-    .transition()
-    .duration(3000)
-    .call(yAxis);
-
-  // Create a update selection: bind to the new data
-  var line_graph = svg_2.selectAll(".lineTest")
-    .data([data], function(d){ return d.x });
-
-  // Updata the line
-  line_graph
-    .enter()
-    .append("path")
-    .attr("class","lineTest")
-    .merge(line_graph)
-    .transition()
-    .duration(3000)
-    .attr("d", d3.line()
-      .x(function(d) { return x_2(d.x); })
-      .y(function(d) { return y_2(d.y); }))
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 2.5)
-
-    
-
-}
-
-
-function change_csv ()
-                {
-                    if(csv_index === 0){csv_index = 1}
-                    else{csv_index = 0}
-                    UpdateLineGraph(csv_arr[csv_index])
-    
+    function UpdateLineGraph(path) // gets data from csv files
+                {  
+                    csv_data=[]
+                    d3.csv(path, function(data) {csv_data.push(data)})
+                        .then(()=>{update_2(csv_data)}); // calls the generate graph function
                 }
-// At the beginning, I run the update function on the first dataset:
-change_csv()
+
+    // set the dimensions and margins of the graph
+    var margin_2 = {top: 10, right: 30, bottom: 30, left: 50},
+        width_2 = 460 - margin_2.left - margin_2.right,
+        height_2 = 400 - margin_2.top - margin_2.bottom;
+
+    // append the svg_2 object to the body of the page
+    var svg_2 = d3.select("#my_dataviz")
+      .append("svg")
+        .attr("width", width_2 + margin_2.left + margin_2.right)
+        .attr("height", height_2 + margin_2.top + margin_2.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin_2.left + "," + margin_2.top + ")");
+
+    // Initialise a X axis:
+    var x_2 = d3.scaleLinear().range([0,width_2]);
+    var xAxis = d3.axisBottom().scale(x_2);
+    svg_2.append("g")
+      .attr("transform", "translate(0," + height_2 + ")")
+      .attr("class","myXaxis")
+
+    // Initialize an Y axis
+    var y_2 = d3.scaleLinear().range([height_2, 0]);
+    var yAxis = d3.axisLeft().scale(y_2);
+    svg_2.append("g")
+      .attr("class","myYaxis")
+
+    //  this function will update the values of all components of the graphs 
+    function update_2(data) {
+
+      // Create the X axis:
+      x_2.domain([0, d3.max(data, function(d) { return d.x }) ]);
+      svg_2.selectAll(".myXaxis").transition()
+        .duration(3000)
+        .call(xAxis);
+
+      // create the Y axis
+      y_2.domain([0, d3.max(data, function(d) { return d.y  }) ]);
+      svg_2.selectAll(".myYaxis")
+        .transition()
+        .duration(3000)
+        .call(yAxis);
+
+      // Create a update selection: bind to the new data
+      var line_graph = svg_2.selectAll(".lineTest")
+        .data([data], function(d){ return d.x });
+
+      // Updata the line
+      line_graph
+        .enter()
+        .append("path")
+        .attr("class","lineTest")
+        .merge(line_graph)
+        .transition()
+        .duration(3000)
+        .attr("d", d3.line()
+          .x(function(d) { return x_2(d.x); })
+          .y(function(d) { return y_2(d.y); }))
+          .attr("fill", "none")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 2.5)
+
+        
+
+    }
+
+
+    function change_csv () // button to switch between csv files
+                    {
+                        if(csv_index === 0){csv_index = 1}
+                        else{csv_index = 0}
+                        UpdateLineGraph(csv_arr[csv_index])
+                    }
+    // At the beginning, I run the update function on the first dataset:
+
+    change_csv()
 
  
 </script>
