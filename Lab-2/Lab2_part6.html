@@ -103,15 +103,15 @@ var svg = d3.select("body").select('#display1').append("svg")
 // set the dimensions and margins of the graph
 
 
-// Create a function that takes a dataset as input and update the plot:
+// Create a function that takes a dataset as input and update the pie chart:
 function update(data) {
     console.log(data)
     var path = svg.selectAll(".arc")
-     .data(pie(data))
+     .data(pie(data)) //new data is passed to the function
 
   path.transition()
   .duration(400)
-               .attrTween("d", function (d) 
+               .attrTween("d", function (d) //arc is calculated
         {
             var i = d3.interpolate(d.endAngle, d.startAngle);
             return function (t) {
@@ -119,8 +119,8 @@ function update(data) {
             return arc(d);
             }
         })
-
-    path.enter()
+// then the enter and exit selection are applied to the DOM
+    path.enter() 
         .append("path")
         .attr("fill", function(d, i) { return color(i); })
         .transition().delay(function(d, i) { return i * 50; })

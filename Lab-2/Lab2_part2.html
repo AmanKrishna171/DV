@@ -103,7 +103,7 @@
                 .on("mouseover", function(){ updateCircle(2) })
                 .on("mouseout", function(){ updateCircle(0)});
 
-        function updateCircle (args){
+        function updateCircle (args){ // this function is used to update the circle and text attributes
 
             if (args>1)
             {
@@ -172,7 +172,7 @@
                         .attr('width', '100vw' )
                         .attr('height', 200 )
                         .attr("style", "outline: thin solid Grey;") 
-                        .on('mousemove', function() {
+                        .on('mousemove', function() {  // used mousehover to update the text element
                             var coordinates = d3.pointer(event)
                             updateText(coordinates)
                         })
@@ -189,8 +189,8 @@
       { 
                 text.attr('x',coordinates[0]+13)
                     .attr('y',parseInt(coordinates[1]))
-                    .text('Coordinates: (X:'+coordinates[0]+', Y:'+parseInt(coordinates[1])+')')
-                    //.style("color", function(coordinates){ return (coordinates[0]<60? "red":"green"); });            
+                    .text('Coordinates: (X:'+coordinates[0]+', Y:'+parseInt(coordinates[1])+')') // show the coordinates
+                          
       }  
 </script>
 

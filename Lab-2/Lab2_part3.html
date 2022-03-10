@@ -74,8 +74,8 @@
      .style("background-color", "red")
      .transition() 
      .duration(2000) 
-     .style('width', '40px')
-     .style('height', '40px')
+     .style('width', '40px') // changing width
+     .style('height', '40px') // changing height
      .style("background-color", "green")
      .transition() 
      .duration(2000) // Exercise 7
@@ -97,8 +97,8 @@
      d3.select('body')
         .select('.exercise8')
         .selectAll('div')
-        .on("mouseover", function(event)
-        { 
+        .on("mouseover", function(event) //changing color on mouseover
+          { 
             d3.select(this)
                 .transition() 
                 .style('width', '40px')
