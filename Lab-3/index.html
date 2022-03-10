@@ -1,0 +1,226 @@
+<html>
+<html lang="en">
+<head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head> 
+
+<body>
+
+   
+  <nav class="navbar navbar-light" style="background-color: #09c05b8e;">
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 3</a>
+    
+    
+    </button>
+
+  </nav>
+
+  <h1>hello</h1>
+<div id="svg1" style="display: flex; flex-direction: row; align-self: auto; ">
+
+    <div id ="svg11">
+
+    </div>
+    <div id ="svg12" style="display: flex; flex-direction: column;">
+
+    </div>
+
+</div>
+
+
+<style>
+    .box1
+    {
+    width: 72vw;
+    height: 37vw;
+    display: flex;
+    }
+
+    .box2
+    {
+    width: 28vw;
+    height: 20vw;
+    }
+
+</style>
+<script>
+
+  console.log('d3.version:', d3.version);
+
+//get window size
+var w = window.innerWidth * 12;
+var h = window.innerHeight * 5;
+
+
+  //create 5 svg elements
+
+    
+
+   
+    
+
+
+    var svg2 = d3.select("body")
+    .select("#svg12").append("svg")
+    .attr("id", "svg2")
+    .style("border", "3px solid black")
+    .attr("class", "box2");
+
+    var svg3 = d3.select("body")
+    .select("#svg12").append("svg")
+    .attr("id", "svg3")
+    .style("border", "3px solid black")
+    .attr("class", "box2");
+
+
+
+    const projection = d3
+    .geoEquirectangular()
+    // .geoMercator()
+   
+    .center([0, 0]) // set centre to further North
+   .scale([w/(2*Math.PI)]) // scale to fit group width
+   .translate([w/2,h/2]) // ensure centred in group
+    // .scale(150)
+    // .translate([w, h-190]);
+
+// A path generator
+const path = d3.geoPath()
+    .projection(projection)
+
+    function zoomed() {
+   t = d3
+      .event
+      .transform
+   ;
+   countriesGroup.attr(
+      "transform","translate(" + [t.x, t.y] + ")scale(" + t.k + ")"
+   );
+}
+
+
+
+function getTextBox(selection) {
+  selection.each(function(d) {
+    d.bbox = this.getBBox();
+  });
+}
+
+var svg1 = d3.select("body")
+    .select("#svg11")
+    .append("svg")
+    .attr("id", "svg1")
+    .style("background-color", "white")
+    .style("border", "3px solid black")
+    .attr("viewBox", "0 0 " + w + " " + h )
+    .attr("class", "box1")
+
+
+    text = svg1.append("text")
+    
+// Load world shape AND list of connection
+Promise.all([
+  d3.json("https://raw.githubusercontent.com/andybarefoot/andybarefoot-www/master/maps/mapdata/custom50.json"), 
+  d3.csv("../csvFiles/owid-covid-data.csv") // World shape
+]).then(
+
+
+
+function (initialize) {
+
+
+
+    let dataGeo = initialize[0]
+    let dataCovid = initialize[1]
+
+    console.log(dataCovid)
+    let merged = [];
+
+for(let i=0; i<dataGeo.features.length; i++) {
+  merged.push({
+  
+   ...dataGeo.features[i], 
+   ...(dataCovid.find((itmInner) => itmInner.iso_code === dataGeo.features[i].iso_a3))}
+  );
+}
+   // console.log(merged)
+    
+    // Draw the map
+    countriesGroup1 =  svg1.append("g")
+        .selectAll("path")
+        .data(dataGeo.features)
+        .join("path")
+            .attr("fill", "#b8b8b8")
+            .attr("d", path)
+            .style("stroke", "#fff")
+            .style("stroke-width", 0)
+            .attr("class", "country")
+            .attr("id", function(d, i) {
+              
+      return "country" + d.properties.iso_a3 ;
+   })
+    .on("mouseover", function(event, d) {
+    
+         d3.select(this).style("fill", "#ff0000");
+    
+    
+         text.text(d.properties.iso_a3)
+        .attr("x", event.clientX)
+        .attr("y", event.clientX)
+        .attr("class", "tooltip")
+        .attr("id", "tooltip")
+        .attr("text-anchor", "middle")
+        .attr("font-size", "42px")
+        .attr("font-family", "sans-serif")
+        .attr("fill", "black")
+        ;
+    })
+    .on("mouseout", function(d) {
+        d3.select(this).style("fill", "#b8b8b8")
+        
+    })
+    .on("click", function(d) {
+        d3.select(this).style("fill", "#0555ff");
+
+   
+    })
+    
+;
+
+    // Add the path
+
+
+})
+
+
+
+
+
+
+    // var svg4 = d3.select("body").append("svg")
+    // .attr("width", w*0.7)
+    // .attr("height", h*0.7)
+    // .attr("id", "svg4")
+    // .attr("outline", "10px solid black")
+    // .style("border", "3px solid black");;
+
+    // var svg5 = d3.select("body").append("svg")
+    // .attr("width", w*0.7)
+    // .attr("height", h*0.7)
+    // .attr("id", "svg5")
+    // .attr("outline", "10px solid black")
+    // .style("border", "3px solid black");;
+
+
+
+ 
+</script>
+
+</body>
+
+</html>
