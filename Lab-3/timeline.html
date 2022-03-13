@@ -31,7 +31,6 @@
     </div>
 
 </div>
-<div id="my_dataviz2"></div>
 <div id="my_dataviz"></div>
 
 <style>
@@ -147,8 +146,6 @@ function (initialize) {
    
    let dataCovid = initialize[1]
 
-   var selected_countries  = []
-   var selected_countries_data = []
 
 var g = svg1.append("g");
 
@@ -241,32 +238,15 @@ let zoom_map = d3.zoom().on("zoom", handleZoom);
     .attr("y", path.centroid(d)[1])
 
   //  console.log(dataCovid.filter(element => element.iso_code === event.target.attributes.id.value))
-  //select clicked country and show data
-
-
- 
-if (selected_countries.includes(event.target.attributes.id.value) === false)
-{
-  selected_countries.push(event.target.attributes.id.value);
-
-  //  selected_countries_data.push({'iso':event.target.attributes.id.value,'data':GetData(event.target.attributes.id.value)})
-
-
-  selected_countries_data = selected_countries_data.concat(GetData(event.target.attributes.id.value))
-
-  mutliline_Graph(selected_countries_data)
-}
-
-
   update_Chart(event.target.attributes.id.value)
 })
 
 
-// const brush = d3.brush()
-//       .on("start brush end", brushed);
+const brush = d3.brush()
+      .on("start brush end", brushed);
 
-// svg1
-//     .call(brush);
+svg1
+    .call(brush);
 
 
     function brushed(selection) {
@@ -283,7 +263,7 @@ function GetData(iso)
  filter_data_by_country = dataCovid.filter(element => element.iso_code === iso  )
 
 
- var keys_to_keep = ['date', 'total_cases','iso_code']
+ var keys_to_keep = ['date', 'total_cases']
 
 var data_arr = filter_data_by_country.map(e => {
   var obj = {};
@@ -547,162 +527,6 @@ function update_Chart(iso)
       )
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-counter = 0
-country_data = []
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-var svg_4 = d3.select("#my_dataviz2")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          `translate(${margin.left}, ${margin.top})`);
-
-          svg_4.append("g")
-      .attr("transform", `translate(0, ${height})`)
-      .attr("class", "xaxis")
-
-      svg_4.append("g")
-  .attr("class", "yaxis")
-      
-function mutliline_Graph (iso)
-{
-
-  data =iso
-  
-   const sumstat = d3.group(data, d => d.iso_code);
-  // country_data.push(sumstat)
-
-
-//  Add X axis --> it is a date format
-
-  var x = d3.scaleTime()
-    .domain(d3.extent(data, function(d) {  return parseDate(d.date) }))
-    .range([ 0, width ]);
-
-   svg_4.selectAll('.xaxis').exit().remove() 
-
-  xAxis = d3.selectAll(".xaxis")
-      .call(d3.axisBottom(x));
-
-  svg_4.selectAll('.yaxis').exit().remove() 
-
-  // // Add Y axis
-  y = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return + d.total_cases; })])
-    .range([ height, 0 ]);
-
-  yAxis = d3.selectAll('.yaxis')
-  .transition()
-      .call(d3.axisLeft(y));
-
-      const color = d3.scaleOrdinal()
-    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
-
-  // // Add the line
-
-  console.log(selected_countries)
-
-  svg_4.selectAll('.line_chart').transition().duration(300).style('opacity',0).remove()
-
-  selected_countries.forEach(element => {
-
-    svg_4.append('g')
-    .attr('class', 'line_chart')
-      .append("path")
-      .datum(sumstat.get(element))
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-     // .attr("class", function(d,i) { return "line "+ selected_countries[i]})
-      .attr("stroke-width", 1.5)
-      .attr("stroke", function(d){ return color(d[0]) })
-      .attr("id", function(d) {  return d.iso_code ;})
-      .transition()
-      .duration(2000)
-         .attr("d", d3.line()
-        .x(function(d) { return x(parseDate(d.date)) })
-        .y(function(d) { return y(d.total_cases) })
-        )
-      .on("mouseover", function(d) {
-        console.log(event.target)
-        // svg1.select(this)
-        //   .transition()
-        //   .duration(200)
-        //   .attr("stroke-width", 3);
-      })
-   
-
-
-  });
-
-  // console.log(sumstat)
-  // svg_4.selectAll("path")
-  //   .data(selected_countries)
-  //   .enter()
-  //     .append("path")
-  //     .datum(data)
-
-  //         .attr("fill", "none")
-  //     .attr("stroke", "steelblue")
-  //     .attr("class", function(d,i) { return "line "+ selected_countries[i]})
-  //     .attr("stroke-width", 1.5)
-  //     .attr("stroke", function(d){ return color(d[0]) })
-  //     .attr("id", function(d) {  return d.iso_code ;})
-  //     .transition()
-  //     .attr("d", d3.line()
-  //       .x(function(d) { return x(parseDate(d.date)) })
-  //       .y(function(d) { return y(d.total_cases) })
-  //       )
-
-  
-  // // Add the line
-  // svg_4.append("path")
-  //     .datum(data)
-  //     .attr("fill", "none")
-  //     .attr("stroke", "red")
-  //     .attr("stroke-width", 1.5)
-  //     .attr("d", d3.line()
-  //       .x(function(d) { return x(parseDate(d.date)) })
-  //       .y(function(d) { return y(d.new_cases) })
-  //       )
-
-  // // Add the line
-  // svg_4.append("path")
-  //     .datum(data)
-  //     .attr("fill", "none")
-  //     .attr("stroke", "green")
-  //     .attr("stroke-width", 1.5)
-  //     .attr("d", d3.line()
-  //       .x(function(d) { return x(parseDate(d.date)) })
-  //       .y(function(d) { return y(d.new_deaths) })
-  //       )
-
-
-}
-
-
-
-
-
-
 
 
 
