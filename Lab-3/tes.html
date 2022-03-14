@@ -1,0 +1,223 @@
+<html>
+<html lang="en">
+<head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head> 
+
+<body>
+
+   
+  <nav class="navbar navbar-light" style="background-color: #09c05b8e;">
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 3</a>
+    
+    
+    </button>
+
+  </nav>
+
+  <h1>hello</h1>
+<div id="svg1" style="display: flex; flex-direction: row; align-self: auto; ">
+
+    <div id ="svg11">
+
+    </div>
+    <div id ="svg12" style="display: flex; flex-direction: column;">
+
+    </div>
+
+</div>
+
+
+<style>
+    .box1
+    {
+    width: 72vw;
+    height: 37vw;
+    display: flex;
+    }
+
+    .box2
+    {
+    width: 28vw;
+    height: 20vw;
+    }
+
+</style>
+<script>
+
+
+Promise.all([
+  d3.json("https://raw.githubusercontent.com/andybarefoot/andybarefoot-www/master/maps/mapdata/custom50.json"), 
+ d3.csv("../csvFiles/owid-covid-data.csv") 
+]).then(
+
+  function (initialize) {
+    
+    let dataGeo = initialize[0]
+   let dataCovid = initialize[1]
+
+
+   filter_data_by_country = dataCovid.filter(element => element.iso_code === 'AFG'  )
+
+
+keys_to_keep = ['date', 'total_cases']
+
+const data = filter_data_by_country.map(e => {
+  const obj = {};
+  keys_to_keep.forEach(k => obj[k] = e[k])
+  return obj;
+});  // source  :https://stackoverflow.com/questions/66250623/subset-array-of-object-based-on-keys-from-another-arraynot-static-and-then-fil
+
+
+
+
+
+
+
+var svg = d3.select('body').append("svg")
+.attr('class', 'box1'),
+    margin = {top: 20, right: 20, bottom: 110, left: 40},
+    margin2 = {top: 430, right: 20, bottom: 30, left: 40},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    height2 = +svg.attr("height") - margin2.top - margin2.bottom;
+
+    const parseDate = d3.timeParse("%Y-%m-%d");
+
+var x = d3.scaleTime().range([0, width]),
+    x2 = d3.scaleTime().range([0, width]),
+    y = d3.scaleLinear().range([height, 0]),
+    y2 = d3.scaleLinear().range([height2, 0]);
+
+var xAxis = d3.axisBottom(x),
+    xAxis2 = d3.axisBottom(x2),
+    yAxis = d3.axisLeft(y);
+
+var brush = d3.brushX()
+    .extent([[0, 0], [width, height2]])
+    .on("brush end", brushed);
+
+var zoom = d3.zoom()
+    .scaleExtent([1, Infinity])
+    .translateExtent([[0, 0], [width, height]])
+    .extent([[0, 0], [width, height]])
+    .on("zoom", zoomed);
+
+    var line = d3.line()
+        .x(function (d) { return x(d.date); })
+        .y(function (d) { return y(d.total_cases); });
+
+    var line2 = d3.line()
+        .x(function (d) { return x2(d.date); })
+        .y(function (d) { return y2(d.total_cases); });
+
+    var clip = svg.append("defs").append("svg:clipPath")
+        .attr("id", "clip")
+        .append("svg:rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("x", 0)
+        .attr("y", 0); 
+
+
+    var Line_chart = svg.append("g")
+        .attr("class", "focus")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("clip-path", "url(#clip)");
+
+
+    var focus = svg.append("g")
+        .attr("class", "focus")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var context = svg.append("g")
+    .attr("class", "context")
+    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function (d) { return d.total_cases; })]);
+  x2.domain(x.domain());
+  y2.domain(y.domain());
+
+
+    focus.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    focus.append("g")
+        .attr("class", "axis axis--y")
+        .call(yAxis);
+
+    Line_chart.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line);
+
+    context.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line2);
+
+
+  context.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis2);
+
+  context.append("g")
+      .attr("class", "brush")
+      .call(brush)
+      .call(brush.move, x.range());
+
+  svg.append("rect")
+      .attr("class", "zoom")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .call(zoom);
+
+
+
+
+
+function brushed() {
+  if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+  var s = d3.event.selection || x2.range();
+  x.domain(s.map(x2.invert, x2));
+  Line_chart.select(".line").attr("d", line);
+  focus.select(".axis--x").call(xAxis);
+  svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+      .scale(width / (s[1] - s[0]))
+      .translate(-s[0], 0));
+}
+
+function zoomed() {
+  if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+  var t = d3.event.transform;
+  x.domain(t.rescaleX(x2).domain());
+  Line_chart.select(".line").attr("d", line);
+  focus.select(".axis--x").call(xAxis);
+  context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+}
+
+function type(d) {
+  d.date = parseDate(d.date);
+  d.total_cases = +d.total_cases;
+  return d;
+}
+
+  })
+
+</script>
+
+</body>
+
+</html>

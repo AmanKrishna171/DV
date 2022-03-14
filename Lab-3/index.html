@@ -641,13 +641,12 @@ function mutliline_Graph (iso)
         .x(function(d) { return x(parseDate(d.date)) })
         .y(function(d) { return y(d.total_cases) })
         )
-      .on("mouseover", function(d) {
-        console.log(event.target)
-        // svg1.select(this)
-        //   .transition()
-        //   .duration(200)
-        //   .attr("stroke-width", 3);
-      })
+      // .on("mouseover", function(d) {
+      //   svg1.select(this)
+      //     .transition()
+      //     .duration(200)
+      //     .attr("stroke-width", 3);
+      // })
    
 
 
