@@ -377,7 +377,7 @@ DATA_DATE = d3.group(dataCovid, d => d.date );
 
   //.find(GLOBAL_DATE.toISOString().substring(0, 10)))
 
-   bar_graph (event.target.attributes.id.value)
+   //bar_graph (event.target.attributes.id.value)
   })
   
   
@@ -616,7 +616,7 @@ if(gLOBAL_SCLAR_MAP != 'continent')
      d3.selectAll(".circle_scatter").attr("stroke", 'black');
      d3.selectAll(".pt").attr("stroke", 'black').attr('stroke-width', '3px');
   selected_countries.forEach(function(d) {
-    d3.select('#'+d) .attr("fill",function(d,i) { return getColor(d,0) }  );
+    d3.select('#'+d) .attr("fill",function(d,i) { return getColor(d) }  );
 
   })
 
@@ -723,30 +723,31 @@ if(gLOBAL_SCLAR_MAP != 'continent')
 
     
 function enter_line_graph(iso) {
-  d3.selectAll('.line').remove()
-  d3.selectAll('.xAxis').remove()
-  d3.selectAll('.yAxis').remove()
+  // d3.selectAll('.line').remove()
+  // d3.selectAll('.xAxis').remove()
+  // d3.selectAll('.yAxis').remove()
+
   
   data= GetData(iso)  // gets data
     
          
       // Add X axis --> it is a date format
-      let  x = d3.scaleTime()
+      let  x_line = d3.scaleTime()
       .domain(d3.extent(data, function(d) { return parseDate(d.date) }))
       .range([ 0, width ]);
 
     xAxis = svg_5.append("g")
       .attr("transform", `translate(0, ${height})`)
       .attr('class', 'xAxis')
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x_line));
 
     // Add Y axis
-    let  y = d3.scaleLinear()
+    let  y_line = d3.scaleLinear()
       .domain([0, d3.max(data, function(d) { return +d.total_cases; })])
       .range([ height, 0 ]);
     yAxis = svg_5.append("g")
     .attr('class', 'yAxis')
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y_line));
 
     // Add a clipPath: everything out of this area won't be drawn.
     let  clip = svg_5.append("defs").append("svg:clipPath")
@@ -776,9 +777,27 @@ function enter_line_graph(iso) {
       .attr("stroke", "steelblue")
       .attr("stroke-width", 1.5)
       .attr("d", d3.line()
-        .x(function(d) { return x(parseDate(d.date)) })
-        .y(function(d) { return y(d.total_cases) })
+        .x(function(d) { return x_line(parseDate(d.date)) })
+        .y(function(d) { return y_line(d.total_cases) })
         )
+
+        let  line2 = svg_5.append('g')
+        .attr("clip-path", "url(#clip)")
+        
+        line2
+        .enter()
+        .append("path")
+          .attr("class", "line2")  // I add the class line to be able to modify this line later on.
+          .attr("fill", "none")
+          .merge(line3)
+          .attr("stroke", "red")
+          .attr("stroke-width", 1.5)
+          .transition()
+          .duration(3000)
+          .attr("d", d3.line()
+            .x(function(d) { return x(parseDate(d.date)) })
+            .y(function(d) { return y(d.total_cases) })
+            )
 
     // Add the brushing
     line
@@ -800,51 +819,68 @@ function enter_line_graph(iso) {
       // If no selection, back to initial coordinate. Otherwise, update X axis domain
       if(!extent){
         if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-        x.domain([ 4,8])
+        x_line.domain([ 4,8])
       }else{
         
-        x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+        x_line.domain([ x_line.invert(extent[0]), x_line.invert(extent[1]) ])
         line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
       }
 
       // Update axis and line position
-      svg_5.selectAll(".xAxis").transition().duration(1000).call(d3.axisBottom(x))
+      svg_5.selectAll(".xAxis").transition().duration(1000).call(d3.axisBottom(x_line))
       line
           .select('.line')
           .transition()
           .duration(1000)
           .attr("d", d3.line()
-            .x(function(d) { return x(parseDate (d.date)) })
-            .y(function(d) { return y(d.total_cases) })
+            .x(function(d) { return x_line(parseDate (d.date)) })
+            .y(function(d) { return y_line(d.total_cases) })
           )
     }
 
     // If user double click, reinitialize the chart
     svg_5.on("dblclick",function(){
-      x.domain(d3.extent(data, function(d) { return parseDate(d.date) }))
-      svg_5.selectAll(".xAxis").transition().call(d3.axisBottom(x))
+      x_line.domain(d3.extent(data, function(d) { return parseDate(d.date) }))
+      svg_5.selectAll(".xAxis").transition().call(d3.axisBottom(x_line))
       line
         .select('.line')
         .transition()
         .attr("d", d3.line()
-          .x(function(d) { return x(parseDate(d.date)) })
-          .y(function(d) { return y(d.total_cases) })
+          .x(function(d) { return x_line(parseDate(d.date)) })
+          .y(function(d) { return y_line(d.total_cases) })
       )
     });
 
   }
 
- // enter_line_graph("IND")
+enter_line_graph("IND")
 
 function update_Chart(iso)
 {
+  twttw = d3.group(dataCovid_2[iso].data, d => d.date )
+ date_array = Array.from(twttw.keys());
+ //console.log(d3.extent(date_array, function(d) { return parseDate(d) }))
+
+ data = []
+ 
+date_array.forEach(function(d) {
+
+  if(typeof twttw.get(d)[0].new_cases != "undefined" && typeof twttw.get(d)[0].people_vaccinated != "undefined") 
+  {
+     data.push({date : d, new_cases : twttw.get(d)[0].new_cases, people_vaccinated : twttw.get(d)[0].people_vaccinated })
+  }
+ 
+
+
+})
+console.log(data)
 
   
       let  brush1 = d3.brushX()                   // Add the brush feature using the d3.brush function
         .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on("end", updateChart1)               // Each time the brush selection changes, trigger the 'updateChart' function
 
- data= GetData(iso)
+
   
       let  clip1 = svg_5.append("defs").append("svg:clipPath")
         .attr("id", "clip1")
@@ -856,8 +892,9 @@ function update_Chart(iso)
       
       // Add X axis --> it is a date format
       let  x = d3.scaleTime()
-      .domain(d3.extent(data, function(d) { return parseDate(d.date) }))
+      .domain(d3.extent(date_array, function(d) { return parseDate(d) }))
       .range([ 0, width ]);
+
     xAxis = svg_5.selectAll(".xAxis")
         .transition()
         .duration(3000)
@@ -867,7 +904,7 @@ function update_Chart(iso)
 
     // Add Y axis
      y = d3.scaleLinear()
-      .domain([0, d3.max(data, function(d) { return +d.total_cases; })])
+      .domain([0, d3.max(data, function(d) { return +d.people_vaccinated; })])
       .range([ height, 0 ]);
     yAxis = svg_5.selectAll(".yAxis")
         .transition()
@@ -893,8 +930,26 @@ function update_Chart(iso)
       .duration(3000)
       .attr("d", d3.line()
         .x(function(d) { return x(parseDate(d.date)) })
-        .y(function(d) { return y(d.total_cases) })
+        .y(function(d) { return y(d.people_vaccinated) })
         )
+        let  line3 = d3.selectAll(".line2")
+        .attr("clip-path", "url(#clip1)")
+        .datum(data)
+
+        line3
+        .enter()
+        .append("path")
+          .attr("class", "line2")  // I add the class line to be able to modify this line later on.
+          .attr("fill", "none")
+          .merge(line3)
+          .attr("stroke", "red")
+          .attr("stroke-width", 1.5)
+          .transition()
+          .duration(3000)
+          .attr("d", d3.line()
+            .x(function(d) { return x(parseDate(d.date)) })
+            .y(function(d) { return y(d.new_cases) })
+            )
 
     // Add the brushing
     line2
@@ -928,7 +983,7 @@ function update_Chart(iso)
           .duration(1000)
           .attr("d", d3.line()
             .x(function(d) { return x(parseDate (d.date)) })
-            .y(function(d) { return y(d.total_cases) })
+            .y(function(d) { return y(d.new_cases) })
           )
     }
 
@@ -994,11 +1049,11 @@ function bar_graph (iso) {
  b =twttw.get(GLOBAL_DATE.toISOString().substring(0, 10))[0]
 
 
-
- data = [{name:'new_cases', value : b.new_cases}
+console.log(b)
+ data = [
  //,{name:'new_deaths', value : b.new_deaths}]
 //,{name:'people_vaccinated', value : a.people_fully_vaccinated},{name:'people_fully_vaccinated', value : a.people_fully_vaccinated}
-,{name:'new_vaccinations',value :a.new_vaccinations}]
+{name:'total_boosters',value :b.total_boosters},{name:'total_cases',value :b.total_cases},{name:'people_fully_vaccinated',value :b.people_fully_vaccinated}]
 
 
 
