@@ -230,7 +230,7 @@ DATA_DATE = d3.group(dataCovid, d => d.date );
 
       else if(GLOBAL_SCLAR_CIRCLE=="total_cases")
       {
-        console.log(radius[0][GLOBAL_SCLAR_CIRCLE])
+       
           return   (radius[0][GLOBAL_SCLAR_CIRCLE] /1000000 )
       }
 
@@ -550,16 +550,16 @@ if(gLOBAL_SCLAR_MAP != 'continent')
         svg_4.call(brush);
   
         // insert circles for each data point\
-        svg_4.selectAll("circle").remove();
+        svg_4.selectAll(".circle_scatter").remove();
   
-     scat_circle=  svg_4.selectAll("circle")
+     scat_circle=  svg_4.selectAll(".circle_scatter")
           .data(data)
           .enter()
           .append("circle")
             .attr("cx", function(d) { return x_2(d.gdp_per_capita) })
           .attr("cy", function(d) { return y_2(d.total_cases_per_million) })
           .attr("r", function(d) { return (d.iso_code.slice(0, 4)==="OWID"|| d.location ==="" ? 0:  (d.new_cases_per_million / d3.max(data, function(d) { return + d.new_cases_per_million }) ) * 40) } )
-          .attr("class", "circle")
+          .attr("class", "circle_scatter")
           .attr('id', function(d) { return "circle"+d.iso_code })
           .attr("fill",function(d) { return getColor(d,3) }  )
           .attr("opacity", 0.8)
@@ -607,21 +607,76 @@ if(gLOBAL_SCLAR_MAP != 'continent')
   
     function brushed({selection}) {
 
-      
-    let value = [];
-    if (selection) {
-      const [[x0, y0], [x1, y1]] = selection;
+      if (selection != null) {
+
+        // revert circles to initial style
+     //   scat_circle.attr("fill", "red");
+
+
+     d3.selectAll(".circle_scatter").attr("stroke", 'black');
+     d3.selectAll(".pt").attr("stroke", 'black').attr('stroke-width', '3px');
+  selected_countries.forEach(function(d) {
+    d3.select('#'+d) .attr("fill",function(d,i) { return getColor(d,0) }  );
+
+  })
+
+  selected_countries=[];
+
+        var brush_coords =selection;
+
+        // style brushed circles
+      yes =   scat_circle.filter(function (){
+
+                   var cx = d3.select(this).attr("cx"),
+                       cy = d3.select(this).attr("cy");
+
+                   return isBrushed(brush_coords, cx, cy);
+
+                  
+               })
+              
+
+          if(typeof yes._groups[0][0] != 'undefined')
+          {
+            yes._groups[0].forEach(function(d) {
+
+              selected_countries.push(d.id.slice(6, ))
+              d3.select('#'+d.id).attr("stroke", 'red');
+              d3.select('#'+d.id.slice(6, )).attr("fill", 'red');
+              d3.select('#clu'+d.id.slice(6, )).attr("stroke", 'red').attr('stroke-width', '5px');
+           
+            })
+           //
+              
+          }
+             
+             //  .attr("class", "brushed");
+    }
+
+    // let value = [];
+    // if (selection) {
+    //   const [[x0, y0], [x1, y1]] = selection;
 
       
-      value = scat_circle .filter(d => x0 <= x_2(d.gdp_per_capita) && x_2(d.gdp_per_capita) < x1 && y0 <= y_2(d.total_cases_per_million) && y_2(d.total_cases_per_million) < y1)
-      value.attr('fill','red')
-        ;
-        console.log(value)
-    } else {
-     // scat_circle.style("stroke", "steelblue");
-    }
+    //   value = scat_circle .filter(d => x0 <= x_2(d.gdp_per_capita) && x_2(d.gdp_per_capita) < x1 && y0 <= y_2(d.total_cases_per_million) && y_2(d.total_cases_per_million) < y1)
+    //   value.attr('fill','red')
+    //     ;
+    //     console.log(value)
+    // } else {
+    //  // scat_circle.style("stroke", "steelblue");
+    // }
     
   }
+
+  function isBrushed(brush_coords, cx, cy) {
+
+    var x0 = brush_coords[0][0],
+        x1 = brush_coords[1][0],
+        y0 = brush_coords[0][1],
+        y1 = brush_coords[1][1];
+
+   return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
+}
 
   if(GLOBAL_SCLAR_CIRCLE != 'population')
   {
@@ -747,7 +802,7 @@ function enter_line_graph(iso) {
         if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
         x.domain([ 4,8])
       }else{
-        console.log(x.invert(extent[0]))
+        
         x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
         line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
       }
@@ -945,7 +1000,7 @@ function bar_graph (iso) {
 //,{name:'people_vaccinated', value : a.people_fully_vaccinated},{name:'people_fully_vaccinated', value : a.people_fully_vaccinated}
 ,{name:'new_vaccinations',value :a.new_vaccinations}]
 
- console.log(data )
+
 
 //  data = {...a,...c}
 
@@ -1127,7 +1182,7 @@ hulls.selectAll(".hull")
           
        }
    })
-   console.log(clus_arr)
+
    
    //   d3.group(d2['IND'].data, d => d.date ).forEach(function(d) {
    //       console.log(d[0].new_cases)
@@ -1330,6 +1385,7 @@ hulls.selectAll(".hull")
                        .attr("r", ()=>(svg_dx + svg_dy)*0.0094)
                        .attr("cx", (d) => x_clus(d.x))
                        .attr("cy", (d) => y_clus(d.y))
+                       .attr('id', (d,i) => "clu" + d.iso)
                        
                        .on("mouseover", function(event,d) {
                         console.log(d.iso)
