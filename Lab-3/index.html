@@ -20,7 +20,12 @@
 
   </nav>
 
- 
+ <div class="center-screen">
+  <a href="./timeline.html" >
+
+    <button type="button" class="btn btn-danger"> Go Back <<<</button>
+
+  </a> 
 <div id="svg1" style="display: flex; flex-direction: row; align-self: auto; ">
 
     <div id ="svg11">
@@ -31,6 +36,7 @@
     </div>
 
 </div>
+<div id="reset_countries"></div>
 <div id="my_dataviz2"></div>
 <div id="my_dataviz"></div>
 
@@ -61,19 +67,7 @@ var w2 = window.innerWidth ;
 var h2 = window.innerHeight ;
 
 
-  //create 5 svg elements
 
-    
-
-   
-    
-
-
-    // var svg2 = d3.select("body")
-    // .select("#svg12").append("svg")
-    // .attr("id", "svg2")
-    // .style("border", "3px solid black")
-    // .attr("class", "box2");
 
     var svg3 = d3.select("body")
     .select("#svg12").append("svg")
@@ -81,35 +75,26 @@ var h2 = window.innerHeight ;
     .style("border", "3px solid black")
     .attr("class", "box2");
 
-    // var svg_2 = d3.select("body").append("svg")
-    // .attr("width", w2)
-    // .attr("height", h2*0.4)
-    // .attr("id", "svg4")
-    // .attr("outline", "10px solid black")
-    // .style("border", "3px solid black");;
-
 
     var projection = d3
     .geoEquirectangular()
     .center([0, 0]) // set centre to further North
    .scale(223) // scale to fit group width
    .translate([w/2,h/2]) // ensure centred in group
-    // .scale(150)
-    // .translate([w, h-190]);
 
-// A path generator
-var path = d3.geoPath()
-    .projection(projection)
+    // A path generator
+    var path = d3.geoPath()
+        .projection(projection)
 
-    function zoomed() {
-   t = d3
-      .event
-      .transform
-   ;
-   countriesGroup.attr(
-      "transform","translate(" + [t.x, t.y] + ")scale(" + t.k + ")"
-   );
-}
+        function zoomed() {
+      t = d3
+          .event
+          .transform
+      ;
+      countriesGroup.attr(
+          "transform","translate(" + [t.x, t.y] + ")scale(" + t.k + ")"
+      );
+    }
 
 
 
@@ -130,11 +115,11 @@ var svg1 = d3.select("body")
 
     
     
-// Load world shape AND list of connection
-Promise.all([
-  d3.json("https://raw.githubusercontent.com/andybarefoot/andybarefoot-www/master/maps/mapdata/custom50.json"), 
- d3.csv("../csvFiles/owid-covid-data.csv") 
-]).then(
+  // Load world shape AND list of connection
+  Promise.all([
+    d3.json("https://raw.githubusercontent.com/andybarefoot/andybarefoot-www/master/maps/mapdata/custom50.json"), 
+  d3.csv("../csvFiles/owid-covid-data.csv") 
+  ]).then(
 
 
 
@@ -147,581 +132,523 @@ function (initialize) {
    
    let dataCovid = initialize[1]
 
-   var selected_countries  = []
+   var selected_countries  = [] // array to store selected countries
    var selected_countries_data = []
 
-var g = svg1.append("g");
+   // the code bewlo is similar to map generation in the previous page so comments are ommited
+        var g = svg1.append("g");
 
-let zoom_map = d3.zoom().on("zoom", handleZoom);
+        let zoom_map = d3.zoom().on("zoom", handleZoom);
 
-            function handleZoom(e) {
-                 d3.select("svg g").attr("transform", e.transform);
+        function handleZoom(e) {
+            d3.select("svg g").attr("transform", e.transform);
 
-            }
+        }
 
-            function initZoom() {
-                d3.select("svg").call(zoom_map);
-            }
+        function initZoom() {
+            d3.select("svg").call(zoom_map);
+        }
 
-    // Draw the map
-    countriesGroup1 =  g.append("g")
-        .selectAll("path")
-        .data(dataGeo.features)
-        .join("path")
-            .attr("fill", "#44CFCB")
-            .attr("d", path)
-            .style("stroke", "#ffffff")
-            .style("stroke-width", 2)
-            .attr("class", "country")
-            .attr("id", function(d, i) {  return d.properties.iso_a3 ;})
+            // Draw the map
+            countriesGroup1 =  g.append("g")
+                .selectAll("path")
+                .data(dataGeo.features)
+                .join("path")
+                    .attr("fill", "#44CFCB")
+                    .attr("d", path)
+                    .style("stroke", "#ffffff")
+                    .style("stroke-width", 2)
+                    .attr("class", "country")
+                    .attr("id", function(d, i) {  return d.properties.iso_a3 ;})
+    
+
+              text =    svg3.append("text")
+            .attr("x", 200)
+            .attr("y", 200)
+            .attr("text-anchor", "middle")
+            .style("font-size", "22px")
+            .style("font-family", "sans-serif")
+            .style("fill", "black")
+            .text("Please select a country")
+            .attr("id", "text");
+
+          countriesGroup1.on("mouseover", function(event, d) {
             
-       g.selectAll('circle')
-        .data(dataGeo.features)
-        .enter()
-        .append('circle')
-        .attr('cx', function(d) {
-            return path.centroid(d)[0];
-        })
-        .attr('cy', function(d) {
-          return path.centroid(d)[1];
-        })
-        .attr('r', function(d) {
-         
-          //  return  d.properties.pop_est/100000;
+            d3.select(this).style("fill", "#ff0000");
 
-          return 10
-
+            text.text(d.properties.iso_a3
+            +'\n'+d.properties.name_long)
+        
         })
-        .attr('fill', '#ff0000')
-        .attr('stroke', '#ffffff')
-        .attr('stroke-width', '1px')
-        .attr('class', 'circle')
-        .attr('id', function(d) {
-            return d.properties.iso_a3;
+        .on("mouseout", function(d) {
+          d3.select(this).style("fill", "#44CFCB")
+          
+        })
+        .on("click", function(event, d) {
+          d3.select(this).style("fill", "#0555ff");
+
+            text.attr("x", path.centroid(d)[0])
+            .attr("y", path.centroid(d)[1])
+
+        
+        if (selected_countries.includes(event.target.attributes.id.value) === false)
+        {
+          selected_countries.push({iso : event.target.attributes.id.value, colour : selected_countries.length});
+
+          selected_countries_data = selected_countries_data.concat(GetData(event.target.attributes.id.value))
+
+          mutliline_Graph(selected_countries_data)
+        }
+
+
+          update_Chart(event.target.attributes.id.value)
         })
 
 
+
+
+            function brushed(selection) {
+          console.log(selection.selection)
+
+            console.log(  projection.invert(selection.selection[0]))
+            
+          }
+        
+
+            
+        function GetData(iso)
+        {
+        filter_data_by_country = dataCovid.filter(element => element.iso_code === iso  )
+
+
+        var keys_to_keep = ['date', 'total_cases','iso_code']
+
+        var data_arr = filter_data_by_country.map(e => {
+          var obj = {};
+          keys_to_keep.forEach(k => obj[k] = e[k])
+          return obj;
+        });  // source  :https://stackoverflow.com/questions/66250623/subset-array-of-object-based-on-keys-from-another-arraynot-static-and-then-fil
+
+
+        return data_arr
+        }
+
+
+
+
+        var parseDate = d3.timeParse("%Y-%m-%d");
+
+        data_arr = GetData('AUS')
+
+        ///////////////////////////////////////////////////////////////////////////////
+        // Line line_graph
+
+        // set the dimensions and margins of the graph
+        var margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = w - margin.left - margin.right,
+            height = h/2 - margin.top - margin.bottom;
+
+        // append the svg object to the body of the page
+        var svg = d3.select("#my_dataviz")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                  `translate(${margin.left}, ${margin.top})`);
+
+     
+         // add button
+         d3.select("#reset_countries")
+              .append("button")
+              .text("Reset Countries")
+              .on("click", function() {
+                selected_countries = []
+                selected_countries_data = []
+                updateChart()
+              })
+
+        function enter_line_graph(iso) {
+          d3.selectAll('.line').remove()
+          d3.selectAll('.xAxis').remove()
+          d3.selectAll('.yAxis').remove()
+          
+          data= GetData(iso)  // gets data
+             // brushing code from : https://d3-graph-gallery.com/graph/line_brushZoom.html
+                
+              // Add X axis --> it is a date format
+              var x = d3.scaleTime()
+              .domain(d3.extent(data, function(d) { return parseDate(d.date) }))
+              .range([ 0, width ]);
+
+            xAxis = svg.append("g")
+              .attr("transform", `translate(0, ${height})`)
+              .attr('class', 'xAxis')
+              .call(d3.axisBottom(x));
+
+            // Add Y axis
+            var y = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return +d.total_cases; })])
+              .range([ height, 0 ]);
+            yAxis = svg.append("g")
+            .attr('class', 'yAxis')
+              .call(d3.axisLeft(y));
+
+            // Add a clipPath: everything out of this area won't be drawn.
+            var clip = svg.append("defs").append("svg:clipPath")
+                .attr("id", "clip")
+                .append("svg:rect")
+                .attr("width", width )
+                .attr("height", height )
+                .attr("x", 0)
+                .attr("y", 0);
+
+            // Add brushing
+            var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+                .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+                .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+
+            // Create the line variable: where both the line and the brush take place
+            var line = svg.append('g')
+              .attr("clip-path", "url(#clip)")
+          
+
+            // Add the line
+            line
+            .append("path")
+              .datum(data)
+              .attr("class", "line")  // I add the class line to be able to modify this line later on.
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-width", 1.5)
+              .attr("d", d3.line()
+                .x(function(d) { return x(parseDate(d.date)) })
+                .y(function(d) { return y(d.total_cases) })
+                )
+
+            // Add the brushing
+            line
+              .append("g")
+                .attr("class", "brush")
+                .call(brush);
+
+            // A function that set idleTimeOut to null
+            let idleTimeout
+            function idled() { idleTimeout = null; }
+
+   
+            
+
+            // A function that update the chart for given boundaries
+            function updateChart(event,d) {
+          
+
+              // What are the selected boundaries?
+              extent = event.selection
+
+              // If no selection, back to initial coordinate. Otherwise, update X axis domain
+              if(!extent){
+                if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+                x.domain([ 4,8])
+              }else{
+                console.log(x.invert(extent[0]))
+                x.domain([ x.invert(extent[0]), x.invert(extent[1]) ]) // sets new domain that is coordinates from the selection
+                line.select(".brush").call(brush.move, null) 
+              }
+
+              // Update axis and line position
+              svg.selectAll(".xAxis").transition().duration(1000).call(d3.axisBottom(x))
+              line
+                  .select('.line')
+                  .transition()
+                  .duration(1000)
+                  .attr("d", d3.line()
+                    .x(function(d) { return x(parseDate (d.date)) })
+                    .y(function(d) { return y(d.total_cases) })
+                  )
+            }
+
+            // If user double click, reinitialize the chart
+            svg.on("dblclick",function(){
+              x.domain(d3.extent(data, function(d) { return parseDate(d.date) }))
+              svg.selectAll(".xAxis").transition().call(d3.axisBottom(x))
+              line
+                .select('.line')
+                .transition()
+                .attr("d", d3.line()
+                  .x(function(d) { return x(parseDate(d.date)) })
+                  .y(function(d) { return y(d.total_cases) })
+              )
+            });
+
+          }
+
+          enter_line_graph("IND")
+
+        function update_Chart(iso)
+        {
+
+          
+              var brush1 = d3.brushX()                   // Add the brush feature using the d3.brush function
+                .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+                .on("end", updateChart1)               // Each time the brush selection changes, trigger the 'updateChart' function
+
+        data= GetData(iso)
+          
+              var clip1 = svg.append("defs").append("svg:clipPath")
+                .attr("id", "clip1")
+                .append("svg:rect")
+                .attr("width", width )
+                .attr("height", height )
+                .attr("x", 0)
+                .attr("y", 0);
+              
+              // Add X axis --> it is a date format
+              var x = d3.scaleTime()
+              .domain(d3.extent(data, function(d) { return parseDate(d.date) }))
+              .range([ 0, width ]);
+            xAxis = svg.selectAll(".xAxis")
+                .transition()
+                .duration(3000)
+              .attr("transform", `translate(0, ${height})`)
+              .transition()
+              .call(d3.axisBottom(x));
+
+            // Add Y axis
+            y = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return +d.total_cases; })])
+              .range([ height, 0 ]);
+            yAxis = svg.selectAll(".yAxis")
+                .transition()
+                .duration(3000)
+              .call(d3.axisLeft(y));
+
+          
+            // Create the line variable: where both the line and the brush take place
+            var line2 = d3.selectAll(".line")
+            .attr("clip-path", "url(#clip1)")
+            .datum(data)
+
+            // Add the line
+            line2
+            .enter()
+            .append("path")
+              .attr("class", "line")  // I add the class line to be able to modify this line later on.
+              .attr("fill", "none")
+              .merge(line2)
+              .attr("stroke", "steelblue")
+              .attr("stroke-width", 1.5)
+              .transition()
+              .duration(3000)
+              .attr("d", d3.line()
+                .x(function(d) { return x(parseDate(d.date)) })
+                .y(function(d) { return y(d.total_cases) })
+                )
+
+            // Add the brushing
+            line2
+                .call(brush1);
+
+            // A function that set idleTimeOut to null
+            let idleTimeout
+            function idled() { idleTimeout = null; }
+
+            // A function that update the chart for given boundaries
+            function updateChart1(event,d) {
+              console.log("22222")
+
+              // What are the selected boundaries?
+              extent = event.selection
+
+              // If no selection, back to initial coordinate. Otherwise, update X axis domain
+              if(!extent){
+                if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+                x.domain([ 4,8])
+              }else{
+                x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+                line2.select(".brush1").call(brush1.move, null) // This remove the grey brush area as soon as the selection has been done
+              }
+
+              // Update axis and line position
+              svg.selectAll(".xAxis").transition().duration(1000).call(d3.axisBottom(x))
+              svg
+                  .selectAll('.line')
+                  .transition()
+                  .duration(1000)
+                  .attr("d", d3.line()
+                    .x(function(d) { return x(parseDate (d.date)) })
+                    .y(function(d) { return y(d.total_cases) })
+                  )
+            }
+
+            // If user double click, reinitialize the chart
+            svg.on("dblclick",function(){
+              x.domain(d3.extent(data, function(d) { return parseDate(d.date) }))
+              svg.selectAll(".xAxis").transition().call(d3.axisBottom(x))
+              svg
+                .selectAll('.line')
+                .transition()
+                .attr("d", d3.line()
+                  .x(function(d) { return x(parseDate(d.date)) })
+                  .y(function(d) { return y(d.total_cases) })
+              )
+            });
+        }
+
+
+
+        counter = 0
+        country_data = []
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        var svg_4 = d3.select("#my_dataviz2")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                  `translate(${margin.left}, ${margin.top})`);
+
+                  svg_4.append("g")
+              .attr("transform", `translate(0, ${height})`)
+              .attr("class", "xaxis")
+
+              svg_4.append("g")
+          .attr("class", "yaxis")
+              
+        function mutliline_Graph (iso)
+        {
+
+          data =iso
+          
+          const sumstat = d3.group(data, d => d.iso_code);
+          // country_data.push(sumstat)
+
+
+        //  Add X axis --> it is a date format
+
+          var x = d3.scaleTime()
+            .domain(d3.extent(data, function(d) {  return parseDate(d.date) }))
+            .range([ 0, width ]);
+
+          svg_4.selectAll('.xaxis').exit().remove() 
+
+          xAxis = d3.selectAll(".xaxis")
+              .call(d3.axisBottom(x))
+              .append("text")
+      .attr("transform", `translate(50, ${height-200})`)
+      .attr("transform", "rotate(-90)")
+      .attr("x", 47)
+      .attr("y", 30)
+      .attr("dy", "-5.1em")
+      .attr("text-anchor", "end")
+      .attr("stroke", "black")
+      .text("ToTal Cases  ->");
+;
+
+          svg_4.selectAll('.yaxis').exit().remove() 
+
+          // // Add Y axis
+          y = d3.scaleLinear()
+            .domain([0, d3.max(data, function(d) { return + d.total_cases; })])
+            .range([ height, 0 ]);
+
+          yAxis = d3.selectAll('.yaxis')
+          //.transition()
+              .call(d3.axisLeft(y))
+              .append("text")
+     // .attr("transform", `translate(50, ${height-200})`)
+      .attr("x", 60)
+      .attr("y", height + 80)
+      .attr("dy", "-5.1em")
+      .attr("text-anchor", "end")
+      .attr("stroke", "black")
+      .text(" Time ->");;
+
+              const color = d3.scaleOrdinal()
+            .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+
+          // // Add the line
+
+          console.log(selected_countries)
+
+          svg_4.selectAll('.line_chart').transition().duration(300).style('opacity',0).remove()
+   size= 20
+
+            
+  // for legend code from : https://d3-graph-gallery.com/graph/custom_legend.html
+
+   svg_4.selectAll(".mydots").remove()
+          svg_4.selectAll(".mydots")
+  .data(selected_countries)
+  .enter()
+  .append("rect")
+    .attr("x", 100)
+    .attr("y", function(d,i){ return 100 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+    .attr("width", size)
+    .attr("height", size)
+    .style("fill", function(d){ return color(d.iso)})
+    .attr('class', 'mydots')
+
+    svg_4.selectAll(".mylabels").remove()
+    svg_4.selectAll(".mylabels")
+  .data(selected_countries)
+  .enter()
+  .append("text")
+    .attr("x", 100 + size*1.2)
+    .attr("y", function(d,i){ return 100 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+    .style("fill", function(d){  color(d.iso)})
+    .text(function(d){ return d.iso})
+    .attr("text-anchor", "left")
+    .style("alignment-baseline", "middle")
+    .attr('class', 'mylabels')
+
+          selected_countries.forEach(element => {   // here for each selected country, a line chart is generated 
+
+            svg_4.append('g')
+            .attr('class', 'line_chart')
+              .append("path")
+              .datum(sumstat.get(element.iso))
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-width", 1.5)
+              .attr("stroke", function(d){ return color(element.iso )})
+              .attr("id", function(d) {  return d.iso_code ;})
+              .transition()
+              .duration(200)
+                .attr("d", d3.line()
+                .x(function(d) { return x(parseDate(d.date)) })
+                .y(function(d) { return y(d.total_cases) })
+                )
        
-           // initZoom();
+          
 
-       text =    svg3.append("text")
-    .attr("x", 200)
-    .attr("y", 200)
-    .attr("text-anchor", "middle")
-    .style("font-size", "22px")
-    .style("font-family", "sans-serif")
-    .style("fill", "black")
-    .text("hello")
-    .attr("id", "text");
 
+          });
 
 
 
-  countriesGroup1.on("mouseover", function(event, d) {
-    
-    d3.select(this).style("fill", "#ff0000");
+        }
 
 
-    text.text(d.properties.iso_a3
-     +'\n'+d.properties.name_long)
- 
 
- 
-})
-.on("mouseout", function(d) {
-   d3.select(this).style("fill", "#44CFCB")
-   
-})
-.on("click", function(event, d) {
-   d3.select(this).style("fill", "#0555ff");
 
-  
 
-    text.attr("x", path.centroid(d)[0])
-    .attr("y", path.centroid(d)[1])
 
-  //  console.log(dataCovid.filter(element => element.iso_code === event.target.attributes.id.value))
-  //select clicked country and show data
 
 
- 
-if (selected_countries.includes(event.target.attributes.id.value) === false)
-{
-  selected_countries.push(event.target.attributes.id.value);
 
-  //  selected_countries_data.push({'iso':event.target.attributes.id.value,'data':GetData(event.target.attributes.id.value)})
 
 
-  selected_countries_data = selected_countries_data.concat(GetData(event.target.attributes.id.value))
+        })
 
-  mutliline_Graph(selected_countries_data)
-}
 
 
-  update_Chart(event.target.attributes.id.value)
-})
 
 
-// const brush = d3.brush()
-//       .on("start brush end", brushed);
 
-// svg1
-//     .call(brush);
-
-
-    function brushed(selection) {
-   console.log(selection.selection)
-
-    console.log(  projection.invert(selection.selection[0]))
-    
-  }
-  // Function that is triggered when brushing is performed
-
-    
-function GetData(iso)
-{
- filter_data_by_country = dataCovid.filter(element => element.iso_code === iso  )
-
-
- var keys_to_keep = ['date', 'total_cases','iso_code']
-
-var data_arr = filter_data_by_country.map(e => {
-  var obj = {};
-  keys_to_keep.forEach(k => obj[k] = e[k])
-  return obj;
-});  // source  :https://stackoverflow.com/questions/66250623/subset-array-of-object-based-on-keys-from-another-arraynot-static-and-then-fil
-
-
- return data_arr
-}
-
-
-
-
-var parseDate = d3.timeParse("%Y-%m-%d");
-
-data_arr = GetData('AUS')
-
-///////////////////////////////////////////////////////////////////////////////
-// Line line_graph
-
-// set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = w - margin.left - margin.right,
-    height = h/2 - margin.top - margin.bottom;
-
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          `translate(${margin.left}, ${margin.top})`);
-
-//Read the data
-
-
-  // When reading the csv, I must format variables:
-
-function enter_line_graph(iso) {
-  d3.selectAll('.line').remove()
-  d3.selectAll('.xAxis').remove()
-  d3.selectAll('.yAxis').remove()
-  
-  data= GetData(iso)  // gets data
-    
-         
-      // Add X axis --> it is a date format
-      var x = d3.scaleTime()
-      .domain(d3.extent(data, function(d) { return parseDate(d.date) }))
-      .range([ 0, width ]);
-
-    xAxis = svg.append("g")
-      .attr("transform", `translate(0, ${height})`)
-      .attr('class', 'xAxis')
-      .call(d3.axisBottom(x));
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-      .domain([0, d3.max(data, function(d) { return +d.total_cases; })])
-      .range([ height, 0 ]);
-    yAxis = svg.append("g")
-    .attr('class', 'yAxis')
-      .call(d3.axisLeft(y));
-
-    // Add a clipPath: everything out of this area won't be drawn.
-    var clip = svg.append("defs").append("svg:clipPath")
-        .attr("id", "clip")
-        .append("svg:rect")
-        .attr("width", width )
-        .attr("height", height )
-        .attr("x", 0)
-        .attr("y", 0);
-
-    // Add brushing
-    var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-        .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-        .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
-
-    // Create the line variable: where both the line and the brush take place
-    var line = svg.append('g')
-      .attr("clip-path", "url(#clip)")
-  
-
-    // Add the line
-    line
-    .append("path")
-      .datum(data)
-      .attr("class", "line")  // I add the class line to be able to modify this line later on.
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x(parseDate(d.date)) })
-        .y(function(d) { return y(d.total_cases) })
-        )
-
-    // Add the brushing
-    line
-      .append("g")
-        .attr("class", "brush")
-        .call(brush);
-
-    // A function that set idleTimeOut to null
-    let idleTimeout
-    function idled() { idleTimeout = null; }
-
-    // A function that update the chart for given boundaries
-    function updateChart(event,d) {
-   
-
-      // What are the selected boundaries?
-      extent = event.selection
-
-      // If no selection, back to initial coordinate. Otherwise, update X axis domain
-      if(!extent){
-        if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-        x.domain([ 4,8])
-      }else{
-        console.log(x.invert(extent[0]))
-        x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
-        line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-      }
-
-      // Update axis and line position
-      svg.selectAll(".xAxis").transition().duration(1000).call(d3.axisBottom(x))
-      line
-          .select('.line')
-          .transition()
-          .duration(1000)
-          .attr("d", d3.line()
-            .x(function(d) { return x(parseDate (d.date)) })
-            .y(function(d) { return y(d.total_cases) })
-          )
-    }
-
-    // If user double click, reinitialize the chart
-    svg.on("dblclick",function(){
-      x.domain(d3.extent(data, function(d) { return parseDate(d.date) }))
-      svg.selectAll(".xAxis").transition().call(d3.axisBottom(x))
-      line
-        .select('.line')
-        .transition()
-        .attr("d", d3.line()
-          .x(function(d) { return x(parseDate(d.date)) })
-          .y(function(d) { return y(d.total_cases) })
-      )
-    });
-
-  }
-
-  enter_line_graph("IND")
-
-function update_Chart(iso)
-{
-
-  
-      var brush1 = d3.brushX()                   // Add the brush feature using the d3.brush function
-        .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-        .on("end", updateChart1)               // Each time the brush selection changes, trigger the 'updateChart' function
-
- data= GetData(iso)
-  
-      var clip1 = svg.append("defs").append("svg:clipPath")
-        .attr("id", "clip1")
-        .append("svg:rect")
-        .attr("width", width )
-        .attr("height", height )
-        .attr("x", 0)
-        .attr("y", 0);
-      
-      // Add X axis --> it is a date format
-      var x = d3.scaleTime()
-      .domain(d3.extent(data, function(d) { return parseDate(d.date) }))
-      .range([ 0, width ]);
-    xAxis = svg.selectAll(".xAxis")
-        .transition()
-        .duration(3000)
-      .attr("transform", `translate(0, ${height})`)
-      .transition()
-      .call(d3.axisBottom(x));
-
-    // Add Y axis
-     y = d3.scaleLinear()
-      .domain([0, d3.max(data, function(d) { return +d.total_cases; })])
-      .range([ height, 0 ]);
-    yAxis = svg.selectAll(".yAxis")
-        .transition()
-        .duration(3000)
-      .call(d3.axisLeft(y));
-
-   
-    // Create the line variable: where both the line and the brush take place
-    var line2 = d3.selectAll(".line")
-    .attr("clip-path", "url(#clip1)")
-    .datum(data)
-
-    // Add the line
-    line2
-    .enter()
-    .append("path")
-      .attr("class", "line")  // I add the class line to be able to modify this line later on.
-      .attr("fill", "none")
-      .merge(line2)
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .transition()
-      .duration(3000)
-      .attr("d", d3.line()
-        .x(function(d) { return x(parseDate(d.date)) })
-        .y(function(d) { return y(d.total_cases) })
-        )
-
-    // Add the brushing
-    line2
-         .call(brush1);
-
-    // A function that set idleTimeOut to null
-    let idleTimeout
-    function idled() { idleTimeout = null; }
-
-    // A function that update the chart for given boundaries
-    function updateChart1(event,d) {
-      console.log("22222")
-
-      // What are the selected boundaries?
-      extent = event.selection
-
-      // If no selection, back to initial coordinate. Otherwise, update X axis domain
-      if(!extent){
-        if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-        x.domain([ 4,8])
-      }else{
-        x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
-        line2.select(".brush1").call(brush1.move, null) // This remove the grey brush area as soon as the selection has been done
-      }
-
-      // Update axis and line position
-      svg.selectAll(".xAxis").transition().duration(1000).call(d3.axisBottom(x))
-      svg
-          .selectAll('.line')
-          .transition()
-          .duration(1000)
-          .attr("d", d3.line()
-            .x(function(d) { return x(parseDate (d.date)) })
-            .y(function(d) { return y(d.total_cases) })
-          )
-    }
-
-    // If user double click, reinitialize the chart
-    svg.on("dblclick",function(){
-      x.domain(d3.extent(data, function(d) { return parseDate(d.date) }))
-      svg.selectAll(".xAxis").transition().call(d3.axisBottom(x))
-      svg
-        .selectAll('.line')
-        .transition()
-        .attr("d", d3.line()
-          .x(function(d) { return x(parseDate(d.date)) })
-          .y(function(d) { return y(d.total_cases) })
-      )
-    });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-counter = 0
-country_data = []
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-var svg_4 = d3.select("#my_dataviz2")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          `translate(${margin.left}, ${margin.top})`);
-
-          svg_4.append("g")
-      .attr("transform", `translate(0, ${height})`)
-      .attr("class", "xaxis")
-
-      svg_4.append("g")
-  .attr("class", "yaxis")
-      
-function mutliline_Graph (iso)
-{
-
-  data =iso
-  
-   const sumstat = d3.group(data, d => d.iso_code);
-  // country_data.push(sumstat)
-
-
-//  Add X axis --> it is a date format
-
-  var x = d3.scaleTime()
-    .domain(d3.extent(data, function(d) {  return parseDate(d.date) }))
-    .range([ 0, width ]);
-
-   svg_4.selectAll('.xaxis').exit().remove() 
-
-  xAxis = d3.selectAll(".xaxis")
-      .call(d3.axisBottom(x));
-
-  svg_4.selectAll('.yaxis').exit().remove() 
-
-  // // Add Y axis
-  y = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return + d.total_cases; })])
-    .range([ height, 0 ]);
-
-  yAxis = d3.selectAll('.yaxis')
-  .transition()
-      .call(d3.axisLeft(y));
-
-      const color = d3.scaleOrdinal()
-    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
-
-  // // Add the line
-
-  console.log(selected_countries)
-
-  svg_4.selectAll('.line_chart').transition().duration(300).style('opacity',0).remove()
-
-  selected_countries.forEach(element => {
-
-    svg_4.append('g')
-    .attr('class', 'line_chart')
-      .append("path")
-      .datum(sumstat.get(element))
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-     // .attr("class", function(d,i) { return "line "+ selected_countries[i]})
-      .attr("stroke-width", 1.5)
-      .attr("stroke", function(d){ return color(d[0]) })
-      .attr("id", function(d) {  return d.iso_code ;})
-      .transition()
-      .duration(2000)
-         .attr("d", d3.line()
-        .x(function(d) { return x(parseDate(d.date)) })
-        .y(function(d) { return y(d.total_cases) })
-        )
-      // .on("mouseover", function(d) {
-      //   svg1.select(this)
-      //     .transition()
-      //     .duration(200)
-      //     .attr("stroke-width", 3);
-      // })
-   
-
-
-  });
-
-  // console.log(sumstat)
-  // svg_4.selectAll("path")
-  //   .data(selected_countries)
-  //   .enter()
-  //     .append("path")
-  //     .datum(data)
-
-  //         .attr("fill", "none")
-  //     .attr("stroke", "steelblue")
-  //     .attr("class", function(d,i) { return "line "+ selected_countries[i]})
-  //     .attr("stroke-width", 1.5)
-  //     .attr("stroke", function(d){ return color(d[0]) })
-  //     .attr("id", function(d) {  return d.iso_code ;})
-  //     .transition()
-  //     .attr("d", d3.line()
-  //       .x(function(d) { return x(parseDate(d.date)) })
-  //       .y(function(d) { return y(d.total_cases) })
-  //       )
-
-  
-  // // Add the line
-  // svg_4.append("path")
-  //     .datum(data)
-  //     .attr("fill", "none")
-  //     .attr("stroke", "red")
-  //     .attr("stroke-width", 1.5)
-  //     .attr("d", d3.line()
-  //       .x(function(d) { return x(parseDate(d.date)) })
-  //       .y(function(d) { return y(d.new_cases) })
-  //       )
-
-  // // Add the line
-  // svg_4.append("path")
-  //     .datum(data)
-  //     .attr("fill", "none")
-  //     .attr("stroke", "green")
-  //     .attr("stroke-width", 1.5)
-  //     .attr("d", d3.line()
-  //       .x(function(d) { return x(parseDate(d.date)) })
-  //       .y(function(d) { return y(d.new_deaths) })
-  //       )
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-})
-
-
-
-
-
-
- 
-
-    // var svg5 = d3.select("body").append("svg")
-    // .attr("width", w*0.7)
-    // .attr("height", h*0.7)
-    // .attr("id", "svg5")
-    // .attr("outline", "10px solid black")
-    // .style("border", "3px solid black");;
+        
 
 
 

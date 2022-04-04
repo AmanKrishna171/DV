@@ -80,6 +80,7 @@
      GLOBAL_DATE = new Date("2021-03-01") // date set up the slider
      GLOBAL_SCLAR_CIRCLE = 'population' // dropdown selection 
      gLOBAL_SCLAR_MAP = 'continent'  // dropdown selection 
+     GLOBAL_SCATTER_PLOT = 'people_fully_vaccinated'  // dropdown selection 
 
      GLOBAL_COUNTRY = 'IND' // map click selection 
   
@@ -102,7 +103,7 @@
 
     
     //drop down to change data being presented by circles on the map
-    const map_dropDown = ["new_deaths_per_million", "continent", "total_cases_per_million"]
+    const map_dropDown = [ "continent", "new_deaths_per_million","total_cases_per_million"]
     // add the options to the button
     d3.select("#selectButton2")
       .selectAll('myOptions')
@@ -113,6 +114,18 @@
       .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
       d3.select("#selectButton2") .on("change", function(event,d) { gLOBAL_SCLAR_MAP= d3.select(this).property("value")})
+
+      const map_dropDown2 = ["total_boosters","people_fully_vaccinated"]
+      // add the options to the button
+      d3.select("#selectButton3")
+        .selectAll('myOptions')
+        .data(map_dropDown2)
+        .enter()
+        .append('option')
+        .text(function (d) { return d; }) // text showed in the menu
+        .attr("value", function (d) { return d; }) // corresponding value returned by the button
+  
+        d3.select("#selectButton3") .on("change", function(event,d) { GLOBAL_SCATTER_PLOT= d3.select(this).property("value")})
 
      Continents_colors = [{ // colour code the continents 
       "name": "Africa",
@@ -300,11 +313,6 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
           d3.select("#Country ISO").text(d.properties.iso_a3);
           d3.select("#Population ").text(d.properties.population);
           GLOBAL_COUNTRY = d.properties.iso_a3;
-
-
- 
-  
-  
         update_Chart(event.target.attributes.id.value)
 
         d3.select("#text_show").html(   // shows country stats on screen
@@ -359,12 +367,12 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
   date = d3.interpolateDate(new Date(Min), new Date(Max))
   
   
-  function update2(nRadiusvalue2) { // updates all the layouts using inforation from the slider
+  function update2(nRadiusvalue2) { // updates all the layouts using information from the slider
 
       GLOBAL_DATE = date (nRadiusvalue2)
 
       data = sumstat.get(date (nRadiusvalue2).toISOString().substring(0, 10))
-      mutliline_Graph(data);
+      Update_AllLayout(data);
       d3.select("#date").text(' Current Date: '+date (nRadiusvalue2).toISOString().substring(0, 10));
      
       update_Chart(GLOBAL_COUNTRY)
@@ -389,30 +397,33 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
   
       svg_4.append("g")
         .attr("transform", `translate(0, ${height})`)
-        .attr("class", "xaxis")
+        .attr("class", "xaxis1")
   
       svg_4.append("g")
-       .attr("class", "yaxis")
+       .attr("class", "yaxis1")
 
       temp =  sumstat.get(date (0.8).toISOString().substring(0, 10))  
       
       iso_arr =temp.map(a => a.iso_code)  // array with list of iso codes
               
-      Colour_arr = d3.scaleLinear()
+ 
  
 
-    function mutliline_Graph (data) // function that updates most functions with new ino from date selected
-    {
-      
-      clustering (range = 8);
+    function Update_AllLayout (data) // function that updates most functions with new ino from date selected
+{
+           
+     clustering (range = 8);
 
         if(gLOBAL_SCLAR_MAP != 'continent')  // runs only when drop down is selected
-        {
+        { Colour_arr = d3.scaleLinear()
+                    .domain([0,7000000])
+                    .range(['blue', 'red']); 
           iso_arr.forEach(function(d) 
           {
-            if(typeof data.find(element => element.iso_code === d) != 'undefined')
+            
+            if(typeof data.find(element => element.iso_code === d) != 'undefined'  )
             {
-              d3.selectAll('#'+d).attr("fill", Colour_arr(data.find(element => element.iso_code === d).total_cases))
+               d3.selectAll('#'+d).attr("fill", Colour_arr(data.find(element => element.iso_code === d).total_cases))
             }   
           })
   
@@ -424,21 +435,41 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
         .domain([0,d3.max(data, function(d) {  return +d.gdp_per_capita })])
         .range([ 0, width ]);
     
-      svg_4.selectAll('.xaxis').exit().remove() 
+      svg_4.selectAll('.xaxis1').exit().remove() 
     
-      xAxis_2 = d3.selectAll(".xaxis")
-          .call(d3.axisBottom(x_2));
+      xAxis_2 = d3.selectAll(".xaxis1")
+          .call(d3.axisBottom(x_2))
+          .append("text")
+          .attr("transform", `translate(${plot_dx/2}, ${plot_dy - 630 })`)
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("font-size", "22px")
+          .attr("dy", "-5.1em")
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("GDP per capita -> ");;
     
-      svg_4.selectAll('.yaxis').exit().remove() 
+      svg_4.selectAll('.yaxis1').exit().remove() 
     
       // // Add Y axis
       y_2 = d3.scaleLinear()
         .domain([0, d3.max(data, function(d) { return + d.total_cases_per_million+10000; })])
         .range([ height, 0 ]);
     
-      yAxis_2 = d3.selectAll('.yaxis')
-      .transition()
-          .call(d3.axisLeft(y_2));
+      yAxis_2 = d3.selectAll('.yaxis1')
+      //.transition()
+          .call(d3.axisLeft(y_2))
+          .append("text")
+        //  .attr("transform", `translate(${0}, ${0 })`)
+          .attr("transform", "rotate(-90)")
+          .attr("x", -100)
+          .attr("y", 150)
+          .attr("font-size", "22px")
+          .attr("dy", "-5.1em")
+          .attr("text-anchor", "end")
+          .attr("stroke", "black")
+          .text("Total Cases Per Million -> ")
+          
 
 
           const brush = d3.brush()
@@ -457,7 +488,7 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
             .append("circle")
               .attr("cx", function(d) { return x_2(d.gdp_per_capita) })
             .attr("cy", function(d) { return y_2(d.total_cases_per_million) })
-            .attr("r", function(d) { return (d.iso_code.slice(0, 4)==="OWID"|| d.location ==="" ? 0:  (d.people_fully_vaccinated)/1000000 ) } ) // filters world data
+            .attr("r", function(d) { return (d.iso_code.slice(0, 4)==="OWID"|| d.location ==="" ? 0: GLOBAL_SCATTER_PLOT!=='total_boosters' ? (d.people_fully_vaccinated)/1000000 : d.total_boosters/100000) })   // filters world data
             .attr("class", "circle_scatter")
             .attr('id', function(d) { return "circle"+d.iso_code })
             .attr("fill",function(d) { return getColor(d,3) }  )
@@ -476,10 +507,6 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
                 d3.selectAll('#'+d.iso_code).attr("fill", "orange")
 
                 d3.selectAll('#clu'+d.iso_code).attr("stroke", "red").attr("stroke-width", "10px")
-
-
-              
-    
     
             })
             .on("mouseout", function(event, d) {
@@ -511,10 +538,10 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
             .attr("cx", function(d) { return x_2(d.gdp_per_capita) })
             .attr("cy", function(d) { return y_2(d.total_cases_per_million) })
     
-      function brushed({selection})  // soruce : http://bl.ocks.org/feyderm/6bdbc74236c27a843db633981ad22c1b
-      {
+      function brushed({selection})  // source : http://bl.ocks.org/feyderm/6bdbc74236c27a843db633981ad22c1b
+    {
 
-        if (selection != null) {  // only when selected
+      if (selection != null) {  // only when selected
 
           // returns all objects to default settings
         d3.selectAll(".circle_scatter").attr("stroke", 'black');
@@ -544,7 +571,7 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
             {
               selected._groups[0].forEach(function(d) {
 
-                selected_countries.push(d.id.slice(6, ))
+                selected_countries.push(d.id.slice(6, ))  // slice is used as id of the circle is from of #circleISO, so circle is sliced out
                 d3.select('#'+d.id).attr("stroke", 'red');
                 d3.select('#'+d.id.slice(6, )).attr("fill", 'red');
                 d3.select('#clu'+d.id.slice(6, )).attr("stroke", 'red').attr('stroke-width', '5px');
@@ -559,7 +586,7 @@ DATA_DATE = d3.group(dataCovid, d => d.date ); // ,ap version of map to get data
       
     }
 
-    function isBrushed(brush_coords, cx, cy) { // returns objects within slecetd area source : http://bl.ocks.org/feyderm/6bdbc74236c27a843db633981ad22c1b
+    function isBrushed(brush_coords, cx, cy) { // returns objects within selected area source : http://bl.ocks.org/feyderm/6bdbc74236c27a843db633981ad22c1b
 
       var x0 = brush_coords[0][0],
           x1 = brush_coords[1][0],
@@ -627,7 +654,7 @@ function enter_line_graph(iso) {
   var size = 20
   keys1 = [ {'name' : 'new_cases', 'color' : 'red'}, {'name' : 'people_vaccinated', 'color' : 'blue'}]
   
-  // for legend 
+  // for legend code from : https://d3-graph-gallery.com/graph/custom_legend.html
   svg_5.selectAll("mydots")
   .data(keys1)
   .enter()
@@ -654,12 +681,22 @@ function enter_line_graph(iso) {
       // Add X axis --> it is a date format
     let  x_line = d3.scaleTime()
       .domain([new Date("2020-01-01"),GLOBAL_DATE])
-      .range([ 0, width * 0.4]);
+      .range([ 0, width * 0.4])
+     
 
     xAxis = svg_5.append("g")
-      .attr("transform", `translate(50, ${height-20})`)
       .attr('class', 'xAxis')
-      .call(d3.axisBottom(x_line));
+      .attr("transform", `translate(50, ${height-20})`)
+      .call(d3.axisBottom(x_line))
+      .append("text")
+      .attr("transform", `translate(50, ${height-200})`)
+      .attr("transform", "rotate(-90)")
+      .attr("x", 47)
+      .attr("y", 30)
+      .attr("dy", "-5.1em")
+      .attr("text-anchor", "end")
+      .attr("stroke", "black")
+      .text("New Cases  ->");
 
     // Add Y axis
     let  y_line = d3.scaleLinear()
@@ -670,19 +707,24 @@ function enter_line_graph(iso) {
     yAxis = svg_5.append("g")
    . attr("transform", `translate(50, -20)`)
     .attr('class', 'yAxis')
-      .call(d3.axisLeft(y_line));
+      .call(d3.axisLeft(y_line))
+      .append("text")
+     // .attr("transform", `translate(50, ${height-200})`)
+      .attr("x", 60)
+      .attr("y", height + 80)
+      .attr("dy", "-5.1em")
+      .attr("text-anchor", "end")
+      .attr("stroke", "black")
+      .text(" Time ->");;
 
-    // Add a clipPath: everything out of this area won't be drawn.
-
-
-
-     
+   
 
     // Add the line graphs
     svg_5
    .append('g')
     .attr('class', 'line_chart')
       .append("path")
+      .enter()
       .datum(data)
       .attr("class", "line")  
       .attr("fill", "none")
@@ -696,8 +738,7 @@ function enter_line_graph(iso) {
         svg_5
         .append('g')
     .attr('class', 'line_chart')
- 
-           .append("path")
+          .append("path")
            .datum(data)
            .attr("class", "line2")  
            .attr("fill", "none")
@@ -822,7 +863,7 @@ plot_dy = svg_dy - margin1.top - margin1.bottom;
 var x_clus = d3.scaleLinear().range([margin1.left, plot_dx]),
 y_clus = d3.scaleLinear().range([plot_dy, margin1.top]);
 
-var svg_clus = d3.select("#chart")
+var svg_clus = d3.select("#chart")  // svg for clustering 
         .append("svg")
         .attr("width", svg_dx)
         .attr("height", svg_dy);
@@ -832,6 +873,24 @@ var hulls = svg_clus.append("g")
 
 var circles = svg_clus.append("g")
              .attr("id", "circles1");
+
+
+svg_clus.append('rect')
+.attr('class','rect')
+.attr('x', 0)
+.attr('y', margin1.top )
+.attr('width', margin.left *2)
+.attr('height', plot_dy)
+.style('fill', 'white')     
+
+
+svg_clus.append('rect')
+.attr('class','rect')
+.attr('x', 60)
+.attr('y', svg_dy - 70 )
+.attr('width', plot_dy * 5)
+.attr('height', margin.left)
+.style('fill', 'white')  
 
  x_axis_cluster =      svg_clus
              .append("g")
@@ -875,12 +934,13 @@ hulls.selectAll(".hull")  // vizualtions of clusters
         
   
    clus_arr = []
+
    key.forEach(function(dd){
        if(typeof d3.group(d2[dd].data, d => d.date ).get(GLOBAL_DATE.toISOString().substring(0, 10))!= 'undefined' 
        && typeof d2[dd].population != 'undefined' && dd.length === 3 && dd != 'IND' &&dd != 'CHN' && dd != 'BRA' && dd != 'USA' && dd != 'TKM')
        {
-           clus_arr.push({y :d3.group(d2[dd].data, d => d.date ).get(GLOBAL_DATE.toISOString().substring(0, 10))[0].new_cases 
-       ,income :d2[dd].population,iso:dd , x :d2[dd].gdp_per_capita })
+           clus_arr.push({x : d2[dd].gdp_per_capita, y :d3.group(d2[dd].data, d => d.date ).get(GLOBAL_DATE.toISOString().substring(0, 10))[0].new_cases 
+       ,income :d2[dd].population,iso:dd   })
           
        }
    })
@@ -888,7 +948,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
    
 
    d = clus_arr
-       d.forEach(d => {  // shows the iietration of running k means 
+       d.forEach(d => {   // conversion of string data to numbers
                    d.x = +d.x;
                    d.y = +d.y;
                });
@@ -897,8 +957,30 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                circles.selectAll(".pt").remove(); // removes prevous cluetrs 
                plotCircles(d);  // updates  new circles 
 
-               x_axis_cluster.call(d3.axisBottom(x_clus));
-               y_axis_cluster.call(d3.axisLeft(y_clus));
+               x_axis_cluster.call(d3.axisBottom(x_clus))
+               .append("text")
+               .attr("transform", `translate(${plot_dx/2}, ${plot_dy - 630 })`)
+               .attr("x", 0)
+               .attr("y", 0)
+               .attr("font-size", "22px")
+               .attr("dy", "-5.1em")
+               .attr("text-anchor", "end")
+               .attr("stroke", "black")
+               .text("GDP per capita -> ");
+               
+              
+               y_axis_cluster.call(d3.axisLeft(y_clus))
+               .append("text")
+               .attr("transform", `translate(${ plot_dy - 630}, ${ plot_dx/2})`)
+               .attr("transform", "rotate(-90)")
+               .attr("x", -60)
+               .attr("y", 150)
+               .attr("font-size", "22px")
+               .attr("dy", "-5.1em")
+               .attr("text-anchor", "end")
+               .attr("stroke", "black")
+               .text("New Cases -> ");
+               
               
    
                // randomly select 15 data points for initial centroids
@@ -914,14 +996,14 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                    var c = computeCentroids()
    
                    assignCluster(c)
-                   addHull();
+                   addHull(); // for visualization of cluster groups 
    
                    var cost = computeCost();
    
-                   // stop iterating when algorithm coverges to local minimum
+                   // stop iterating when algorithm coverages to local minimum
                    if (cost == costs[costs.length - 1]) {
    
-                       displayStats(costs);
+                       displayStats(costs);// shows the iteration of running k means
                        iterate.stop();
                    }
    
@@ -940,7 +1022,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                                    .attr("x", 10)
                                    .attr("y", 20);
               
-                n_iters.append("tspan")
+                n_iters.append("tspan")  // display number of iterations
                        .style("font-weight", "bold")
                        .text("Num. Iterations: ");
               
@@ -951,7 +1033,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                                 .attr("x", 10)
                                 .attr("y", 40);
               
-                cost.append("tspan")
+                cost.append("tspan") //display local minimum
                     .style("font-weight", "bold")
                     .text("Local Minimum: ");
               
@@ -960,7 +1042,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                    
               }
               
-              function computeCentroids() {
+              function computeCentroids() { // function to get the centroids
                 
                 var centroids = clusters.map(cluster => {
               
@@ -980,7 +1062,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
               
               function addHull() {
               
-                clusters.forEach(cluster => {
+                clusters.forEach(cluster => { // add clusters to the vizualtions
               
                     // parse cluster data
                     var d_cluster = d3.selectAll(".cluster_" + cluster)
@@ -1006,7 +1088,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
               
               }
               
-              function computeCost() {
+              function computeCost() { // function to compute the cost
               
                 var dists = d3.selectAll("circle")
                               .data()
@@ -1044,7 +1126,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
               function computeDistances(centroids, d_pt) {
               
                 var dists = centroids.map(centroid => {
-                    var dist = Math.sqrt(Math.pow(d_pt.x - centroid.x, 2) + Math.pow(d_pt.y - centroid.y, 2));
+                    var dist = Math.sqrt(Math.pow(d_pt.x - centroid.x, 2) + Math.pow(d_pt.y - centroid.y, 2)); // euclidean distance
                     return dist;
                 })
                 return dists;
@@ -1053,8 +1135,8 @@ hulls.selectAll(".hull")  // vizualtions of clusters
               function setScaleDomains(d) {
               
                  x_clus.domain(
-                   [0,d3.max(d, d => d.x)]);
-                 y_clus.domain( [0,d3.max(d, d => d.y)+1000]);
+                   [10000,d3.max(d, d => d.x)]);
+                 y_clus.domain( [-2000,d3.max(d, d => d.y)+1000]);
 
                  
       
@@ -1071,15 +1153,14 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                        .append("g")
                        .append("circle")
                        .attr("class", "pt")
-                       .attr("r", ()=>(svg_dx + svg_dy)*0.0091)
+                       .attr("r", (d)=>d.x > 11000?((svg_dx + svg_dy)*0.008):0)
                        .attr("cx", (d) => x_clus(d.x))
                        .attr("cy", (d) => y_clus(d.y))
                        .attr('id', (d,i) => "clu" + d.iso)
+                       .attr('opacity', 0.5)
+
                        
                        .on("mouseover", function(event,d) {
-                        console.log(d.iso)
-                        console.log(d.income)
-
                         d3.select('#'+d.iso).attr("stroke", 'red');
                         d3.select('#'+d.iso).attr("fill", 'red');
                         d3.select('#clu'+d.iso).attr("stroke", 'red').attr('stroke-width', '5px');
@@ -1103,8 +1184,8 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                        clust_text.selectAll(".text_clu").data(d)
                        .enter()
                        .append("g").append('text')
-                       .attr("x", (d) => x_clus(d.x))
-                       .attr("y", (d) => y_clus(d.y))
+                       .attr("x", (d) =>d.x > 11000?(x_clus(d.x)):-1 )
+                       .attr("y", (d) =>d.x > 11000?(y_clus(d.y)):-1)
                        .text(function(d) { return d.iso; })
                        .attr('class','text_clu')
                         .attr("fill", "white")
