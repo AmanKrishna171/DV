@@ -1,0 +1,215 @@
+<html>
+<html lang="en">
+<head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head> 
+
+<body>
+    
+   
+  <nav class="navbar navbar-light" style="background-color: #c00f098e; align-items: center;display: flex;align-content: center;position: fixed;z-index:999 ;">
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 4</a>
+    <input type="range" min="0" max="1" step="0.01" id="nRadius2">
+    <span class="display-4"  id="date" ></span>
+  </nav>
+
+    <style>
+        .main-cards {
+          column-count: 1;
+          column-gap: 20px;
+          margin: 20px;
+        }
+        
+        .card {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          background-color: #ffffff;
+          margin-bottom: 20px;
+          -webkit-column-break-inside: avoid;
+          padding: 24px;
+          box-sizing: border-box;
+        }
+        .card2 {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          background-color: #666a6d;
+          margin-bottom: 20px;
+          -webkit-column-break-inside: avoid;
+          padding: 24px;
+          box-sizing: border-box;
+        }
+        .card3 {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          background-color: #666a6d;
+          margin-bottom: 20px;
+          -webkit-column-break-inside: avoid;
+          padding: 24px;
+          box-sizing: border-box;
+        }
+
+        .cluster
+        {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          background-color: #666a6d;
+          margin-bottom: 20px;
+          -webkit-column-break-inside: avoid;
+          padding: 24px;
+          box-sizing: border-box;
+        }
+        /* Force varying heights to simulate dynamic content */
+        .card {
+          height: 585px;
+        }
+      
+        .card2 {
+          height: 685px;
+        }
+
+        .card3 {
+          height: 685px;
+         
+        }
+
+        #world_map {
+          height: 885px;
+        }
+
+        #bar_chart {
+          height: 845px;
+        }
+
+        #chord2 {
+          height: 845px;
+        }
+
+        #chord {
+          height: 1045px;
+        }
+        .main_title {
+          
+          font-size: 90px;
+          font-weight: bold;
+          color: #666a6d;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+
+        }
+
+        .introduction {
+          font-size: 20px;
+          font-weight: bold;
+          color: #666a6d;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .credit {
+          font-size: 20px;
+          font-weight: bold;
+          color: #666a6d;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+  
+      </style>
+      
+<div class = "main_title"> Youtube Trending Videos Data Visualization</div>
+<div class = "introduction"><p>
+  This is a data visualization project for the Youtube Trending Videos dataset from <a href="https://www.kaggle.com/datasets/datasnaek/youtube-new"> here </a>.
+  This dataset is a daily record of the top trending YouTube videos uptill April 2018.
+  The data is visualized using D3.js. </p>
+ 
+  
+</div>
+
+<div class ="credit"><p>Done by Aman Krishna Satheesh </p></div>
+
+      <div class="main-cards">
+        <div class="card" id="world_map">
+          <p ><h1>What are the Popular categories of Trending Videos of the World?</h1>
+            <h3>Use the slider to change the date and choose the different catgories from drop down</h3></p>
+            <p><h3>The radius of the circle shows the total number of videos in of the choosen category that were Trending</h3></p>
+          <span>Category:</span>
+          <select id="selectButton3"></select>
+
+          <button type="button" class="btn btn-danger" id ='resetB' >Reset countries</button>
+        </div>
+        <div class="card" id="bar_chart"><h1>Bar Chart</h1> 
+          <p ><h1>How many views did each category get on<span class="display-4"  id="date2" ></span></h1>
+             <p><h3>The bar chart shows the total views each category of trending videos got</h3></p>
+             <p><h3>The data of what country or world can be chosen from the drop down "Data from" and</h3></p><p><h3>  other stats can be chosen from "Data type" drop 
+               down. The slider can be moved to get data from different dates</h3></p>
+
+          <span>Data from:</span>
+          <select id="selectButton"></select>
+    <span>Data type:</span>
+          <select id="selectButton2"></select>
+               
+     
+      
+
+        </div>
+
+        <div class="card3"  id="chord2"><h1>Scatter Plot</h1> (country colours same as in map)
+          <span>Category:</span>
+          <select id="selectButton3"></select>
+
+          <p ><h1>What is the relationship between likes/dislikes/comments and views of a category compared between countries different countries?<span class="display-4"  id="date2" ></span></h1>
+            <p><h3>The Scatter plot shows videos of chosen category of different countries (colour coded by colours from map). </h3></p>
+            <p><h3>The data of category can be chosen from the drop down "Category" and</h3></p><p><h3>  The chart supports brushing and hovering, that is linked with main map</h3></p>
+          
+        </div>
+        <div class="card2" id="chord"><h1>Chord Diagram</h1>
+        
+          <p ><h1>What portion of trending video category came from a country and comparison between countries<span class="display-4"  id="date2" ></span></h1>
+            <p><h3>The chord diagram displays a graphical representation of the portion of trending video categories from a country  </h3></p>
+            <p><h3>Countries can be clicked on from the map and be added to chord diagram for comparison</h3></p><p><h3>  
+              The chart supports hovering to view the data representation of a country, the list can be reset by clicking reset countries button on map</h3></p>
+          </div>
+       
+        
+      </div>
+   <div id ="cluster"><h1>Clustering</h1>
+  
+    <p ><h1>What are category of videos have similar number of views and likes?<span class="display-4"  id="date2" ></span></h1>
+      <p><h3>K-Means clustering is used to find group of video category that have similar likes and views  </h3></p>
+      <p><h3>Countries can be clicked on from the map and their data will be analyzed in the chart, it is also affected by time slider</h3></p><p><h3>  
+        The chart supports hovering that shows video thumbnail of that video</h3></p>
+   </div>
+<script>
+  
+</script>
+<script src ='../JS_Functions/Lab_4.js'>
+ 
+</script>
+
+<a href="./index.html" >
+
+  <button type="button" class="btn btn-danger">DashBoard >>></button>
+
+</a>
+</body>
+
+</html>

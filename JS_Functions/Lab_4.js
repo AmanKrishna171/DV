@@ -43,8 +43,11 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
         GLOBAL_COUNTRY_DROPDOWN= 'WORLD'
         GLOBAL_DATE = '2017-12-31'
         GLOBAL_CAT_DROPDOWN= '24'
-        GLOBAL_DATA_DROPDOWN = 'views'
+        GLOBAL_DATA_DROPDOWN = 'likes'
         GLOBAL_COUNTRY_SELECTED = []
+        GLOBAL_X_BOUND_LOW = 0
+        GLOBAL_X_BOUND_HIGH = 500000
+
 
         let zoom_map = d3.zoom().on("zoom", handleZoom);
   
@@ -54,7 +57,7 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
         }
       
         function initZoom() {
-            d3.select("svg").call(zoom_map);
+            d3.select(".box1").call(zoom_map);
         }
 
         //array of  10 pastel colours 
@@ -149,6 +152,7 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
                                 bar_data_date('17.14.11') // updates the bar chart
                                 Update_Chord() // updates the chord diagram
                                 Update_Clustering() // updates the clustering diagram
+                               
                             })
                         .on("mouseover", function(event, d) 
                             {
@@ -364,7 +368,8 @@ const svg_chord = d3.select("#chord")
         .attr("dy", "-5.1em")
         .attr("text-anchor", "end")
         .attr("stroke", "black")
-        .text("Total"+ GLOBAL_DATA_DROPDOWN +"-> ");
+        .attr('id', 'y_scater_label')
+        .text("Total "+ GLOBAL_DATA_DROPDOWN +"-> ");
        
        // Add Y axis
        
@@ -388,7 +393,7 @@ const svg_chord = d3.select("#chord")
             Update_Bar_Chart(bar_data_date(convertToString(GLOBAL_DATE)),'24')
        })
            
-       const mapCircle_dropDown2 = ["views", "likes", "dislikes"]
+       const mapCircle_dropDown2 = ["likes", "dislikes","comment_count"]
        // add the options to the button
        d3.select("#selectButton2")
          .selectAll('myOptions')
@@ -400,7 +405,9 @@ const svg_chord = d3.select("#chord")
           // corresponding value returned by the button
          d3.select("#selectButton2").on("change", function(event,d) {
             GLOBAL_DATA_DROPDOWN= d3.select(this).property("value")
+            d3.selectAll("#y_scater_label").text("Total "+ GLOBAL_DATA_DROPDOWN +"-> ")
             Update_Bar_Chart(bar_data_date(convertToString(GLOBAL_DATE)),'24')
+            Update_Scatter() // updates the scatter plot
        })
 
 
@@ -425,7 +432,7 @@ const svg_chord = d3.select("#chord")
   
 
        // add the options to the button
-       d3.select("#selectButton3")
+       d3.selectAll("#selectButton3")
          .selectAll('myOptions')
          .data(mapCircle_dropDown3)
          .enter()
@@ -435,13 +442,14 @@ const svg_chord = d3.select("#chord")
           // corresponding value returned by the button
          d3.select("#selectButton3").on("change", function(event,d) {
             GLOBAL_CAT_DROPDOWN= key_value[d3.select(this).property("value")]
+            Update_Scatter();
            
        })
       
        function Update_Bar_Chart(data , cat ) { // function that updates the bar chart
-       if(GLOBAL_DATA_DROPDOWN == 'views'){
-        max  = d3.max(data, function(d) { return +d.views; }) // get the min and max values of the data
-        min = d3.min(data, function(d) { return +d.views; })
+       if(GLOBAL_DATA_DROPDOWN == 'comment_count'){
+        max  = d3.max(data, function(d) { return +d.comment_count; }) // get the min and max values of the data
+        min = d3.min(data, function(d) { return +d.comment_count; })
        
         // code belwo is similar ot previous labs
        
@@ -482,16 +490,69 @@ const svg_chord = d3.select("#chord")
         .transition()
         .duration(100)
         .attr("x", function(d) { return x(d.category_name); })
-        .attr("y", function(d) { return y(d.views); })
+        .attr("y", function(d) { return y(d.comment_count); })
         .attr("width", x.bandwidth())
-        .attr("height", function(d) { return height - y(d.views); })
+        .attr("height", function(d) { return height - y(d.comment_count); })
         .attr("fill", function(d,i) { return d.category_color; })
         
         u.exit().transition().remove();
 
        }
 
-       else{
+       if(GLOBAL_DATA_DROPDOWN == 'dislikes'){
+        max  = d3.max(data, function(d) { return +d.dislikes; }) // get the min and max values of the data
+        min = d3.min(data, function(d) { return +d.dislikes; })
+       
+        // code belwo is similar ot previous labs
+       
+        x = d3.scaleBand()
+        .range([ 0, width ])
+        .domain(data.map(function(d) { return d.category_name; }))
+        .padding(0.2);
+       
+       svg.selectAll('.myXaxis_bot') // bottom axis
+           .transition()
+           .duration(500)
+           .call(d3.axisBottom(x))
+       
+ 
+       // Add Y axis
+        y = d3.scaleLinear()
+        .domain([0, max])
+        .range([ height, 0]);
+       
+       svg.select(".myYaxis_left")
+           .transition()
+           .duration(500)
+           .call(d3.axisLeft(y).tickFormat(d => d3.format(".2s")(d).replace('G', 'B'))) 
+           // source : https://stackoverflow.com/questions/40774677/d3-formatting-tick-value-to-show-b-billion-instead-of-g-giga
+           
+         ;
+       
+  
+       
+        var u = svg.selectAll("rect")
+        .data(data)
+       
+        u.enter()
+        .append("rect")
+        .merge(u)
+        .on("mouseover", onMouseOver) //Add listener for the mouseover event
+        .on("mouseout", onMouseOut) //Add listener for the mouseout event
+        .transition()
+        .duration(100)
+        .attr("x", function(d) { return x(d.category_name); })
+        .attr("y", function(d) { return y(d.dislikes); })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) { return height - y(d.dislikes); })
+        .attr("fill", function(d,i) { return d.category_color; })
+        
+        u.exit().transition().remove();
+
+       }
+
+
+       if(GLOBAL_DATA_DROPDOWN == 'likes'){
         max  = d3.max(data, function(d) { return +d.likes; }) // get the min and max values of the data
         min = d3.min(data, function(d) { return +d.likes; })
        
@@ -556,7 +617,7 @@ const svg_chord = d3.select("#chord")
         GLOBAL_DATE = date (nRadiusvalue2) // sets global date
 
         d3.select("#date").text(' Current Date: '+date (nRadiusvalue2).toISOString().substring(0, 10));
-    
+        d3.select("#date2").text(' Current Date: '+date (nRadiusvalue2).toISOString().substring(0, 10));
         // updates all layouts with new date
         Update_Bar_Chart(bar_data_date(convertToString(GLOBAL_DATE)),'24');
         Update_Chord();
@@ -886,6 +947,7 @@ let  svg_Scat = d3.select("#chord2")
      .attr("dy", "-5.1em")
      .attr("text-anchor", "end")
      .attr("stroke", "black")
+    .attr("class", "scatter_x")
      .text("Likes -> ");
 
   svg_Scat.selectAll('.yaxis1').exit().remove() 
@@ -961,7 +1023,7 @@ let  svg_Scat = d3.select("#chord2")
      // turns all countires to default color
     selected_countries.forEach(function(d)
      {
-      d3.select('#'+d) .style("fill",function(d,i) { return getColor(d) }  ).style("stroke-width", "2px");
+      d3.select('#'+d) .style("fill",function(d,i) { return getColor(d) }  ).style("stroke-width", "2px"); // unhighlight the selected countrires
     })
 
    selected_countries=[]; // resets the array
@@ -977,14 +1039,11 @@ let  svg_Scat = d3.select("#chord2")
      return isBrushed(brush_coords, cx, cy);
    })
             
-
         if(typeof selected._groups[0][0] != 'undefined')
         {
           selected._groups[0].forEach(function(d) {
-            console.log(d.id.slice(6, ))
-            d3.select('#'+d.id.slice(6, )) .style("fill", "red"  ).style("stroke", "black").style("stroke-width", "10px");
-
-            if (selected_countries.includes(d.id.slice(6, ))!== true) {selected_countries.push(d.id.slice(6, ))}
+            d3.select('#'+d.id.slice(6, )) .style("fill", "red"  ).style("stroke", "black").style("stroke-width", "10px"); // highlight the selected country
+            if (selected_countries.includes(d.id.slice(6, ))!== true) {selected_countries.push(d.id.slice(6, ))} // adds the selected country to the array
 
         
           })
@@ -1161,16 +1220,17 @@ hulls.selectAll(".hull")  // vizualtions of clusters
    local_temp_data =  GLOBAL_DATA.filter(function(d) { return  d.country === GLOBAL_COUNTRY }) // gets the filtered local data
    clus_arr = []
 
-   Categories.forEach(function(dd){ // for each category
+   Categories.forEach(function(dd)
+   { // for each category
 
-    temp = local_temp_data.filter(function(d) { return d.category_id === ""+dd }) // get daata accorriding to category
-    temp= temp.sort(function(a, b) {            // sort the data according to the number of views in descending order
-        return parseFloat(b.views) - parseFloat(a.views);
-    }).slice(0,4);                               // get the top 4
+        temp = local_temp_data.filter(function(d) { return d.category_id === ""+dd }) // get daata accorriding to category
+        
+        temp= temp.sort(function(a, b) {            // sort the data according to the number of views in descending order
+            return parseFloat(b.views) - parseFloat(a.views);}).slice(0,4);                               // get the top 4
 
-    temp.forEach(function(d) { // push to the cluster array that will be visualized
-        clus_arr.push({'country':d.country,'x':d.views,'y':d.likes,'category_id':d.category_id,'thumbnail_link':d.thumbnail_link})
-    })
+        temp.forEach(function(d) { // push to the cluster array that will be visualized
+            clus_arr.push({'country':d.country,'x':d.views,'y':d.likes,'category_id':d.category_id,'thumbnail_link':d.thumbnail_link})
+        })
 
    })
 
@@ -1189,7 +1249,7 @@ hulls.selectAll(".hull")  // vizualtions of clusters
 
                x_axis_cluster.call(d3.axisBottom(x_clus))
                .append("text")
-               .attr("transform", `translate(${plot_dx/2}, ${plot_dy - 630 })`)
+               .attr("transform", `translate(${plot_dx/2}, ${plot_dy - 590 })`)
                .attr("x", 0)
                .attr("y", 0)
                .attr("font-size", "22px")
@@ -1387,31 +1447,31 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                        .append("g")
                        .append("circle")
                        .attr("class", "pt")
-                       .attr("r", (d)=>d.x > 5?((svg_dx + svg_dy)*0.008):0)
-                       .attr("cx", (d) => x_clus(d.x))
-                       .attr("cy", (d) => y_clus(d.y))
+                       .attr("r", (d)=>d.x < 4900000?((svg_dx + svg_dy)*0.008):0)
+                       .attr("cx", (d) => d.x < 4900000?x_clus(d.x):-1000000)
+                       .attr("cy", (d) => d.x < 4900000?y_clus(d.y):-1000000)
                        .attr('id', (d,i) => "clu" + d.x)
                        .attr('opacity', 0.5)
 
                        
                        .on("mouseover", function(event,d) {
-                        d3.select('#'+d.country).style("stroke", 'red'); // highlight the country
-                        d3.select('#circle'+d.country).style("stroke", 'red').style('stroke-width', '9px'); // highlight the circle on scatter plot of that country
+                        d3.selectAll('#'+d.country).style("stroke", 'red'); // highlight the country
+                        d3.selectAll('#circle'+d.country).style("stroke", 'red').style('stroke-width', '9px'); // highlight the circle on scatter plot of that country
                    
-                        d3.select('#clu'+d.x).style("stroke", 'red').style('stroke-width', '5px');
+                        d3.selectAll('#clu'+d.x).style("stroke", 'red').style('stroke-width', '5px');
                      
-                        d3.select('#clusimg' + d.x).style('width', 200)
+                        d3.selectAll('#clusimg' + d.x).style('width', 200)
                         .style('height', 200);
                         
                            
                        })
                        .on("mouseout",function(event,d) { // the code below is for bi directional 
                         
-                        d3.select('#clu'+d.x).style("stroke", 'red').style('stroke-width', '0px'); 
-                        d3.select('#'+d.country) .style("fill",function(d,i) { return getColor(d) }  );
-                        d3.select('#circle'+d.country).style("stroke", 'red').style('stroke-width', '0px');
-                       d3.select('#clusimg' + d.x)    .style('width', 20)
-                       .style('height', 20)
+                        d3.selectAll('#clu'+d.x).style("stroke", 'red').style('stroke-width', '0px'); 
+                        d3.selectAll('#'+d.country) .style("fill",function(d,i) { return getColor(d) }  );
+                        d3.selectAll('#circle'+d.country).style("stroke", 'red').style('stroke-width', '0px');
+                       d3.selectAll('#clusimg' + d.x)    .style('width', 0)
+                       .style('height', 0)
 
                       })
 
@@ -1423,10 +1483,10 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                        .append("g")
                        .append('image')
                         .attr('xlink:href', function(d) { return d.thumbnail_link; })
-                        .attr('width', 20)
-                        .attr('height', 20)
-                        .attr("x", (d) =>d.x > 11000?(x_clus(d.x)):-1 )
-                       .attr("y", (d) =>d.x > 11000?(y_clus(d.y)):-1)
+                        .attr('width', 0)
+                        .attr('height', 0)
+                        .attr("x", (d) =>d.x > 11000?(x_clus(d.x)):-10000 )
+                       .attr("y", (d) =>d.x > 11000?(y_clus(d.y)):-10000)
                        .attr('class','img_clu')
                        .attr('id', (d) => "clusimg" + d.x)
                        .style("pointer-events", "none")
@@ -1437,8 +1497,8 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                        .append("g")
                        .append("g")
                        .append('text')
-                       .attr("x", (d) =>d.x > 11000?(x_clus(d.x)):-1 )
-                       .attr("y", (d) =>d.x > 11000?(y_clus(d.y)):-1)
+                       .attr("x", (d) =>d.x > 11000?(x_clus(d.x)):-10000 )
+                       .attr("y", (d) =>d.x > 11000?(y_clus(d.y)):-1000000)
                        .text(function(d) { return d.category_id; })
                        .attr('class','text_clu')
                         .attr("fill", "white")
@@ -1457,7 +1517,26 @@ hulls.selectAll(".hull")  // vizualtions of clusters
 
             }
 
+            axis = d3.interpolate(0, 2000000000)
 
+            d3.select("#ubound").on("input", function() { GLOBAL_X_BOUND_HIGH = axis(+this.value); });
+            d3.select("#lbound").on("input", function() {GLOBAL_X_BOUND_LOW = axis(+this.value);});
+    function handleClick(event){
+      
+       GLOBAL_X_BOUND_HIGH = document.getElementById("myVal2").value
+       GLOBAL_X_BOUND_LOW = document.getElementById("myVal1").value
+       console.log(document.getElementById("myVal").value)
+      
 
+        d3.select("#myVal2").on("input", function() {
+            console.log(this.value)
+          })
+        ;
+    //  draw(document.getElementById("myVal").value)
+        return false;
+    }
+
+    d3.select("#add").on("click", handleClick ) 
 
     }) // main 
+
