@@ -12,16 +12,20 @@
 <body>
     
    
-  <nav class="navbar navbar-light" style="background-color: #c00f098e; width: 100%;">
-    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 4</a>
   
+  
+ 
+  <nav class="navbar navbar-light" style="background-color: #c00f098e; align-items: center;display: flex;align-content: center;position: fixed;z-index:999 ;">
+    <a class="navbar-brand" href="../index.html" style="color: white">DF Lab 4</a>
+    <input type="range" min="0" max="1" step="0.01" id="nRadius2">
+    <span class="display-4"  id="date" ></span>
+
     <a href="./story.html" >
 
       <button type="button" class="btn btn-danger">Story >>></button>
   
     </a>
   </nav>
-
 
 
 
@@ -95,15 +99,10 @@
           <select id="selectButton"></select>
     <span>Data type:</span>
           <select id="selectButton2"></select>
-               
-          <label for="nRadius2" 
-              style=" width: 80vw; text-align: center">
-              <span  id="date" >(please use the slider)</span>
-              </label>
           
 
         </div>
-  <input type="range" min="0" max="1" step="0.01" id="nRadius2">
+
         <div class="card3"  id="chord2"><h1>Scatter Plot</h1> (country colours same as in map)
           
         </div>

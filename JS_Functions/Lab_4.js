@@ -1,4 +1,4 @@
-let  svg1 = d3.select("body")
+let  svg1 = d3.select("body") // svg for map
 .select("#world_map")
 .append("svg")
 .attr("id", "svg1")
@@ -38,6 +38,7 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
 
     function (initialize) {
     
+        // al global variables to be used in the functions
         GLOBAL_DATA = []
         GLOBAL_COUNTRY = 'US'
         GLOBAL_COUNTRY_DROPDOWN= 'WORLD'
@@ -49,6 +50,8 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
         GLOBAL_X_BOUND_HIGH = 500000
 
 
+
+        // the code below is to add zoom and pan to map
         let zoom_map = d3.zoom().on("zoom", handleZoom);
   
         function handleZoom(e) {
@@ -59,6 +62,7 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
         function initZoom() {
             d3.select(".box1").call(zoom_map);
         }
+
 
         //array of  10 pastel colours 
         let count_colors = d3.scaleOrdinal(d3.schemeCategory10);
@@ -81,8 +85,8 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
 
 
 
-            function getColor(d,f=0)
-            {  // get the colour of each continent
+            function getColor(d,f=0) // get the colour of each country
+            {  
         
                 if(f==0)
                 {
@@ -110,11 +114,12 @@ d3.csv("../Lab-4 data/CAvideos.csv"),
         
                 
             }
+
     
-        let dataGeo = initialize[0]
+        let dataGeo = initialize[0] // json files for world map
 
 
-        function select_Country(iso)
+        function select_Country(iso) // function to select country and prevent duplicates
         {
             if(GLOBAL_COUNTRY_SELECTED.includes(iso) !== true)
             {
@@ -251,7 +256,7 @@ return Bar_arr
 }
 
 
-const svg_chord = d3.select("#chord")
+const svg_chord = d3.select("#chord") // svg for the chord diagram
 .append("svg")
   .attr("width", 640)
   .attr("height", 640)
@@ -310,7 +315,7 @@ const svg_chord = d3.select("#chord")
     
 
 
-       const data1 = [
+       const data1 = [ // placeholder data
         {group: "A", value: 5, 'color': '#ff0000'},
         {group: "B", value: 20, 'color': '#e1ff00'},
         {group: "C", value: 9, 'color': '#0000ff'},
@@ -320,8 +325,9 @@ const svg_chord = d3.select("#chord")
        const margin = {top: 30, right: 30, bottom: 70, left: 60};
        const width = 760 - margin.left - margin.right;
        const height = 400 - margin.top - margin.bottom;
-       // append the svg object to the body of the page
-       var svg = d3.select('body')
+      
+
+       var svg = d3.select('body') // svg for bar chart
        .select('#bar_chart')
         .append('div')
         .append("svg")
@@ -378,7 +384,7 @@ const svg_chord = d3.select("#chord")
 
        // code for drop down inspired from https://d3-graph-gallery.com/graph/line_select.html
 
-       const mapCircle_dropDown = ["WORLD", "CA", "DE", "FR", "GB", "IN", "JP", "KR", "MX", "RU", "US"]
+       const mapCircle_dropDown = ["WORLD", "CA", "DE", "FR", "GB", "IN", "JP", "KR", "MX", "RU", "US"] // dropdown for country
        // add the options to the button
        d3.select("#selectButton")
          .selectAll('myOptions')
@@ -393,7 +399,7 @@ const svg_chord = d3.select("#chord")
             Update_Bar_Chart(bar_data_date(convertToString(GLOBAL_DATE)),'24')
        })
            
-       const mapCircle_dropDown2 = ["likes", "dislikes","comment_count"]
+       const mapCircle_dropDown2 = ["likes", "dislikes","comment_count"] // dropdown for data type
        // add the options to the button
        d3.select("#selectButton2")
          .selectAll('myOptions')
@@ -1103,6 +1109,19 @@ function Update_MapCircle()
     .attr('class', 'circle_sclr')
     .attr('opacity', 0.8)
     .attr('pointer-events', 'none')
+
+    g.selectAll('.text_sclr').remove(); // removes old text
+    g.selectAll(".text_sclr") // this adds number to scalr circles on map
+    .data(dataGeo.features.filter(function(d) { return countries_names.includes(d.properties.iso_a2); }))
+    .enter()
+    .append("g")
+    .append("text")
+    .attr("x", function(d) { return path.centroid(d)[0] - 30; })
+    .attr("y", function(d) { return path.centroid(d)[1] + 20; })
+   .attr("font-size", "40px")
+    .attr("fill", "black")
+    .text( function(d,i) { return get_scalr_map_data(d.properties.iso_a2) })
+    .attr("class", "text_sclr");
 }
 
  function reset_countries_list()
@@ -1508,35 +1527,11 @@ hulls.selectAll(".hull")  // vizualtions of clusters
                         .attr("alignment-baseline", "middle")
                         .attr("font-weight", "bolder")
                         .attr("pointer-events", "none")
-                
-
-
-                       
 
              }
 
             }
 
-            axis = d3.interpolate(0, 2000000000)
-
-            d3.select("#ubound").on("input", function() { GLOBAL_X_BOUND_HIGH = axis(+this.value); });
-            d3.select("#lbound").on("input", function() {GLOBAL_X_BOUND_LOW = axis(+this.value);});
-    function handleClick(event){
-      
-       GLOBAL_X_BOUND_HIGH = document.getElementById("myVal2").value
-       GLOBAL_X_BOUND_LOW = document.getElementById("myVal1").value
-       console.log(document.getElementById("myVal").value)
-      
-
-        d3.select("#myVal2").on("input", function() {
-            console.log(this.value)
-          })
-        ;
-    //  draw(document.getElementById("myVal").value)
-        return false;
-    }
-
-    d3.select("#add").on("click", handleClick ) 
-
+  
     }) // main 
 
